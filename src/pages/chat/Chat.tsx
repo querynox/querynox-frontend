@@ -1,28 +1,68 @@
-import { Link, useParams } from "@tanstack/react-router"
+import { useParams } from "@tanstack/react-router"
 import { useSidebar } from "@/components/ui/sidebar";
 import { ChatSidebar } from "@/components/ui/chat-sidebar";
-import { chatIdRoute } from "@/router/routes/chatid.route";
+import HeadBar from "@/components/ui/HeadBar";
+import { useChatContext } from "@/contexts/ChatContext";
+import { useEffect, useState } from "react";
+import { useUser, SignedOut, SignedIn } from "@clerk/clerk-react";
+import { Spinner } from "@/components/ui/spinner";
+import SignInOverlay from "@/components/ui/SignInOverlay";
 
 const Chat = () => {
-  const {
-    state,
-    open,
-    setOpen,
-    openMobile,
-    setOpenMobile,
-    isMobile,
-    toggleSidebar,
-  } = useSidebar()
-  
-    const { chatId } = useParams({ from: chatIdRoute.id });
+  const { open, isMobile } = useSidebar()
+  const { chatId } = useParams({ strict: false})
+  const { chats, setActiveChatIndex, activeChatIndex } = useChatContext()
+  const { isLoaded } = useUser()
+
+  const [activeModel, setActiveModel] = useState<string>("")
+
+  useEffect(() => {
+    if (chatId) {
+      const index = chats.findIndex((chat) => chat._id === chatId);
+      if (index !== -1) {
+        setActiveChatIndex(index);
+      }
+    }
+  }, [chatId, chats]);
+
 
   return (
-    <div className={` ${open ? "ml-[16rem]" : "ml-[3rem]"} transition-all p-4`} >
-        <ChatSidebar/>
-        
-        <div className="block"><Link to="/">Go to Home</Link></div>
+    !isLoaded ? <div className="w-screen h-screen flex justify-center items-center"> <Spinner className="size-14"/> </div> :
+    <div className={` ${isMobile ? "ml-0": open ? "ml-[16rem]" : "ml-[3rem]"} transition-all mt-4 overflow-hidden`} >
 
-   <div>Chat ID is: {chatId}</div>
+        {/** Sign in Overlay if user is not signed in. */}
+        <SignedOut>
+          <SignInOverlay />
+        </SignedOut>
+
+        {/** Sidbar */}
+        <ChatSidebar/>
+      
+        {/** Headbar */}
+        <HeadBar activeModel={activeModel} setActiveModel={setActiveModel}/>
+
+        {/** Chat / Conversations */}
+        <div className="mt-2 bg-amber-50 px-4 overflow-y-auto">
+        
+          {activeChatIndex < 0 ? 
+
+            /** New Chat */
+            <div>Start a new Chat</div> :
+
+             /** Old Chat */
+            <SignedIn>
+              <div>Chat: {JSON.stringify(chats[activeChatIndex])}</div>
+            </SignedIn>}
+          
+
+          {/** Show User Placeholder chats behind Signin Page Glass Effect */}
+          <SignedOut>
+            <div>Chat: {JSON.stringify(chats[activeChatIndex])}</div>
+          </SignedOut>
+
+        </div>
+        
+
 
     </div>
   )

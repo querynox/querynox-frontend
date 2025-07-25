@@ -19,7 +19,7 @@ import { chatRoute } from './routes/chat.route';
 //RootRoute
 export const rootRoute = createRootRoute({
   component: () => (
-    <main>
+    <main className="flex-1 w-full">
         <Outlet />
     </main>
 )});

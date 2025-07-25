@@ -157,3 +157,14 @@ code {
   scrollbar-width: thin;
   scrollbar-color: hsl(var(--border)) transparent; /* thumb color and track color */
 }
+
+
+@keyframes spinner-leaf-fade {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}

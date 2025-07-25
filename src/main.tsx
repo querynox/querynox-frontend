@@ -7,6 +7,7 @@ import { ClerkProvider } from '@clerk/clerk-react'
 import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
 import { SidebarProvider } from './components/ui/sidebar.tsx'
+import { ChatProvider } from './contexts/ChatContext.tsx'
 
 declare module '@tanstack/react-router' {
   interface Register {
@@ -23,9 +24,11 @@ if (rootElement && !rootElement.innerHTML) {
     <StrictMode>
       <TanStackQueryProvider>
         <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+          <ChatProvider>
             <SidebarProvider >
               <RouterProvider router={router} />
             </SidebarProvider>
+          </ChatProvider>
         </ClerkProvider>
       </TanStackQueryProvider>
     </StrictMode>,
