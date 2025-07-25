@@ -1,7 +1,11 @@
 import { models , type ModelEnum} from "@/data/models"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem } from "@/components/ui/select";
+
 import { useChatContext } from "@/contexts/ChatContext";
+import { useSystemContext } from "@/contexts/SystemContext";
+
 import { useEffect } from "react";
+import { Moon, Sun } from "lucide-react";
 
 type HeadBarProps = {
   activeModel: ModelEnum;
@@ -19,7 +23,8 @@ const HeadBar = ({ activeModel, setActiveModel }: HeadBarProps) => {
     return acc;
   }, {} as Record<string, typeof models>);
 
-  const {chats,activeChatIndex,setChats} = useChatContext();
+  const { chats, activeChatIndex, setChats } = useChatContext();
+  const { darkmode, setDarkmode } = useSystemContext();
 
   const selectedModel = () : ModelEnum => {
     if(activeChatIndex<0) return "gpt-3.5-turbo"
@@ -47,10 +52,7 @@ const HeadBar = ({ activeModel, setActiveModel }: HeadBarProps) => {
   },[activeChatIndex])
 
   return (
-    <div className="flex flex-row items-center p-3 border-b-[1px] ">
-        <h1 className="text-[32px] font-semibold flex-1">
-          QueryNOX
-        </h1>
+    <div className="flex flex-row items-center justify-between p-3 border-b-[1px] ">
 
         <Select value={activeModel} onValueChange={changeSelectedModel}>
           <SelectTrigger>
@@ -68,6 +70,15 @@ const HeadBar = ({ activeModel, setActiveModel }: HeadBarProps) => {
             }) }
           </SelectContent>
         </Select>
+
+        <h1 className="text-[32px] font-semibold relative right-20">
+          QueryNOX
+        </h1>
+
+        <div className="cursor-pointer transition-all px-2" onClick={()=>{setDarkmode(prev=>!prev)}}>
+          {darkmode? <Sun /> : <Moon/>}
+        </div>
+
     </div>
   )
 }

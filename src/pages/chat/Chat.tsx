@@ -16,7 +16,7 @@ const Chat = () => {
   const { open, isMobile } = useSidebar()
   const { chatId } = useParams({ strict: false})
   const { chats, setChats, setActiveChatIndex, activeChatIndex, setNewChatFiles,newChatFiles } = useChatContext()
-  const { isLoaded } = useUser()
+  const { isLoaded,user } = useUser()
 
   const [activeModel, setActiveModel] = useState<string>("")
 
@@ -30,7 +30,6 @@ const Chat = () => {
       }
     }
   }, [chatId, chats]);
-
 
   const handleButtonClick = () => {
     fileInputRef.current?.click();
@@ -125,12 +124,19 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 
           {/** Chat / Conversations */}
           
-          <div className="flex-1 overflow-y-auto p-6 px-[15vw] hide-scrollbar bg-grey-50 thin-scrollbar mt-2 pt-1 transition-none">
-            { activeChatIndex>=0 && chats[activeChatIndex].messages.length > 0 && <Conversation activeMessages={chats[activeChatIndex].messages}/>}
+          <div className="flex-1 overflow-y-auto p-6 px-[16vw] hide-scrollbar bg-grey-50 thin-scrollbar mt-2 pt-1 transition-none ">
+            { activeChatIndex>=0 ? 
+              chats[activeChatIndex].messages.length > 0 && <Conversation activeMessages={chats[activeChatIndex].messages}/> : 
+              <div className="flex justify-center items-center flex-col h-full">
+                <h2 className="text-2xl font-bold mb-2">Welcome back, {user?.fullName} 👋</h2>
+                <p className="text-muted-foreground">Start a new conversation or revisit your recent work.</p>
+              </div>}
           </div>
 
+
+
           {/* Input always at bottom */}
-          <div className=" flex flex-col pt-2 px-[12vw] pb-6 items-start">
+          <div className=" flex flex-col pt-2 px-[16vw] pb-6 items-start">
             <div className="rounded-md border border-input w-full">
 
               {/**Attached Files*/}

@@ -1,12 +1,19 @@
 import type { Message } from '@/data/types'
 import { cn } from '@/lib/utils'
 import { ClipboardCopy } from 'lucide-react'
+import { useEffect, useRef } from 'react'
 
 type ConversationPropType = {
   activeMessages:Message[]
 }
 
 const Conversation = ({activeMessages}:ConversationPropType) => {
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [activeMessages]);
+
   return (<>
       {activeMessages.map((message, index)=>{
         return <div key={index + message._id} className={cn("flex",message.role === "user" ? "justify-end" : "justify-start")}>
@@ -25,8 +32,12 @@ const Conversation = ({activeMessages}:ConversationPropType) => {
                     </button>
 
                   </div>
+
+                  <div ref={messagesEndRef} />
                   
                 </div>})}
-          </>)}
+
+        </>)
+  }
 
 export default Conversation

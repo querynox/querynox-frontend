@@ -36,7 +36,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         chats,
         activeChatIndex,
         newChatFiles,
-        
+
         setChats,
         setActiveChatIndex,
         setNewChatFiles
@@ -52,7 +52,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 };
 
 // Custom Hook to use the User Context
-export const useChatContext = () => {
+export const useChatContext = () : ChatContextType => {
     const context = useContext(ChatContext);
     if (!context) {
         throw new Error("useChatContext must be used within a ChatProvider");
