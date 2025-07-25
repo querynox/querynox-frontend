@@ -47,8 +47,8 @@ const HeadBar = ({ activeModel, setActiveModel }: HeadBarProps) => {
   },[activeChatIndex])
 
   return (
-    <div className="flex flex-row items-center px-4 pb-3 border-b-[1px] ">
-        <h1 className="text-4xl font-bold flex-1">
+    <div className="flex flex-row items-center p-4 border-b-[1px] ">
+        <h1 className="text-5xl font-bold flex-1">
           QueryNOX
         </h1>
 

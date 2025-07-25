@@ -18,4 +18,5 @@ export type Chat = {
   messages: Message[];
   createdAt: string;
   updatedAt: string;
+  files:File[];
 };

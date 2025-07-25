@@ -20,9 +20,10 @@ export const chats: Chat[] = [
     model: 'Claude Haiku 3.5',
     systemPrompt: 'You are a helpful assistant.',
     webSearch: true,
-    messages: generateMessages(12, 'chat-1'),
+    messages: generateMessages(33, 'chat-1'),
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    files:[]
   },
   {
     _id: 'chat-2',
@@ -33,6 +34,7 @@ export const chats: Chat[] = [
     messages: generateMessages(10, 'chat-2'),
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    files:[]    
   },
   {
     _id: 'chat-3',
@@ -43,6 +45,7 @@ export const chats: Chat[] = [
     messages: generateMessages(15, 'chat-3'),
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    files:[]
   },
   {
     _id: 'chat-4',
@@ -54,6 +57,7 @@ export const chats: Chat[] = [
     messages: generateMessages(11, 'chat-4'),
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    files:[]
   },
   {
     _id: 'chat-5',
@@ -65,6 +69,7 @@ export const chats: Chat[] = [
     messages: generateMessages(10, 'chat-5'),
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    files:[]
   },
   {
     _id: 'chat-6',
@@ -75,6 +80,7 @@ export const chats: Chat[] = [
     messages: generateMessages(13, 'chat-6'),
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    files:[]
   },
   {
     _id: 'chat-7',
@@ -86,5 +92,6 @@ export const chats: Chat[] = [
     messages: generateMessages(10, 'chat-7'),
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    files:[]
   }
 ];

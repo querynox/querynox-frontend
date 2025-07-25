@@ -22,9 +22,9 @@ export function ChatSidebar() {
   const {chats,setActiveChatIndex} = useChatContext();
   const {user} = useUser();
   return (
-    <Sidebar collapsible="icon" className="pt-3 pb-2">
+    <Sidebar collapsible="icon" className="pt-4 pb-2">
 
-      <SidebarHeader className="mb-2">
+      <SidebarHeader className="mb-4">
         <SidebarMenu>
           <SidebarMenuItem>
             <div className="flex justify-between h-max">

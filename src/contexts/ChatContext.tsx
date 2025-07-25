@@ -5,18 +5,22 @@ import { createContext, useState, type ReactNode, useContext, useMemo } from "re
 export interface ChatContextType {
     chats:Chat[]
     activeChatIndex:number;
+    newChatFiles:File[];
 
     setChats: React.Dispatch<React.SetStateAction<Chat[]>>;
     setActiveChatIndex: React.Dispatch<React.SetStateAction<number>>;
+    setNewChatFiles:React.Dispatch<React.SetStateAction<File[]>>
 }
 
 // Default Context Values
 const defaultContext: ChatContextType = {
     chats:chats.sort((a,b) => parseInt(b.updatedAt) - parseInt(a.updatedAt) ),
     activeChatIndex:-1,
+    newChatFiles:[],
 
     setChats: () => { },
-    setActiveChatIndex: () => {}
+    setActiveChatIndex: () => { },
+    setNewChatFiles: () => { }
 };
 
 // Create Context
@@ -26,13 +30,17 @@ const ChatContext = createContext<ChatContextType>(defaultContext);
 export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [chats, setChats] = useState<Chat[]>(defaultContext.chats);
     const [activeChatIndex, setActiveChatIndex] = useState<number>(defaultContext.activeChatIndex);
+    const [newChatFiles,setNewChatFiles] = useState<File[]>(defaultContext.newChatFiles);
 
     const value = useMemo(() => ({
         chats,
         activeChatIndex,
+        newChatFiles,
+        
         setChats,
-        setActiveChatIndex
-    }), [chats, activeChatIndex]);
+        setActiveChatIndex,
+        setNewChatFiles
+    }), [chats, activeChatIndex, newChatFiles]);
 
     return (
         <ChatContext.Provider
