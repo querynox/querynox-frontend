@@ -1,4 +1,4 @@
-import { useParams } from "@tanstack/react-router"
+import { useNavigate, useParams } from "@tanstack/react-router"
 import { useSidebar } from "@/components/ui/sidebar";
 import { ChatSidebar } from "@/components/ui/chat-sidebar";
 import HeadBar from "@/components/ui/HeadBar";
@@ -8,7 +8,7 @@ import { useUser, SignedOut } from "@clerk/clerk-react";
 import { Spinner } from "@/components/ui/spinner";
 import SignInOverlay from "@/components/ui/SignInOverlay";
 import { cn } from "@/lib/utils";
-import { Paperclip,X,Send, ClipboardCopy } from "lucide-react";
+import { Paperclip,X,Send } from "lucide-react";
 import TextareaAutosize from 'react-textarea-autosize';
 import Conversation from "@/components/ui/Conversation";
 
@@ -17,6 +17,7 @@ const Chat = () => {
   const { chatId } = useParams({ strict: false})
   const { chats, setChats, setActiveChatIndex, activeChatIndex, setNewChatFiles,newChatFiles } = useChatContext()
   const { isLoaded,user } = useUser()
+  const navigate = useNavigate()
 
   const [activeModel, setActiveModel] = useState<string>("")
 
@@ -27,6 +28,8 @@ const Chat = () => {
       const index = chats.findIndex((chat) => chat._id === chatId);
       if (index !== -1) {
         setActiveChatIndex(index);
+      }else{
+        navigate({to:"/chat"})
       }
     }
   }, [chatId, chats]);
@@ -35,48 +38,48 @@ const Chat = () => {
     fileInputRef.current?.click();
   };
 
-const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  const files = event.target.files;
-  if (files && files.length > 0) {
-    const fileArray = Array.from(files);
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      const fileArray = Array.from(files);
 
-    if (activeChatIndex < 0) {
-      setNewChatFiles((prevFiles) => {
-        const uniqueFiles = fileArray.filter(
-          (newFile) =>
-            !prevFiles.some(
-              (existingFile) =>
-                existingFile.name === newFile.name &&
-                existingFile.size === newFile.size
-            )
-        );
-        return [...prevFiles, ...uniqueFiles];
-      });
-    } else {
-      setChats((chats) => {
-        const updatedChats = [...chats];
-        const currentFiles = updatedChats[activeChatIndex].files || [];
+      if (activeChatIndex < 0) {
+        setNewChatFiles((prevFiles) => {
+          const uniqueFiles = fileArray.filter(
+            (newFile) =>
+              !prevFiles.some(
+                (existingFile) =>
+                  existingFile.name === newFile.name &&
+                  existingFile.size === newFile.size
+              )
+          );
+          return [...prevFiles, ...uniqueFiles];
+        });
+      } else {
+        setChats((chats) => {
+          const updatedChats = [...chats];
+          const currentFiles = updatedChats[activeChatIndex].files || [];
 
-        const uniqueFiles = fileArray.filter(
-          (newFile) =>
-            !currentFiles.some(
-              (existingFile) =>
-                existingFile.name === newFile.name &&
-                existingFile.size === newFile.size
-            )
-        );
+          const uniqueFiles = fileArray.filter(
+            (newFile) =>
+              !currentFiles.some(
+                (existingFile) =>
+                  existingFile.name === newFile.name &&
+                  existingFile.size === newFile.size
+              )
+          );
 
-        const updatedChat = {
-          ...updatedChats[activeChatIndex],
-          files: [...currentFiles, ...uniqueFiles],
-        };
+          const updatedChat = {
+            ...updatedChats[activeChatIndex],
+            files: [...currentFiles, ...uniqueFiles],
+          };
 
-        updatedChats[activeChatIndex] = updatedChat;
-        return updatedChats;
-      });
+          updatedChats[activeChatIndex] = updatedChat;
+          return updatedChats;
+        });
+      }
     }
-  }
-};
+  };
 
 
   const deleteFromFile = (index: number) => {
@@ -105,8 +108,8 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   };
 
   return (
-    !isLoaded ? <div className="w-screen h-screen flex justify-center items-center"> <Spinner className="size-14"/> </div> :
-    <div className={` ${isMobile ? "ml-0": open ? "ml-[16rem]" : "ml-[3rem]"} transition-all h-screen flex flex-col`} >
+    !isLoaded ? <div className="w-screen h-screen flex justify-center items-center text-accent-foreground"> <Spinner className="size-14"/> </div> :
+    <div className={` ${isMobile ? "ml-0": open ? "ml-[16rem]" : "ml-[3rem]"} transition-all h-screen flex flex-col text-accent-foreground`} >
 
         {/** Sign in Overlay if user is not signed in. */}
         <SignedOut>
@@ -133,20 +136,18 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
               </div>}
           </div>
 
-
-
           {/* Input always at bottom */}
           <div className=" flex flex-col pt-2 px-[16vw] pb-6 items-start">
             <div className="rounded-md border border-input w-full">
 
               {/**Attached Files*/}
               
-              {((activeChatIndex < 0 && newChatFiles.length>0 ) || (activeChatIndex >= 0 && chats[activeChatIndex].files.length > 0))  && <div className="flex gap-0 flex-col w-full pt-2 pl-2">
-                {(activeChatIndex < 0 ? newChatFiles : chats[activeChatIndex].files ).map((file,index) => <span className="flex items-center text-sm gap-x-1" key={index}>{file.name} <X onClick={()=> {deleteFromFile(index)}} size={14} color="red" className="cursor-pointer mt-1" /> </span> )}
+              {((activeChatIndex < 0 && newChatFiles.length>0 ) || (activeChatIndex >= 0 && chats[activeChatIndex].files.length > 0))  && <div className="flex gap-y-[2px] flex-col w-full pt-2 pl-4 dark:bg-primary-foreground rounded-md">
+                {(activeChatIndex < 0 ? newChatFiles : chats[activeChatIndex].files ).map((file,index) => <span className="flex items-center text-sm gap-x-1 italic" key={index}>{file.name} <X onClick={()=> {deleteFromFile(index)}} size={14} color="brown" className="cursor-pointer mt-1"/> </span> )}
               </div>}
               
               {/**Input Bar with Attachment and Send */}
-              <div className="flex w-full items-top justify-around">
+              <div className="flex w-full items-top justify-around dark:bg-primary-foreground rounded-md">
 
                 <div onClick={handleButtonClick} className="p-[15px] px-3 opacity-70 hover:opacity-100 cursor-pointer flex">
                   <input type="file" className="hidden" accept="*/*" multiple ref={fileInputRef} onChange={handleFileChange}/> 
@@ -158,15 +159,15 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                   minRows={1}
                   maxRows={10}
                   className={cn(
-                    "placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 ",
-                    "flex w-full min-w-0 rounded-r-md bg-transparent px-2 mb-3 mt-4 text-md transition-[color,box-shadow] outline-none",
+                    "placeholder:text-muted-foreground",
+                    "flex w-full min-w-0 rounded-r-md bg-transparent px-2 mb-3 mt-3 text-md transition-[color,box-shadow] outline-none",
                     "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
                     "focus-visible:border-ring focus-visible:ring-ring/50",
-                    "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive thin-scrollbar resize-none"
+                    "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive thin-scrollbar resize-none pt-0"
                   )}
                 />
 
-                <div className="p-[15px] px-3 opacity-70 hover:opacity-100 cursor-pointer ">
+                <div className="p-[15px] px-3 opacity-70 hover:opacity-100 cursor-pointer">
                   <Send/>
                 </div>
 

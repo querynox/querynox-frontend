@@ -52,6 +52,7 @@ code {
   --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.871 0.006 286.286);
+  --scrollbar: rgba(0, 0, 0, 0.4); /* light theme */
 }
 
 .dark {
@@ -87,6 +88,7 @@ code {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.274 0.006 286.033);
   --sidebar-ring: oklch(0.442 0.017 285.786);
+  --scrollbar:rgba(255,255,255,0.4);
 }
 
 @theme inline {
@@ -137,6 +139,13 @@ code {
   }
 }
 
+.thin-scrollbar {
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar) transparent;
+}
+
+/* WebKit (Chrome, Safari, Edge) */
 .thin-scrollbar::-webkit-scrollbar {
   width: 8px;
 }
@@ -146,16 +155,10 @@ code {
 }
 
 .thin-scrollbar::-webkit-scrollbar-thumb {
-  background-color: hsl(var(--border)); /* Uses your theme's border color */
+  background-color: var(--scrollbar);
   border-radius: 10px;
-  border: 2px solid transparent; /* Creates padding around the thumb */
+  border: 2px solid transparent;
   background-clip: content-box;
-}
-
-/* For Firefox */
-.thin-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: hsl(var(--border)) transparent; /* thumb color and track color */
 }
 
 

@@ -22,9 +22,9 @@ export function ChatSidebar() {
   const {chats,setActiveChatIndex} = useChatContext();
   const {user} = useUser();
   return (
-    <Sidebar collapsible="icon" className="pt-4 pb-2">
+    <Sidebar collapsible="icon" className="">
 
-      <SidebarHeader className="mb-4">
+      <SidebarHeader className="pt-4 mb-4">
         <SidebarMenu>
           <SidebarMenuItem>
             <div className="flex justify-between h-max">
@@ -77,7 +77,7 @@ export function ChatSidebar() {
       
       <Separator/>
 
-      <SidebarFooter>
+      <SidebarFooter className="pb-4">
           <div className="flex flex-1 overflow-auto justify-left items-center gap-2 overflow-x-hidden pt-1 pl-[2px]">
             <SignedIn>
                 <UserButton />

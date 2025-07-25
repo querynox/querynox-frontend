@@ -52,10 +52,10 @@ const HeadBar = ({ activeModel, setActiveModel }: HeadBarProps) => {
   },[activeChatIndex])
 
   return (
-    <div className="flex flex-row items-center justify-between p-3 border-b-[1px] ">
+    <div className="flex flex-row items-center justify-between p-3 border-b-[1px] text-accent-foreground bg-secondary">
 
-        <Select value={activeModel} onValueChange={changeSelectedModel}>
-          <SelectTrigger>
+        <Select value={activeModel} onValueChange={changeSelectedModel} >
+          <SelectTrigger className="w-48 bg-muted dark:bg-[#2e2e30]">
             <SelectValue placeholder="Models" />
           </SelectTrigger>
           <SelectContent>
@@ -71,7 +71,7 @@ const HeadBar = ({ activeModel, setActiveModel }: HeadBarProps) => {
           </SelectContent>
         </Select>
 
-        <h1 className="text-[32px] font-semibold relative right-20">
+        <h1 className="text-[28px] font-semibold relative right-24">
           QueryNOX
         </h1>
 

@@ -1,4 +1,4 @@
-import type { Chat, Message } from "./types";
+import type { Chat } from "./types";
 
 // Helper to create staggered, realistic timestamps in the past
 const generateTimestamps = (count: number): string[] => {

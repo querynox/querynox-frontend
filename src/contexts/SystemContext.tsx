@@ -21,6 +21,11 @@ export const SystemProvider : React.FC<{ children: ReactNode }> = ({ children })
     
     useEffect(()=>{
         localStorage.setItem("darkmode",darkmode ? "true": "false");
+        if(darkmode) {
+            document.documentElement.classList.add('dark');
+        }else{
+            document.documentElement.classList.remove('dark');
+        }
     },[darkmode])
 
     const value = {

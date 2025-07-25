@@ -21,7 +21,7 @@ const Conversation = ({activeMessages}:ConversationPropType) => {
                   {/* Bubble Container */}
                   <div className="relative group max-w-[70%] px-4 py-2 mb-2">
 
-                    <div className={cn("rounded-lg px-4 py-2 mb-2 whitespace-pre-wrap", message.role === "user" ? "bg-sky-700 text-white": "bg-zinc-200 text-zinc-900" )}>
+                    <div className={cn("rounded-lg px-4 py-2 mb-2 whitespace-pre-wrap", message.role === "user" ? "bg-sky-700 dark:bg-sky-950 text-white dark:text-accent-foreground": "bg-secondary dark:text-white" )}>
                       {message.content}
                     </div>
 
