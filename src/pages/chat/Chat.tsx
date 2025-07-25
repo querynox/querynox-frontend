@@ -8,7 +8,9 @@ import { useUser, SignedOut } from "@clerk/clerk-react";
 import { Spinner } from "@/components/ui/spinner";
 import SignInOverlay from "@/components/ui/SignInOverlay";
 import { cn } from "@/lib/utils";
-import { Paperclip,X } from "lucide-react";
+import { Paperclip,X,Send, ClipboardCopy } from "lucide-react";
+import TextareaAutosize from 'react-textarea-autosize';
+import Conversation from "@/components/ui/Conversation";
 
 const Chat = () => {
   const { open, isMobile } = useSidebar()
@@ -105,7 +107,7 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 
   return (
     !isLoaded ? <div className="w-screen h-screen flex justify-center items-center"> <Spinner className="size-14"/> </div> :
-    <div className={` ${isMobile ? "ml-0": open ? "ml-[16rem]" : "ml-[3rem]"} transition-transform h-screen flex flex-col`} >
+    <div className={` ${isMobile ? "ml-0": open ? "ml-[16rem]" : "ml-[3rem]"} transition-all h-screen flex flex-col`} >
 
         {/** Sign in Overlay if user is not signed in. */}
         <SignedOut>
@@ -118,44 +120,52 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         {/** Headbar */}
         <HeadBar activeModel={activeModel} setActiveModel={setActiveModel}/>
 
-        {/** Chat / Conversations */}
+        {/** Body */}
         <div className="flex flex-col flex-1 bg-grey-200 rounded-lg overflow-hidden">
-        
-          <div className="flex-1 overflow-y-auto p-6 px-44 space-y-0 hide-scrollbar bg-grey-50 thin-scrollbar mt-2 pt-1">
-              {activeChatIndex>=0 && chats[activeChatIndex].messages.map((message, index)=>{
-                  return <div key={index+message._id} className={cn("flex",message.role == "user" ? "justify-end" : "justify-start")}>
-                    {message.content}
-                    </div>
-              })}
+
+          {/** Chat / Conversations */}
+          
+          <div className="flex-1 overflow-y-auto p-6 px-[15vw] hide-scrollbar bg-grey-50 thin-scrollbar mt-2 pt-1 transition-none">
+            { activeChatIndex>=0 && chats[activeChatIndex].messages.length > 0 && <Conversation activeMessages={chats[activeChatIndex].messages}/>}
           </div>
 
           {/* Input always at bottom */}
-          <div className=" flex flex-col pt-2 px-40 pb-6 items-start">
-
+          <div className=" flex flex-col pt-2 px-[12vw] pb-6 items-start">
             <div className="rounded-md border border-input w-full">
 
+              {/**Attached Files*/}
+              
               {((activeChatIndex < 0 && newChatFiles.length>0 ) || (activeChatIndex >= 0 && chats[activeChatIndex].files.length > 0))  && <div className="flex gap-0 flex-col w-full pt-2 pl-2">
                 {(activeChatIndex < 0 ? newChatFiles : chats[activeChatIndex].files ).map((file,index) => <span className="flex items-center text-sm gap-x-1" key={index}>{file.name} <X onClick={()=> {deleteFromFile(index)}} size={14} color="red" className="cursor-pointer mt-1" /> </span> )}
               </div>}
               
-              <div className="flex w-full justify-center">
+              {/**Input Bar with Attachment and Send */}
+              <div className="flex w-full items-top justify-around">
 
-                <div onClick={handleButtonClick} className="py-[15px] px-2 opacity-75 hover:opacity-100 cursor-pointer flex items-end">
+                <div onClick={handleButtonClick} className="p-[15px] px-3 opacity-70 hover:opacity-100 cursor-pointer flex">
                   <input type="file" className="hidden" accept="*/*" multiple ref={fileInputRef} onChange={handleFileChange}/> 
                   <Paperclip/>
                 </div>
                 
-                <input type="text"
-                    data-slot="input"
-                    placeholder="Start typing"
-                    className={cn(
-                      "placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-r-md bg-transparent px-2 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-                      "focus-visible:border-ring focus-visible:ring-ring/50 ",
-                      "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
-                      "h-14"
-                    )}/>
+                <TextareaAutosize
+                  placeholder="Start typing"
+                  minRows={1}
+                  maxRows={10}
+                  className={cn(
+                    "placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 ",
+                    "flex w-full min-w-0 rounded-r-md bg-transparent px-2 mb-3 mt-4 text-md transition-[color,box-shadow] outline-none",
+                    "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+                    "focus-visible:border-ring focus-visible:ring-ring/50",
+                    "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive thin-scrollbar resize-none"
+                  )}
+                />
+
+                <div className="p-[15px] px-3 opacity-70 hover:opacity-100 cursor-pointer ">
+                  <Send/>
+                </div>
 
               </div>
+
             </div>
           </div>
 

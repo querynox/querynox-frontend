@@ -6,8 +6,16 @@ function generateMessages(count: number, prefix: string = ''): Message[] {
     _id: `${prefix}-msg-${i}`,
     role: i % 2 === 0 ? 'user' : 'assistant',
     content: i % 2 === 0
-      ? `User message ${Math.floor(i / 2) + 1}`
-      : `Assistant reply ${Math.floor(i / 2) + 1}`,
+      ? `User message laceholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 ",
+                    "flex w-full min-w-0 rounded-r-md bg-transparent px-2 mb-3 mt-4 text-md transition-[color,box-shadow] outline-none",
+                    "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+                    "focus-visible:border-ring focus-visible:ring-ring/50",
+                    "aria-invalid: ${Math.floor(i / 2) + 1}`
+      : `Assistant reply laceholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 ",
+                    "flex w-full min-w-0 rounded-r-md bg-transparent px-2 mb-3 mt-4 text-md transition-[color,box-shadow] outline-none",
+                    "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+                    "focus-visible:border-ring focus-visible:ring-ring/50",
+                    "aria-invalid: ${Math.floor(i / 2) + 1}`,
     createdAt: new Date(baseTime + (count + i) * 60_000).getTime().toString(),
   }));
 }
