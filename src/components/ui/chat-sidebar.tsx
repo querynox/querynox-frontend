@@ -17,9 +17,10 @@ import { SignedIn, UserButton , useUser} from "@clerk/clerk-react"
 import { Link } from "@tanstack/react-router";
 import { useChatContext } from "@/contexts/ChatContext";
 import { Separator } from "./separator";
+import { cn } from "@/lib/utils";
 
 export function ChatSidebar() {
-  const {chats,setActiveChatIndex} = useChatContext();
+  const {chats,setActiveChatIndex,activeChatIndex} = useChatContext();
   const {user} = useUser();
   return (
     <Sidebar collapsible="icon" className="">
@@ -60,7 +61,7 @@ export function ChatSidebar() {
             <SidebarMenu>
               {chats.map((chat,index)=>
                 <SidebarMenuItem key = {index+chat._id}>
-                  <SidebarMenuButton asChild className="my-[0.7px]">
+                  <SidebarMenuButton asChild className={cn("my-[0.7px]",index ==activeChatIndex ? "bg-accent" : "" )}>
                     <Link to={`/chat/$chatId`} params={{chatId:chat._id}} onClick={() => {setActiveChatIndex(index)}}>
                       <MessageSquare />
                       <span>{chat.title}</span>
