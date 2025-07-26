@@ -3,24 +3,37 @@ import type { Chat } from "@/data/types";
 import { createContext, useState, type ReactNode, useContext, useMemo } from "react";
 
 export interface ChatContextType {
-    chats:Chat[]
+    chats:Chat[];
+    newChat:Chat;
     activeChatIndex:number;
-    newChatFiles:File[];
 
     setChats: React.Dispatch<React.SetStateAction<Chat[]>>;
     setActiveChatIndex: React.Dispatch<React.SetStateAction<number>>;
-    setNewChatFiles:React.Dispatch<React.SetStateAction<File[]>>
+    setNewChat:React.Dispatch<React.SetStateAction<Chat>>;
+}
+
+export const newChatDefaultObject : Chat = {
+    _id: "",
+    userId: "",
+    title: "",
+    model: "gpt-3.5-turbo",
+    webSearch: false,
+    messages: [],
+    createdAt: "",
+    updatedAt: "",
+    systemPrompt: "You are a helpful Assistant",
+    files: []
 }
 
 // Default Context Values
 const defaultContext: ChatContextType = {
-    chats:chats.sort((a,b) => parseInt(b.updatedAt) - parseInt(a.updatedAt) ),
+    chats:[],
     activeChatIndex:-1,
-    newChatFiles:[],
+    newChat:newChatDefaultObject,
 
     setChats: () => { },
     setActiveChatIndex: () => { },
-    setNewChatFiles: () => { }
+    setNewChat: () => { }
 };
 
 // Create Context
@@ -30,17 +43,17 @@ const ChatContext = createContext<ChatContextType>(defaultContext);
 export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [chats, setChats] = useState<Chat[]>(defaultContext.chats);
     const [activeChatIndex, setActiveChatIndex] = useState<number>(defaultContext.activeChatIndex);
-    const [newChatFiles,setNewChatFiles] = useState<File[]>(defaultContext.newChatFiles);
+    const [newChat,setNewChat] = useState<Chat>(defaultContext.newChat);
 
     const value = useMemo(() => ({
         chats,
         activeChatIndex,
-        newChatFiles,
+        newChat,
 
         setChats,
         setActiveChatIndex,
-        setNewChatFiles
-    }), [chats, activeChatIndex, newChatFiles]);
+        setNewChat
+    }), [chats, activeChatIndex, newChat]);
 
     return (
         <ChatContext.Provider

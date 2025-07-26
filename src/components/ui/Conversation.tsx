@@ -4,15 +4,16 @@ import { ClipboardCopy } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 
 type ConversationPropType = {
-  activeMessages:Message[]
+  activeMessages:Message[];
+  isThinking:boolean;
 }
 
-const Conversation = ({activeMessages}:ConversationPropType) => {
+const Conversation = ({activeMessages, isThinking}:ConversationPropType) => {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [activeMessages]);
+  }, [activeMessages,isThinking]);
 
   return (<>
       {activeMessages.map((message, index)=>{
@@ -32,10 +33,19 @@ const Conversation = ({activeMessages}:ConversationPropType) => {
                     </button>
 
                   </div>
-
-                  <div ref={messagesEndRef} />
                   
                 </div>})}
+
+                {/* Thinking */}
+                {isThinking && <div className="flex justify-start">
+                  <div className="relative group max-w-[70%] px-4 py-2 mb-2">
+                    <div className="rounded-lg px-4 py-2 mb-2 whitespace-pre-wrap bg-secondary dark:text-white">
+                      thinking . . .
+                    </div>
+                  </div>
+                </div>}
+
+                 <div ref={messagesEndRef} />
 
         </>)
   }

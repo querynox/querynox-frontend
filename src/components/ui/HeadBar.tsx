@@ -13,6 +13,9 @@ type HeadBarProps = {
 };
 
 const HeadBar = ({ activeModel, setActiveModel }: HeadBarProps) => {
+
+  const { chats, activeChatIndex, setChats, newChat, setNewChat } = useChatContext();
+  const { darkmode, setDarkmode } = useSystemContext();
   
   const groupedModels = models.reduce((acc, model) => {
     const category = model.modelCategory;
@@ -23,11 +26,9 @@ const HeadBar = ({ activeModel, setActiveModel }: HeadBarProps) => {
     return acc;
   }, {} as Record<string, typeof models>);
 
-  const { chats, activeChatIndex, setChats } = useChatContext();
-  const { darkmode, setDarkmode } = useSystemContext();
 
   const selectedModel = () : ModelEnum => {
-    if(activeChatIndex<0) return "gpt-3.5-turbo"
+    if(activeChatIndex<0) return newChat.model
     const model = chats[activeChatIndex]?.model?.trim();
     if (!model) return "gpt-3.5-turbo";
 
@@ -37,8 +38,16 @@ const HeadBar = ({ activeModel, setActiveModel }: HeadBarProps) => {
 
   const changeSelectedModel = (modelName:string) => {
     setActiveModel(modelName);
-    const updatedChats = [...chats]; // clone
-    if (updatedChats[activeChatIndex]) {
+
+    if(activeChatIndex<0){
+      setNewChat((chat) => {
+        const uChat = {...chat,model:modelName};
+        return uChat;
+      })
+    }
+    else if(chats[activeChatIndex]) {
+
+      const updatedChats = [...chats]; // clone
       updatedChats[activeChatIndex] = {
         ...updatedChats[activeChatIndex],
         model: modelName,

@@ -13,7 +13,7 @@ export type Chat = {
   userId: string;
   title: string;
   model: ModelEnum;
-  systemPrompt?: string;
+  systemPrompt: string;
   webSearch: boolean;
   messages: Message[];
   createdAt: string;

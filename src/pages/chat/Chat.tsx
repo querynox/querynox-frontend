@@ -2,24 +2,35 @@ import { useNavigate, useParams } from "@tanstack/react-router"
 import { useSidebar } from "@/components/ui/sidebar";
 import { ChatSidebar } from "@/components/ui/chat-sidebar";
 import HeadBar from "@/components/ui/HeadBar";
-import { useChatContext } from "@/contexts/ChatContext";
-import { useEffect, useState, useRef } from "react";
+import { newChatDefaultObject, useChatContext } from "@/contexts/ChatContext";
+import { useEffect, useState, useRef} from "react";
 import { useUser, SignedOut } from "@clerk/clerk-react";
 import { Spinner } from "@/components/ui/spinner";
 import SignInOverlay from "@/components/ui/SignInOverlay";
 import { cn } from "@/lib/utils";
-import { Paperclip,X,Send } from "lucide-react";
+import { Paperclip,X,Send, Earth } from "lucide-react";
 import TextareaAutosize from 'react-textarea-autosize';
 import Conversation from "@/components/ui/Conversation";
-
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { createChatMutationOptions, createGetUserChatsQueryOptions, type CreateChatResponse } from "./apis/options";
+import type { Chat } from "@/data/types";
 const Chat = () => {
+
   const { open, isMobile } = useSidebar()
   const { chatId } = useParams({ strict: false})
-  const { chats, setChats, setActiveChatIndex, activeChatIndex, setNewChatFiles,newChatFiles } = useChatContext()
+  const { chats, setChats, setActiveChatIndex, activeChatIndex, newChat,setNewChat } = useChatContext()
   const { isLoaded,user } = useUser()
   const navigate = useNavigate()
 
-  const [activeModel, setActiveModel] = useState<string>("")
+  const { refetch }  = useQuery(createGetUserChatsQueryOptions(user?.id));
+  const { mutate } = useMutation(createChatMutationOptions(
+    (data) => {handleSuccessfulMutation(data)},
+    (error) => {console.log(error)}
+  ))
+
+  const [activeModel, setActiveModel] = useState<string>(newChatDefaultObject.model)
+  const [prompt, setPrompt] = useState<string>("")
+  const [isThinking,setIsThinking] = useState<boolean>(false); 
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -34,7 +45,23 @@ const Chat = () => {
     }
   }, [chatId, chats]);
 
-  const handleButtonClick = () => {
+  useEffect(()=>{
+    if(user)
+      refetchChats()
+  },[user])
+
+    
+  const refetchChats = async () => {
+    if(user){
+        const { data } = await refetch();
+        if(data){
+          const tempChats = data.map((chat) =>  { return {...chat,files:[]} } )
+          setChats([...tempChats]);
+        }
+    }
+  };
+
+  const handleAttachmentButtonClick = () => {
     fileInputRef.current?.click();
   };
 
@@ -44,16 +71,18 @@ const Chat = () => {
       const fileArray = Array.from(files);
 
       if (activeChatIndex < 0) {
-        setNewChatFiles((prevFiles) => {
+        setNewChat((prevChat) => {
+
           const uniqueFiles = fileArray.filter(
             (newFile) =>
-              !prevFiles.some(
+              !prevChat.files.some(
                 (existingFile) =>
                   existingFile.name === newFile.name &&
                   existingFile.size === newFile.size
               )
           );
-          return [...prevFiles, ...uniqueFiles];
+
+          return {...prevChat, files:uniqueFiles};
         });
       } else {
         setChats((chats) => {
@@ -81,13 +110,16 @@ const Chat = () => {
     }
   };
 
-
   const deleteFromFile = (index: number) => {
     if (activeChatIndex < 0) {
-      setNewChatFiles((chatFiles) => {
-        const files = [...chatFiles];
-        files.splice(index, 1); // Remove only 1 item at `index`
-        return [...files];
+      setNewChat((chat) => {
+        const updatedFiles = [...chat.files];
+        updatedFiles.splice(index, 1); 
+        const updatedChat = {
+          ...chat,
+          files: updatedFiles,
+        };
+        return updatedChat;
       });
     } else {
       setChats((chats) => {
@@ -106,6 +138,114 @@ const Chat = () => {
       });
     }
   };
+
+  const toggleWebSearch = () => {
+    if(activeChatIndex<0){
+      setNewChat(prevChat => {
+        return {...prevChat, webSearch:!prevChat.webSearch}
+      })
+    }else{
+      setChats(prevChats => {
+        const newchats = [...prevChats]
+        const newchat = {...prevChats[activeChatIndex],webSearch:!prevChats[activeChatIndex].webSearch}
+        newchats[activeChatIndex] = newchat
+        return newchats
+      })
+    }
+  }
+
+  const handleSuccessfulMutation = async (data:CreateChatResponse) => {
+
+    if(activeChatIndex<0){
+      
+      await refetchChats()
+      navigate({ to: "/chat/$chatId", params: { chatId: data.chatId } });
+    
+      resetNewChatDefault();
+
+      setIsThinking(false);
+      setPrompt("");
+      return
+    }
+
+    setChats((prev) => {
+      const temp = [...prev];
+      const chatIndex = temp.findIndex((chat) => data.chatId === chat._id);
+      if (chatIndex === -1) return prev;
+
+      const temp_chat = { ...temp[chatIndex] };
+      temp_chat.messages = [...temp_chat.messages,{
+      _id: "TEMP "+Date.now().toString(),
+      content: data.response,
+      role: "assistant",
+    }]
+      temp[chatIndex] = temp_chat;
+      return [...temp];
+    });
+
+    setIsThinking(false);
+    setPrompt("");
+  }
+
+  const sendChat = async () => {
+    if (isThinking || !prompt.trim() || !user) return;
+
+    setIsThinking(true);
+
+    let chat = {
+      clerkUserId:"",
+      chatId:"",
+      prompt,
+      model:"",
+      systemPrompt:"",
+      webSearch:false
+    }
+
+    setPrompt("");
+
+    if(activeChatIndex>=0){
+
+      setChats((prev) => {
+        const temp = [...prev];
+        const temp_chat = { ...temp[activeChatIndex] };
+        temp_chat.messages = [...temp_chat.messages,{
+          _id: "TEMP "+Date.now().toString(),
+          content: prompt,
+          role: "user",
+        }]
+        temp[activeChatIndex] = temp_chat;
+        return [...temp];
+      });
+
+      chat.clerkUserId=user.id,
+      chat.chatId=chats[activeChatIndex]._id,
+      chat.model=chats[activeChatIndex].model,
+      chat.systemPrompt=chats[activeChatIndex].systemPrompt,
+      chat.webSearch=chats[activeChatIndex].webSearch
+      
+    }else{
+
+      chat.clerkUserId=user.id,
+      chat.chatId=newChat._id,
+      chat.model=newChat.model,
+      chat.systemPrompt=newChat.systemPrompt,
+      chat.webSearch=newChat.webSearch
+
+      setNewChat((prev)=>{
+        return {...prev,messages:[{_id:"temp",content:prompt,role:"user"}]}
+      })
+    }
+
+    
+
+    mutate(chat);
+      
+  };
+
+  const resetNewChatDefault = () => {
+    setNewChat(newChatDefaultObject)
+    setActiveModel(newChatDefaultObject.model)
+  }
 
   return (
     !isLoaded ? <div className="w-screen h-screen flex justify-center items-center text-accent-foreground"> <Spinner className="size-14"/> </div> :
@@ -129,7 +269,8 @@ const Chat = () => {
           
           <div className="flex-1 overflow-y-auto p-6 px-[16vw] hide-scrollbar bg-grey-50 thin-scrollbar mt-2 pt-1 transition-none ">
             { activeChatIndex>=0 ? 
-              chats[activeChatIndex].messages.length > 0 && <Conversation activeMessages={chats[activeChatIndex].messages}/> : 
+              chats[activeChatIndex].messages.length > 0 && <Conversation activeMessages={chats[activeChatIndex].messages } isThinking={isThinking}/> : 
+              newChat.messages.length > 0 ?  <Conversation activeMessages={newChat.messages } isThinking={isThinking}/> :
               <div className="flex justify-center items-center flex-col h-full">
                 <h2 className="text-2xl font-bold mb-2">Welcome back, {user?.fullName} 👋</h2>
                 <p className="text-muted-foreground">Start a new conversation or revisit your recent work.</p>
@@ -138,37 +279,44 @@ const Chat = () => {
 
           {/* Input always at bottom */}
           <div className=" flex flex-col pt-2 px-[16vw] pb-6 items-start">
-            <div className="rounded-md border border-input w-full">
+            <div className="rounded-md border border-input w-full dark:bg-primary-foreground">
 
               {/**Attached Files*/}
-              
-              {((activeChatIndex < 0 && newChatFiles.length>0 ) || (activeChatIndex >= 0 && chats[activeChatIndex].files.length > 0))  && <div className="flex gap-y-[2px] flex-col w-full pt-2 pl-4 dark:bg-primary-foreground rounded-md">
-                {(activeChatIndex < 0 ? newChatFiles : chats[activeChatIndex].files ).map((file,index) => <span className="flex items-center text-sm gap-x-1 italic" key={index}>{file.name} <X onClick={()=> {deleteFromFile(index)}} size={14} color="brown" className="cursor-pointer mt-1"/> </span> )}
+              {((activeChatIndex < 0 && newChat.files.length>0 ) || (activeChatIndex >= 0 && chats[activeChatIndex].files.length > 0))  && <div className="flex gap-y-[2px] flex-col w-full pt-2 pl-4 dark:bg-primary-foreground rounded-t-md">
+                {(activeChatIndex < 0 ? newChat.files : chats[activeChatIndex].files ).map((file,index) => <span className="flex items-center text-sm gap-x-1 italic" key={index}>{file.name} <X onClick={()=> {deleteFromFile(index)}} size={14} color="brown" className="cursor-pointer mt-1"/> </span> )}
               </div>}
-              
-              {/**Input Bar with Attachment and Send */}
-              <div className="flex w-full items-top justify-around dark:bg-primary-foreground rounded-md">
 
-                <div onClick={handleButtonClick} className="p-[15px] px-3 opacity-70 hover:opacity-100 cursor-pointer flex">
+              {/**Input Bar with Attachment and Send */}
+              <div className="flex w-full items-top justify-around">
+
+
+                <div onClick={handleAttachmentButtonClick} className="p-[15px] pr-2 pl-4 opacity-70 hover:opacity-100 cursor-pointer flex">
                   <input type="file" className="hidden" accept="*/*" multiple ref={fileInputRef} onChange={handleFileChange}/> 
                   <Paperclip/>
+                </div>
+
+                <div onClick={toggleWebSearch} className="p-[15px] px-2 opacity-70 hover:opacity-100 cursor-pointer flex">
+                  <Earth className={(activeChatIndex<0 && newChat.webSearch) || (activeChatIndex>=0 && chats[activeChatIndex].webSearch) ? "stroke-blue-700 dark:stroke-blue-500" : "" }/>
                 </div>
                 
                 <TextareaAutosize
                   placeholder="Start typing"
                   minRows={1}
                   maxRows={10}
+                  onKeyDown={(e) => { if (e.key == "Enter" && !e.shiftKey ) {sendChat()} }}
+                  value={prompt}
+                  onChange={(event) => {setPrompt(event.target.value)}}
                   className={cn(
                     "placeholder:text-muted-foreground",
-                    "flex w-full min-w-0 rounded-r-md bg-transparent px-2 mb-3 mt-3 text-md transition-[color,box-shadow] outline-none",
-                    "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+                    "flex w-full min-w-0 rounded-r-md bg-transparent p-2 my-4 md:text-[16px] transition-[color,box-shadow] outline-none",
+                    "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 text-sm",
                     "focus-visible:border-ring focus-visible:ring-ring/50",
                     "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive thin-scrollbar resize-none pt-0"
                   )}
                 />
 
-                <div className="p-[15px] px-3 opacity-70 hover:opacity-100 cursor-pointer">
-                  <Send/>
+                <div className="p-[15px] pr-4 pl-2 opacity-70 hover:opacity-100 cursor-pointer">
+                  <Send onClick={sendChat}/>
                 </div>
 
               </div>
@@ -183,4 +331,4 @@ const Chat = () => {
 
 
 
-export default Chat
+export default Chat;

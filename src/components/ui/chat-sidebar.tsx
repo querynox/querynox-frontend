@@ -56,7 +56,7 @@ export function ChatSidebar() {
 
         {chats.length > 0 && <SidebarGroup className="mt-0 py-0 overflow-hidden group-data-[state=expanded]:pr-0">
           <SidebarGroupLabel className="">Previous Chats</SidebarGroupLabel>
-          <SidebarGroupContent className="h-full overflow-auto group-data-[state=collapsed]:overflow-clip ml-0 thin-scrollbar">
+          <SidebarGroupContent className="h-full overflow-auto group-data-[state=collapsed]:overflow-clip ml-0 thin-scrollbar pr-3">
             <SidebarMenu>
               {chats.map((chat,index)=>
                 <SidebarMenuItem key = {index+chat._id}>
@@ -77,7 +77,7 @@ export function ChatSidebar() {
       
       <Separator/>
 
-      <SidebarFooter className="pb-4">
+      <SidebarFooter className="pb-4 overflow-x-hidden">
           <div className="flex flex-1 overflow-auto justify-left items-center gap-2 overflow-x-hidden pt-1 pl-[2px]">
             <SignedIn>
                 <UserButton />
