@@ -24,7 +24,6 @@ pre {
   padding: 0.5rem;
 }
 
-.code-highlight{}
 :root {
   --markdown-user-background: var(--color-sky-600);
   --markdown-assistant-background: var(--secondary);
