@@ -1,7 +1,7 @@
 import type { Message } from '@/data/types'
 import { cn } from '@/lib/utils'
-import { ClipboardCopy } from 'lucide-react'
-import { useEffect, useRef } from 'react'
+import { Check, ClipboardCopy } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import MarkdownPreview from '@uiw/react-markdown-preview';
 
 type ConversationPropType = {
@@ -11,10 +11,17 @@ type ConversationPropType = {
 
 const Conversation = ({activeMessages, isThinking}:ConversationPropType) => {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const [copid, setCopid] = useState<number>(-1)
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [activeMessages,isThinking]);
+
+  const handleClickCopy = (message:string, index:number) => {
+    setCopid(index);
+    setTimeout(()=>{setCopid(-1)},700)
+    navigator.clipboard.writeText(message)
+  }
 
   return (<>
       {activeMessages.map((message, index)=>{
@@ -33,8 +40,8 @@ const Conversation = ({activeMessages, isThinking}:ConversationPropType) => {
                     />       
 
                     {/* Czpy Button */}
-                    <button  className={cn("text-xs text-gray-400 hover:text-gray-600 flex items-center gap-1 cursor-copy", message.role === "user" ? "ml-auto":"mr-auto")}  onClick={() => navigator.clipboard.writeText(message.content)} title="Copy message">
-                      <ClipboardCopy className="w-4 h-4" />
+                    <button  className={cn("text-xs text-gray-400 hover:text-gray-600 dark:hover:text-white flex items-center gap-1 cursor-copy", message.role === "user" ? "ml-auto":"mr-auto")}  onClick={()=>handleClickCopy(message,index)} title="Copy message">
+                      {copid == index ? <Check className="w-4 h-4 text-green-500" /> : <ClipboardCopy className="w-4 h-4" />}
                       Copy
                     </button>
 
