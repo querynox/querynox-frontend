@@ -32,7 +32,7 @@ const Conversation = ({activeMessages, isThinking}:ConversationPropType) => {
      
                     <MarkdownPreview
                       source={message.content}
-                      className="rounded-lg p-2 mb-2 whitespace-pre-wrap"
+                      className="rounded-lg p-4 mb-2 whitespace-pre-wrap"
                       style={{
                         backgroundColor: message.role === "user" ? "var(--markdown-user-background)" : "var(--markdown-assistant-background)",
                         color: message.role === "user" ? "var(--markdown-user-text)" : "var(--markdown-assistant-text)",
