@@ -20,3 +20,19 @@ export type Chat = {
   updatedAt: string;
   files:File[];
 };
+
+export type CreateChatInput = {
+  clerkUserId: string;
+  chatId: string;
+  prompt: string;
+  model: ModelEnum;
+  systemPrompt: string;
+  webSearch: boolean;
+  files:File[];
+}
+
+export type CreateChatResponse = {
+  chat: Chat;
+  response: string;
+  isError:false;
+} | { error:Error, isError:true }

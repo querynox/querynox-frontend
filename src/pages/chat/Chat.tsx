@@ -12,8 +12,8 @@ import { Paperclip,X,Send, Earth } from "lucide-react";
 import TextareaAutosize from 'react-textarea-autosize';
 import Conversation from "@/components/ui/Conversation";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { createChatMutationOptions, createGetUserChatsQueryOptions, type CreateChatResponse } from "./apis/options";
-import type { Chat } from "@/data/types";
+import { createChatMutationOptions, createGetUserChatsQueryOptions } from "./apis/options";
+import type { Chat, CreateChatInput, CreateChatResponse } from "@/data/types";
 const Chat = () => {
 
   const { open, isMobile } = useSidebar()
@@ -51,12 +51,21 @@ const Chat = () => {
   },[user])
 
     
-  const refetchChats = async () => {
+  const refetchChats = async (isNewChat?:boolean, files?:File[]) => {
     if(user){
         const { data } = await refetch();
         if(data){
-          const tempChats = data.map((chat) =>  { return {...chat,files:[]} } )
-          setChats([...tempChats]);
+          setChats((_prevChats) => {
+            const tempChats = [...data.map((chat) =>  { 
+              const _chat: Chat | undefined = _prevChats.find(_c => _c._id == chat._id);
+              return { ...chat, files: _chat !== undefined ? _chat.files : [] };
+            })]
+            if(isNewChat && files){
+              tempChats[0].files = files;
+            }
+            return tempChats
+          })
+
         }
     }
   };
@@ -156,52 +165,56 @@ const Chat = () => {
 
   const handleSuccessfulMutation = async (data:CreateChatResponse) => {
 
-    if(activeChatIndex<0){
-      
-      await refetchChats()
-      navigate({ to: "/chat/$chatId", params: { chatId: data.chatId } });
-    
-      resetNewChatDefault();
-
+    if(data.isError){
+      console.error(data.error.message)
       setIsThinking(false);
-      setPrompt("");
-      return
+      return;
     }
 
-    setChats((prev) => {
-      const temp = [...prev];
-      const chatIndex = temp.findIndex((chat) => data.chatId === chat._id);
-      if (chatIndex === -1) return prev;
+    if(activeChatIndex<0){
 
-      const temp_chat = { ...temp[chatIndex] };
-      temp_chat.messages = [...temp_chat.messages,{
-      _id: "TEMP "+Date.now().toString(),
-      content: data.response,
-      role: "assistant",
-    }]
-      temp[chatIndex] = temp_chat;
-      return [...temp];
-    });
+      await refetchChats(true,newChat.files)
+      navigate({ to: "/chat/$chatId", params: { chatId: data.chat._id } });
+      resetNewChatDefault();
+
+    }else{
+
+      setChats((prev) => {
+        const temp = [...prev];
+        const chatIndex = temp.findIndex((chat) => data.chat._id === chat._id);
+        if (chatIndex === -1) return prev;
+
+        const temp_chat = { ...temp[chatIndex] };
+        temp_chat.messages = [...temp_chat.messages,{
+          _id: "TEMP "+Date.now().toString(),
+          content: data.response,
+          role: "assistant",
+        }]
+        temp[chatIndex] = temp_chat;
+        return [...temp];
+      });
+
+    }
 
     setIsThinking(false);
-    setPrompt("");
   }
 
   const sendChat = async () => {
+    
     if (isThinking || !prompt.trim() || !user) return;
-
+    const _prompt = prompt;
+    setPrompt("");
     setIsThinking(true);
 
-    let chat = {
+    let chat : CreateChatInput = {
       clerkUserId:"",
       chatId:"",
-      prompt,
+      prompt:_prompt,
       model:"",
       systemPrompt:"",
-      webSearch:false
+      webSearch:false,
+      files:[]
     }
-
-    setPrompt("");
 
     if(activeChatIndex>=0){
 
@@ -222,6 +235,7 @@ const Chat = () => {
       chat.model=chats[activeChatIndex].model,
       chat.systemPrompt=chats[activeChatIndex].systemPrompt,
       chat.webSearch=chats[activeChatIndex].webSearch
+      chat.files=chats[activeChatIndex].files
       
     }else{
 
@@ -230,17 +244,15 @@ const Chat = () => {
       chat.model=newChat.model,
       chat.systemPrompt=newChat.systemPrompt,
       chat.webSearch=newChat.webSearch
+      chat.files=newChat.files
 
       setNewChat((prev)=>{
         return {...prev,messages:[{_id:"temp",content:prompt,role:"user"}]}
       })
+
     }
 
-
-
     mutate(chat);
-      
-    setPrompt("");
   };
 
   const resetNewChatDefault = () => {
@@ -280,7 +292,7 @@ const Chat = () => {
 
           {/* Input always at bottom */}
           <div className=" flex flex-col pt-2 px-[16vw] pb-6 items-start">
-            <div className="rounded-md border border-input w-full dark:bg-primary-foreground">
+            <div className="rounded-md border border-input w-full dark:bg-primary-foreground bg-primary-foreground">
 
               {/**Attached Files*/}
               {((activeChatIndex < 0 && newChat.files.length>0 ) || (activeChatIndex >= 0 && chats[activeChatIndex].files.length > 0))  && <div className="flex gap-y-[2px] flex-col w-full pt-2 pl-4 dark:bg-primary-foreground rounded-t-md">
@@ -304,7 +316,7 @@ const Chat = () => {
                   placeholder="Start typing"
                   minRows={1}
                   maxRows={10}
-                  onKeyDown={(e) => { if (e.key == "Enter" && !e.shiftKey ) {sendChat()} }}
+                  onKeyDown={(e) => { if (e.key == "Enter" && !e.shiftKey ) {e.preventDefault();sendChat()} }}
                   value={prompt}
                   onChange={(event) => {setPrompt(event.target.value)}}
                   className={cn(
