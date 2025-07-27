@@ -2,6 +2,7 @@ import type { Message } from '@/data/types'
 import { cn } from '@/lib/utils'
 import { ClipboardCopy } from 'lucide-react'
 import { useEffect, useRef } from 'react'
+import MarkdownPreview from '@uiw/react-markdown-preview';
 
 type ConversationPropType = {
   activeMessages:Message[];
@@ -21,12 +22,17 @@ const Conversation = ({activeMessages, isThinking}:ConversationPropType) => {
 
                   {/* Bubble Container */}
                   <div className="relative group max-w-[70%] px-4 py-2 mb-2">
+     
+                    <MarkdownPreview
+                      source={message.content}
+                      className="rounded-lg px-4 py-2 mb-2 whitespace-pre-wrap"
+                      style={{
+                        backgroundColor: message.role === "user" ? "var(--markdown-user-background)" : "var(--markdown-assistant-background)",
+                        color: message.role === "user" ? "var(--markdown-user-text)" : "var(--markdown-assistant-text)",
+                      }}
+                    />       
 
-                    <div className={cn("rounded-lg px-4 py-2 mb-2 whitespace-pre-wrap", message.role === "user" ? "bg-sky-700 dark:bg-sky-950 text-white dark:text-accent-foreground": "bg-secondary dark:text-white" )}>
-                      {message.content}
-                    </div>
-
-                    {/* Copy Button */}
+                    {/* Czpy Button */}
                     <button  className={cn("text-xs text-gray-400 hover:text-gray-600 flex items-center gap-1 cursor-copy", message.role === "user" ? "ml-auto":"mr-auto")}  onClick={() => navigator.clipboard.writeText(message.content)} title="Copy message">
                       <ClipboardCopy className="w-4 h-4" />
                       Copy

@@ -19,6 +19,11 @@ code {
 }
 
 :root {
+  --markdown-user-background: var(--color-sky-600);
+  --markdown-assistant-background: var(--secondary);
+  --markdown-assistant-text: var(--accent-foreground);
+  --markdown-user-text: oklch(1 0 0);
+
   --background: oklch(1 0 0);
   --foreground: oklch(0.141 0.005 285.823);
   --card: oklch(1 0 0);
@@ -56,6 +61,11 @@ code {
 }
 
 .dark {
+  --markdown-user-background: var(--color-sky-900);
+  --markdown-assistant-background: var(--secondary);
+  --markdown-assistant-text: var(--accent-foreground);
+  --markdown-user-text: oklch(1 0 0);
+
   --background: oklch(0.141 0.005 285.823);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.141 0.005 285.823);

@@ -236,10 +236,11 @@ const Chat = () => {
       })
     }
 
-    
+
 
     mutate(chat);
       
+    setPrompt("");
   };
 
   const resetNewChatDefault = () => {
