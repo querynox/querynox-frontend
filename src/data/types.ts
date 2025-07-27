@@ -5,6 +5,7 @@ export type Message = {
   role: 'user' | 'assistant';
   content: string;
   createdAt?: string;
+  imageUrl?:string;
 };
 
 
@@ -19,6 +20,7 @@ export type Chat = {
   createdAt: string;
   updatedAt: string;
   files:File[];
+  imageUrl?:string;
 };
 
 export type CreateChatInput = {

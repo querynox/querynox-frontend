@@ -14,6 +14,7 @@ import Conversation from "@/components/ui/Conversation";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createChatMutationOptions, createGetUserChatsQueryOptions } from "./apis/options";
 import type { Chat, CreateChatInput, CreateChatResponse } from "@/data/types";
+
 const Chat = () => {
 
   const { open, isMobile } = useSidebar()
@@ -186,9 +187,11 @@ const Chat = () => {
 
         const temp_chat = { ...temp[chatIndex] };
         temp_chat.messages = [...temp_chat.messages,{
-          _id: "TEMP "+Date.now().toString(),
+          _id: data.chat.messages[data.chat.messages.length-1]._id,
           content: data.response,
           role: "assistant",
+          imageUrl:data.chat.messages[data.chat.messages.length-1].imageUrl,
+          createdAt:data.chat.messages[data.chat.messages.length-1].createdAt,
         }]
         temp[chatIndex] = temp_chat;
         return [...temp];
@@ -280,10 +283,11 @@ const Chat = () => {
 
           {/** Chat / Conversations */}
           
+          {/*TODO: No Need of unnecessary prop drilling, use contest in convesations*/}
           <div className="flex-1 overflow-y-auto p-6 px-[16vw] hide-scrollbar bg-grey-50 thin-scrollbar mt-2 pt-1 transition-none ">
             { activeChatIndex>=0 ? 
-              chats[activeChatIndex].messages.length > 0 && <Conversation activeMessages={chats[activeChatIndex].messages } isThinking={isThinking}/> : 
-              newChat.messages.length > 0 ?  <Conversation activeMessages={newChat.messages } isThinking={isThinking}/> :
+              chats[activeChatIndex].messages.length > 0 && <Conversation isImage={activeChatIndex<0 ? (newChat.model == "dall-e-3" || newChat.model == "gpt-image-1") : (chats[activeChatIndex].model == "dall-e-3" || chats[activeChatIndex].model == "gpt-image-1")} activeMessages={chats[activeChatIndex].messages } isThinking={isThinking}/> : 
+              newChat.messages.length > 0 ?  <Conversation isImage={activeChatIndex<0 ? (newChat.model == "dall-e-3" || newChat.model == "gpt-image-1") : (chats[activeChatIndex].model == "dall-e-3" || chats[activeChatIndex].model == "gpt-image-1")} activeMessages={newChat.messages } isThinking={isThinking}/> :
               <div className="flex justify-center items-center flex-col h-full">
                 <h2 className="text-2xl font-bold mb-2">Welcome back, {user?.fullName} 👋</h2>
                 <p className="text-muted-foreground">Start a new conversation or revisit your recent work.</p>

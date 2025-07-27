@@ -1,15 +1,17 @@
 import type { Message } from '@/data/types'
 import { cn } from '@/lib/utils'
-import { Check, ClipboardCopy } from 'lucide-react'
+import { Check, ClipboardCopy, Download, Save } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import MarkdownPreview from '@uiw/react-markdown-preview';
+import { Skeleton } from './skeleton';
 
 type ConversationPropType = {
   activeMessages:Message[];
   isThinking:boolean;
+  isImage:boolean;
 }
 
-const Conversation = ({activeMessages, isThinking}:ConversationPropType) => {
+const Conversation = ({activeMessages, isThinking, isImage}:ConversationPropType) => {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [copid, setCopid] = useState<number>(-1)
 
@@ -38,12 +40,28 @@ const Conversation = ({activeMessages, isThinking}:ConversationPropType) => {
                         color: message.role === "user" ? "var(--markdown-user-text)" : "var(--markdown-assistant-text)",
                       }}
                     />       
+                    <div className={cn("flex gap-x-4", message.role === "user" ? "ml-auto":"mr-auto")}>
+                    
+                      {/* Copy Button */}
+                      <button  className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-white flex items-center gap-1 cursor-copy"  onClick={()=>handleClickCopy(message.content,index)} title="Copy message">
+                        {copid == index ? <Check className="w-4 h-4 text-green-500" /> : <ClipboardCopy className="w-4 h-4" />}
+                        Copy
+                      </button>
 
-                    {/* Czpy Button */}
-                    <button  className={cn("text-xs text-gray-400 hover:text-gray-600 dark:hover:text-white flex items-center gap-1 cursor-copy", message.role === "user" ? "ml-auto":"mr-auto")}  onClick={()=>handleClickCopy(message.content,index)} title="Copy message">
-                      {copid == index ? <Check className="w-4 h-4 text-green-500" /> : <ClipboardCopy className="w-4 h-4" />}
-                      Copy
-                    </button>
+                      {/* Save Button */}
+                      {message.imageUrl !== undefined &&  message.role == "assistant" &&
+                        <a
+                          href={message.imageUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-white flex items-center gap-1 cursor-pointer"
+                          title="Open image in new tab"
+                        >
+                          <Save className="w-4 h-4" />
+                          Open & Save
+                        </a>}
+                    
+                    </div>
 
                   </div>
                   
@@ -51,11 +69,8 @@ const Conversation = ({activeMessages, isThinking}:ConversationPropType) => {
 
                 {/* Thinking */}
                 {isThinking && <div className="flex justify-start">
-                  <div className="relative group max-w-[70%] px-4 py-2 mb-2">
-                    <div className="rounded-lg px-4 py-2 mb-2 whitespace-pre-wrap bg-secondary dark:text-white">
-                      thinking . . .
-                    </div>
-                  </div>
+                  {isImage? <Skeleton className='size-[400px]'/> :<Skeleton className='w-[400px] h-[40px]'/> }
+
                 </div>}
 
                  <div ref={messagesEndRef} />

@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 
 import { BACKEND_URL } from "@/data/constants";
 import type { Chat, CreateChatResponse } from '@/data/types';
@@ -10,7 +10,7 @@ export const getUserChats = async (clerkUserId:string) : Promise<Omit<Chat,"file
         const response = await axios.get(BACKEND_URL+"/api/chats/user/"+clerkUserId);
         return response.data
     } catch (error) {
-        console.log(error);   
+        console.error(error)
         return []
     }
 }
