@@ -1,4 +1,3 @@
-import { chats } from "@/data/tempChatData";
 import type { Chat } from "@/data/types";
 import { createContext, useState, type ReactNode, useContext, useMemo } from "react";
 
@@ -16,12 +15,12 @@ export const newChatDefaultObject : Chat = {
     _id: "",
     userId: "",
     title: "",
-    model: "gpt-3.5-turbo",
+    model: "llama-3.3-70b-versatile",
     webSearch: false,
     messages: [],
     createdAt: "",
     updatedAt: "",
-    systemPrompt: "You are a helpful Assistant",
+    systemPrompt: "You are a helpful Assistant. Always output in Github's Markdown Format. You can use code highlight using \`\`\`{language_name} \`\`\` tag. Always mention language name.",
     files: []
 }
 

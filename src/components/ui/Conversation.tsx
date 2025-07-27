@@ -21,7 +21,7 @@ const Conversation = ({activeMessages, isThinking}:ConversationPropType) => {
         return <div key={index + message._id} className={cn("flex",message.role === "user" ? "justify-end" : "justify-start")}>
 
                   {/* Bubble Container */}
-                  <div className="relative group max-w-[70%] px-4 py-2 mb-2">
+                  <div className="relative group max-w-[85%] px-4 py-2 mb-2">
      
                     <MarkdownPreview
                       source={message.content}
