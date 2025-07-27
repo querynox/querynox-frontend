@@ -29,10 +29,10 @@ const Chat = () => {
   ))
 
   const [activeModel, setActiveModel] = useState<string>(newChatDefaultObject.model)
-  const [prompt, setPrompt] = useState<string>("")
   const [isThinking,setIsThinking] = useState<boolean>(false); 
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const inputPromptRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (chatId) {
@@ -201,9 +201,10 @@ const Chat = () => {
 
   const sendChat = async () => {
     
-    if (isThinking || !prompt.trim() || !user) return;
-    const _prompt = prompt;
-    setPrompt("");
+    if (isThinking || !inputPromptRef.current || !inputPromptRef.current.value.trim() || !user) return;
+    const _prompt = inputPromptRef.current.value
+    
+    inputPromptRef.current.value = "";
     setIsThinking(true);
 
     let chat : CreateChatInput = {
@@ -223,7 +224,7 @@ const Chat = () => {
         const temp_chat = { ...temp[activeChatIndex] };
         temp_chat.messages = [...temp_chat.messages,{
           _id: "TEMP "+Date.now().toString(),
-          content: prompt,
+          content: _prompt,
           role: "user",
         }]
         temp[activeChatIndex] = temp_chat;
@@ -247,9 +248,8 @@ const Chat = () => {
       chat.files=newChat.files
 
       setNewChat((prev)=>{
-        return {...prev,messages:[{_id:"temp",content:prompt,role:"user"}]}
+        return {...prev,messages:[{_id:"temp",content:_prompt,role:"user"}]}
       })
-
     }
 
     mutate(chat);
@@ -317,8 +317,7 @@ const Chat = () => {
                   minRows={1}
                   maxRows={10}
                   onKeyDown={(e) => { if (e.key == "Enter" && !e.shiftKey ) {e.preventDefault();sendChat()} }}
-                  value={prompt}
-                  onChange={(event) => {setPrompt(event.target.value)}}
+                  ref={inputPromptRef}
                   className={cn(
                     "placeholder:text-muted-foreground",
                     "flex w-full min-w-0 rounded-r-md bg-transparent p-2 my-4 md:text-[16px] transition-[color,box-shadow] outline-none",
