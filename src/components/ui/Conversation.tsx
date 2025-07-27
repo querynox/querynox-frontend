@@ -40,7 +40,7 @@ const Conversation = ({activeMessages, isThinking}:ConversationPropType) => {
                     />       
 
                     {/* Czpy Button */}
-                    <button  className={cn("text-xs text-gray-400 hover:text-gray-600 dark:hover:text-white flex items-center gap-1 cursor-copy", message.role === "user" ? "ml-auto":"mr-auto")}  onClick={()=>handleClickCopy(message,index)} title="Copy message">
+                    <button  className={cn("text-xs text-gray-400 hover:text-gray-600 dark:hover:text-white flex items-center gap-1 cursor-copy", message.role === "user" ? "ml-auto":"mr-auto")}  onClick={()=>handleClickCopy(message.content,index)} title="Copy message">
                       {copid == index ? <Check className="w-4 h-4 text-green-500" /> : <ClipboardCopy className="w-4 h-4" />}
                       Copy
                     </button>
