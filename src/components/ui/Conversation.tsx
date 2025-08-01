@@ -34,7 +34,7 @@ const Conversation = ({activeMessages, isThinking, isImage}:ConversationPropType
      
                     <MarkdownPreview
                       source={message.content}
-                      className="rounded-lg p-4 mb-2 whitespace-pre-wrap"
+                      className="rounded-lg p-4 mb-2 markdown-preview"
                       style={{
                         backgroundColor: message.role === "user" ? "var(--markdown-user-background)" : "var(--markdown-assistant-background)",
                         color: message.role === "user" ? "var(--markdown-user-text)" : "var(--markdown-assistant-text)",
@@ -69,11 +69,10 @@ const Conversation = ({activeMessages, isThinking, isImage}:ConversationPropType
 
                 {/* Thinking */}
                 {isThinking && <div className="flex justify-start">
-                  {isImage? <Skeleton className='size-[400px]'/> :<Skeleton className='w-[400px] h-[40px]'/> }
-
+                  {isImage? <Skeleton className='size-[400px]'/> : <div className='dots-loader mx-4 my-2 p-1'></div> }
                 </div>}
 
-                 <div ref={messagesEndRef} />
+                <div ref={messagesEndRef} />
 
         </>)
   }

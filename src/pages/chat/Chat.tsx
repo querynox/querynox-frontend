@@ -5,7 +5,6 @@ import HeadBar from "@/components/ui/HeadBar";
 import { newChatDefaultObject, useChatContext } from "@/contexts/ChatContext";
 import { useEffect, useState, useRef} from "react";
 import { useUser, SignedOut } from "@clerk/clerk-react";
-import { Spinner } from "@/components/ui/spinner";
 import SignInOverlay from "@/components/ui/SignInOverlay";
 import { cn } from "@/lib/utils";
 import { Paperclip,X,Send, Earth } from "lucide-react";
@@ -35,17 +34,6 @@ const Chat = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const inputPromptRef = useRef<HTMLTextAreaElement>(null);
 
-  useEffect(() => {
-    if (chatId) {
-      const index = chats.findIndex((chat) => chat._id === chatId);
-      if (index !== -1) {
-        setActiveChatIndex(index);
-      }else{
-        navigate({to:"/chat"})
-      }
-    }
-  }, [chatId, chats]);
-
   useEffect(()=>{
     if(user)
       refetchChats()
@@ -67,13 +55,26 @@ const Chat = () => {
             return tempChats
           })
 
-        }
+          handleParamChat(data,chatId)
+      }
     }
   };
 
   const handleAttachmentButtonClick = () => {
     fileInputRef.current?.click();
   };
+
+  const handleParamChat = (data:Chat[] | Omit<Chat, "files">[],chatId:string) => {
+    if (chatId) {
+      const index = data.findIndex((chat) => chat._id === chatId);
+      console.log(index)
+      if (index !== -1) {
+        setActiveChatIndex(index);
+      }else{
+        navigate({to:"/chat"})
+      }
+    }
+  }
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -175,8 +176,7 @@ const Chat = () => {
     if(activeChatIndex<0){
 
       await refetchChats(true,newChat.files)
-      navigate({ to: "/chat/$chatId", params: { chatId: data.chat._id } });
-      resetNewChatDefault();
+      setActiveChatIndex(0);
 
     }else{
 
@@ -264,7 +264,7 @@ const Chat = () => {
   }
 
   return (
-    !isLoaded ? <div className="w-screen h-screen flex justify-center items-center text-accent-foreground"> <Spinner className="size-14"/> </div> :
+    !isLoaded ? <div className="w-screen h-screen flex justify-center items-center text-accent-foreground"> <div className="size-14 spinner-loader"/> </div> :
     <div className={` ${isMobile ? "ml-0": open ? "ml-[16rem]" : "ml-[3rem]"} transition-all h-screen flex flex-col text-accent-foreground`} >
 
         {/** Sign in Overlay if user is not signed in. */}
