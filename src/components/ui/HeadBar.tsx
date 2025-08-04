@@ -64,7 +64,7 @@ const HeadBar = ({ activeModel, setActiveModel }: HeadBarProps) => {
     <div className="flex flex-row items-center justify-between p-3 border-b-[1px] text-accent-foreground bg-secondary">
 
         <Select value={activeModel} onValueChange={changeSelectedModel} >
-          <SelectTrigger className="w-48 bg-muted dark:bg-[#2e2e30]">
+          <SelectTrigger className="w-48 bg-muted dark:bg-[#2e2e30] border-2 border-gray-400 dark:border-gray-500">
             <SelectValue placeholder="Models" />
           </SelectTrigger>
           <SelectContent>
@@ -80,9 +80,19 @@ const HeadBar = ({ activeModel, setActiveModel }: HeadBarProps) => {
           </SelectContent>
         </Select>
 
-        <h1 className="text-[28px] font-semibold relative right-24">
-          QueryNOX
-        </h1>
+        <div className="flex items-center space-x-3 relative right-24">
+                                 <img 
+              src="/querynox.jpeg" 
+              alt="QueryNox" 
+              className="h-10 w-10 rounded-lg"
+            />
+          <div className="flex items-center space-x-2">
+            <span className="text-[28px] font-semibold">
+              <span className="text-foreground">Query</span>
+              <span className="text-muted-foreground">Nox</span>
+            </span>
+          </div>
+        </div>
 
         <div className="cursor-pointer transition-all px-2" onClick={()=>{setDarkmode(prev=>!prev)}}>
           {darkmode? <Sun /> : <Moon/>}
