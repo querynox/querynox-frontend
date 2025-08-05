@@ -55,12 +55,12 @@ const Conversation = () => {
       <p className="text-muted-foreground">Start a new conversation or revisit your recent work.</p>
     </div>)
 
-  return <div className="flex-1 overflow-y-auto p-6 px-[16vw] hide-scrollbar bg-grey-50 thin-scrollbar mt-2 pt-1 transition-none">
-    {activeChat.chatQueries.length>0 ? <>
+  return <div className="flex-1 overflow-y-auto p-6 hide-scrollbar bg-grey-50 thin-scrollbar mt-2 pt-1 transition-none">
+    {activeChat.chatQueries.length>0 ? <div className='w-[800px] mx-auto'>
       {activeChat.chatQueries.map((query, index)=><div  key={index + query._id}>
       
         {/**User Chat */}
-        <div className="flex justify-end">
+        <div className="flex justify-end ">
 
           {/* Bubble Container */}
           <div className="relative group max-w-[85%] px-4 p-2 mb-2">
@@ -84,7 +84,7 @@ const Conversation = () => {
         ?<div className="flex justify-start">
 
           {/* Bubble Container */}
-          <div className="relative group max-w-[85%] px-4 p-2 mb-2">
+          <div className="relative group px-4 p-2 mb-2">
 
             <MarkdownPreview
               source={isChatQueryImage(query) ?
@@ -118,7 +118,7 @@ const Conversation = () => {
         <div className="flex justify-start">
 
           {/* Bubble Container */}
-          <div className="relative group max-w-[85%] px-4 p-2 mb-2">
+          <div className="relative group px-4 p-2 mb-2">
 
             <MarkdownPreview
               source={ streamingResponse.trim() }
@@ -144,7 +144,7 @@ const Conversation = () => {
 
       </div>)}
 
-    </>
+    </div>
     : <div className="flex justify-center items-center h-full"><div className='spinner-loader mx-4 my-2 p-1'></div></div>}
     </div>
   }

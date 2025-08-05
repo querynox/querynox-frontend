@@ -290,7 +290,7 @@ const InputBar = () => {
   
   return (
   <div className="flex flex-col pt-2 px-[16vw] pb-6 items-start">
-      <div className="rounded-lg pt-2 shadow-2xs border border-input w-full dark:bg-primary-foreground bg-primary-foreground">
+      <div className="rounded-lg pt-2 shadow-2xs border border-input w-[800px] mx-auto dark:bg-primary-foreground bg-primary-foreground">
 
         {/**Attached Files*/}
         {activeChat.files.length > 0 && <div className="flex gap-y-[2px] flex-col w-full pt-2 pl-4 dark:bg-primary-foreground">

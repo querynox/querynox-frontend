@@ -13,11 +13,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.markdown-preview>code {
+.markdown-preview code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-  background-color: var(--markdown-code-bg);
+  background-color: var(--markdown-code-bg) !important;
   color:var(--markdown-code);
-  scrollbar-color: #dedede transparent;
+  scrollbar-color: var(--primary) transparent;
+  padding: 4px 10px !important;
 }
 
 .markdown-preview ul {
@@ -25,9 +26,15 @@ body {
   padding-left: 1.25rem;
 }
 
-.markdown-preview>pre {
+.markdown-preview pre {
   background-color: var(--markdown-code-bg) !important;
   padding: 0.5rem;
+}
+
+.wmde-markdown hr {
+  border: none !important;
+  height:1px !important;
+  background-color: var(--scrollbar) !important;
 }
 
 :root {
@@ -36,7 +43,7 @@ body {
   --markdown-assistant-text: var(--accent-foreground);
   --markdown-user-text: oklch(1 0 0);
   --markdown-code-bg: oklch(83.902% 0.0001 271.152);
-  --markdown-code: oklch(1 0 0);
+  --markdown-code: oklch(30.919% 0.00004 271.152);
 
   --background: rgb(240, 240, 240);
   --foreground: rgb(51, 51, 51);
@@ -92,7 +99,7 @@ body {
   --markdown-assistant-background: var(--secondary);
   --markdown-assistant-text: var(--accent-foreground);
   --markdown-user-text: oklch(1 0 0);
-  --markdown-code-bg: oklch(23.075% 0.00003 271.152);
+  --markdown-code-bg: oklch(25.197% 0.00003 271.152);
   --markdown-code: var(--foreground);
 
   --background: rgb(26, 26, 26);

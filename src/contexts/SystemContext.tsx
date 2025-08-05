@@ -2,14 +2,18 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 
 export interface SystemContextType {
     darkmode: boolean;
+    isSidebarOpen:boolean;
 
-    setDarkmode: React.Dispatch<React.SetStateAction<boolean>>
+    setDarkmode: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsSidebarOpen:React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const defaultContext : SystemContextType = {
     darkmode:localStorage.getItem("darkmode") == "true" ? true : false,
+    isSidebarOpen:localStorage.getItem("sidebarOpen") == "true" ? true : false,
 
-    setDarkmode: () => { }
+    setDarkmode: () => { },
+    setIsSidebarOpen: () => { }
 }
 
 
@@ -18,6 +22,7 @@ const SystemContext = createContext<SystemContextType>(defaultContext);
 export const SystemProvider : React.FC<{ children: ReactNode }> = ({ children }) => {
 
     const [darkmode, setDarkmode] = useState<boolean>(defaultContext.darkmode);
+    const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(defaultContext.isSidebarOpen);
     
     useEffect(()=>{
         localStorage.setItem("darkmode",darkmode ? "true": "false");
@@ -28,10 +33,17 @@ export const SystemProvider : React.FC<{ children: ReactNode }> = ({ children })
         }
     },[darkmode])
 
+    useEffect(()=>{
+        localStorage.setItem("sidebarOpen",isSidebarOpen ? "true": "false");
+    },[isSidebarOpen])
+
+
     const value = {
         darkmode,
+        isSidebarOpen,
 
-        setDarkmode 
+        setDarkmode,
+        setIsSidebarOpen
     }
 
     return (
