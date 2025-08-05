@@ -1,0 +1,83 @@
+
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem } from "@/components/ui/select";
+
+import { useChatContext } from "@/contexts/ChatContext";
+import { useSystemContext } from "@/contexts/SystemContext";
+import { useEffect, useState } from "react";
+import { Moon, Sun } from "lucide-react";
+import useQueryModels from "@/pages/chat/apis/queries/useQueryModels";
+import type { Model } from "@/data/types";
+
+
+const HeadBar = () => {
+  const { data: models  } = useQueryModels();
+  const { chats, activeChatIndex, setChats, setNewChat, activeChat } = useChatContext();
+  const { darkmode, setDarkmode } = useSystemContext();
+  
+  const [groupedModels, setGroupedModels] = useState<Record<string, Model[]>>();
+  
+  useEffect(()=>{
+    if(models)
+    setGroupedModels(generateGroupedModels(models));
+  },[models])
+  
+  const generateGroupedModels = (models:Model[]) :  Record<string, Model[]> => { return models.reduce((acc, model) => {
+    const category = model.category;
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(model);
+    return acc;
+  }, {} as Record<string, typeof models>)}
+
+
+  const changeSelectedModel = (modelName:string) => {
+    if(activeChatIndex<0){
+      setNewChat((chat) => {
+        const uChat = {...chat,model:modelName};
+        return uChat;
+      })
+    }else if(chats[activeChatIndex]){
+      setChats(prev => {
+        const chats = [...prev];
+        const uChat = {...prev[activeChatIndex],model:modelName};
+        chats[activeChatIndex] = uChat;
+        return chats;
+      })
+    }
+  }
+
+  return (
+    <div className="flex flex-row items-center justify-between p-3 border-b-[1px] text-accent-foreground bg-secondary">
+
+        <Select value={activeChat.model} onValueChange={changeSelectedModel} >
+          <SelectTrigger className="w-48 bg-muted dark:bg-[#2e2e30]">
+            <SelectValue placeholder="Models" />
+          </SelectTrigger>
+          <SelectContent>
+              {groupedModels &&
+              Object.keys(groupedModels).map((key) => {
+                const _models = groupedModels;
+                return (
+                <SelectGroup key={key}>
+                  <SelectLabel>{key}</SelectLabel>
+                  {_models[key].map((model)=> <SelectItem value={model.name} key={model.name} title={model.description}>{model.name}</SelectItem> )}
+                </SelectGroup>
+                )
+              }) }
+          </SelectContent>
+        </Select>
+
+        <h1 className="text-[28px] font-semibold relative right-24">
+          QueryNOX
+        </h1>
+
+        <div className="cursor-pointer transition-all px-2" onClick={()=>{setDarkmode(prev=>!prev)}}>
+          {darkmode? <Sun /> : <Moon/>}
+        </div>
+
+    </div>
+  )
+}
+
+export default HeadBar

@@ -1,10 +1,9 @@
 import { createRoute } from "@tanstack/react-router";
+import { chatRoute } from "@/router/routes/chat.route";
 import Chat from "@/pages/chat/Chat";
-import { rootRoute } from "../route";
 
 export const chatIdRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/chat/$chatId',
-  component: Chat
-  },
-);
+  getParentRoute: () => chatRoute,
+  path: '$chatId',
+  component: Chat,
+});

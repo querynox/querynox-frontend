@@ -16,12 +16,14 @@ import {
 import { SignedIn, UserButton , useUser} from "@clerk/clerk-react"
 import { Link } from "@tanstack/react-router";
 import { useChatContext } from "@/contexts/ChatContext";
-import { Separator } from "./separator";
+import { Separator } from "../../../components/ui/separator";
 import { cn } from "@/lib/utils";
 
 export function ChatSidebar() {
+
   const {chats,setActiveChatIndex,activeChatIndex} = useChatContext();
   const {user} = useUser();
+  
   return (
     <Sidebar collapsible="icon" className="">
 
@@ -82,7 +84,7 @@ export function ChatSidebar() {
           <div className="flex flex-1 overflow-auto justify-left items-center gap-2 overflow-x-hidden pt-1 pl-[2px]">
             <SignedIn>
                 <UserButton />
-                <span className="text-nowrap">{user?.fullName}</span>
+                <span className="text-nowrap ml-2">{user?.fullName}</span>
             </SignedIn>
           </div>
       </SidebarFooter>
