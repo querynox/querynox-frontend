@@ -54,7 +54,7 @@ const Chat = () => {
   if (!isUserLoaded || !isModelFetched) return <div className="w-screen h-screen flex justify-center items-center text-accent-foreground"> <div className="size-14 spinner-loader"/> </div>;
 
   return (
-    <div className={` ${isMobile ? "ml-0": open ? "ml-[16rem]" : "ml-[3rem]"} transition-all h-screen flex flex-col text-accent-foreground w-full dark:bg-[#1f1f1f]`} >
+    <div className={` ${isMobile ? "ml-0": open ? "ml-[16rem]" : "ml-[3rem]"} transition-all h-screen flex flex-col text-accent-foreground w-full dark:bg-[#1f1f1f] overflow-hidden`} >
 
         {/** Sign in Overlay if user is not signed in. */}
         <SignedOut>

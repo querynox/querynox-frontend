@@ -8,6 +8,9 @@ import useQueryModels from '@/pages/chat/apis/queries/useQueryModels';
 import { useUser } from '@clerk/clerk-react';
 import useQueryMessages from '../apis/queries/useQueryMessages';
 
+
+import { useSystemContext } from '@/contexts/SystemContext';
+
 const Conversation = () => {
 
   const chatQueryEndRef = useRef<HTMLDivElement | null>(null);
@@ -15,6 +18,7 @@ const Conversation = () => {
   
   const { data: models  } = useQueryModels();
   const { activeChat, activeChatIndex, setChats } = useChatContext();
+  const { darkmode } = useSystemContext()
   const { user } = useUser();
   const { data } = useQueryMessages(activeChat._id);
 
@@ -66,6 +70,7 @@ const Conversation = () => {
                 backgroundColor: "var(--markdown-user-background)",
                 color: "var(--markdown-user-text)",
               }}
+              wrapperElement={{ "data-color-mode": darkmode ? "dark" : "light" }}
             />       
 
           </div>
@@ -86,8 +91,9 @@ const Conversation = () => {
               className={isChatQueryImage(query) ?"rounded-lg mb-2 markdown-preview":"rounded-lg p-4 mb-2 markdown-preview"}
               style={{
                 backgroundColor:"var(--markdown-assistant-background)",
-                color:"var(--markdown-assistant-text)",
+                color:"var(--markdown-assistant-text)"
               }}
+              wrapperElement={{ "data-color-mode": darkmode ? "dark" : "light" }}
             /> 
           
             {/* Copy Button / Save Button */}

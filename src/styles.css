@@ -15,7 +15,7 @@ body {
 
 .markdown-preview>code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-  background-color: var(--markdown-code-bg) !important;
+  background-color: var(--markdown-code-bg);
   color:var(--markdown-code);
   scrollbar-color: #dedede transparent;
 }
@@ -24,7 +24,6 @@ body {
   list-style-type: disc;
   padding-left: 1.25rem;
 }
-
 
 .markdown-preview>pre {
   background-color: var(--markdown-code-bg) !important;
@@ -36,8 +35,8 @@ body {
   --markdown-assistant-background: var(--secondary);
   --markdown-assistant-text: var(--accent-foreground);
   --markdown-user-text: oklch(1 0 0);
-  --markdown-code-bg: oklch(40.912% 0.00005 271.152);
-  --markdown-code: oklch(100% 0.00011 271.152);
+  --markdown-code-bg: oklch(83.902% 0.0001 271.152);
+  --markdown-code: oklch(1 0 0);
 
   --background: rgb(240, 240, 240);
   --foreground: rgb(51, 51, 51);

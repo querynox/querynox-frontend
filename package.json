@@ -26,6 +26,7 @@
     "@tanstack/react-query-devtools": "^5.66.5",
     "@tanstack/react-router": "^1.121.2",
     "@tanstack/react-router-devtools": "^1.121.2",
+    "@uiw/codemirror-theme-github": "^4.24.2",
     "@uiw/react-markdown-preview": "^5.1.4",
     "axios": "^1.11.0",
     "class-variance-authority": "^0.7.1",
