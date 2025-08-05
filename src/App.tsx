@@ -22,9 +22,7 @@ const InnerApp = () => {
       appearance={{ baseTheme: darkmode ? dark : undefined }}
     >
       <ChatProvider>
-        <SidebarProvider>
-          <RouterProvider router={router} />
-        </SidebarProvider>
+        <RouterProvider router={router} />
       </ChatProvider>
     </ClerkProvider>
   );

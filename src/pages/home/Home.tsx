@@ -40,7 +40,7 @@ const Home = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="h-screen bg-background overflow-y-auto thin-scrollbar">
       {/* Navbar */}
       <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="flex h-16 items-center justify-between px-6">
@@ -127,27 +127,27 @@ const Home = () => {
           <h2 className="text-4xl font-bold text-center mb-16 animate-fade-in-up">Powerful AI Models</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="bg-background p-8 rounded-xl border shadow-sm hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out transform">
-              <img src="/openai.svg" alt="OpenAI" className="h-12 w-16 mb-4 dark:invert" />
+              <img src="/openai.svg" alt="OpenAI" className="h-12 mb-4 dark:invert" />
               <h3 className="text-xl font-semibold mb-3">OpenAI GPT-3.5</h3>
               <p className="text-muted-foreground">Fast and reliable conversational AI for everyday tasks.</p>
             </div>
             <div className="bg-background p-8 rounded-xl border shadow-sm hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out transform">
-              <img src="/claude.png" alt="Claude" className="h-12 w-12 mb-4" />
+              <img src="/claude.png" alt="Claude" className="h-12 mb-4" />
               <h3 className="text-xl font-semibold mb-3">Claude Haiku 3.5</h3>
               <p className="text-muted-foreground">Anthropic's latest model for nuanced conversations.</p>
             </div>
             <div className="bg-background p-8 rounded-xl border shadow-sm hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out transform">
-              <img src="/meta svg.png" alt="Llama" className="h-12 w-20 mb-4 dark:brightness-0 dark:invert" />
+              <img src="/meta svg.png" alt="Llama" className="h-12 mb-4 dark:brightness-0 dark:invert" />
               <h3 className="text-xl font-semibold mb-3">Llama 3.3 70B</h3>
               <p className="text-muted-foreground">High-performance model via Groq for complex reasoning.</p>
             </div>
             <div className="bg-background p-8 rounded-xl border shadow-sm hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out transform">
-              <img src="/geminisvg.png" alt="Gemini" className="h-12 w-20 mb-4 rounded-lg" />
+              <img src="/geminisvg.png" alt="Gemini" className="h-12 mb-4 rounded-lg" />
               <h3 className="text-xl font-semibold mb-3">Gemini Pro</h3>
               <p className="text-muted-foreground">Google's advanced model for comprehensive understanding.</p>
             </div>
             <div className="bg-background p-8 rounded-xl border shadow-sm hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out transform">
-              <img src="/openai.svg" alt="OpenAI" className="h-12 w-16 mb-4 dark:invert" />
+              <img src="/openai.svg" alt="OpenAI" className="h-12 mb-4 dark:invert" />
               <h3 className="text-xl font-semibold mb-3">DALL-E 3 / GPT-Image-1</h3>
               <p className="text-muted-foreground">Create stunning images from text descriptions.</p>
             </div>
