@@ -8,22 +8,23 @@ import useQueryModels from '@/pages/chat/apis/queries/useQueryModels';
 import { useUser } from '@clerk/clerk-react';
 import useQueryMessages from '../apis/queries/useQueryMessages';
 
+import '@uiw/react-markdown-preview/markdown.css';
 
 import { useSystemContext } from '@/contexts/SystemContext';
 
 const Conversation = () => {
 
-  const chatQueryEndRef = useRef<HTMLDivElement | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const [copid, setCopid] = useState<number>(-1)
   
   const { data: models  } = useQueryModels();
-  const { activeChat, activeChatIndex, setChats } = useChatContext();
+  const { activeChat, activeChatIndex, setChats, streamingResponse } = useChatContext();
   const { darkmode } = useSystemContext()
   const { user } = useUser();
   const { data } = useQueryMessages(activeChat._id);
 
   useEffect(() => {
-    chatQueryEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    scrollContainerRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [activeChat.chatQueries.length]);
 
   useEffect(()=>{
@@ -54,7 +55,8 @@ const Conversation = () => {
       <p className="text-muted-foreground">Start a new conversation or revisit your recent work.</p>
     </div>)
 
-  return activeChat.chatQueries.length>0 ? <>
+  return <div className="flex-1 overflow-y-auto p-6 px-[16vw] hide-scrollbar bg-grey-50 thin-scrollbar mt-2 pt-1 transition-none">
+    {activeChat.chatQueries.length>0 ? <>
       {activeChat.chatQueries.map((query, index)=><div  key={index + query._id}>
       
         {/**User Chat */}
@@ -65,7 +67,7 @@ const Conversation = () => {
 
             <MarkdownPreview
               source={query.prompt}
-              className="rounded-lg p-4 mb-2 markdown-preview"
+              className="rounded-lg p-3 mb-2 markdown-preview"
               style={{
                 backgroundColor: "var(--markdown-user-background)",
                 color: "var(--markdown-user-text)",
@@ -88,7 +90,7 @@ const Conversation = () => {
               source={isChatQueryImage(query) ?
                  `<img src="${query.response}" alt="${query.prompt}" loading="lazy" style="width: 400px; aspect-ratio: 1/1; background-color: #222; object-fit: cover; border-radius: 8px;" />` 
                  : query.response}
-              className={isChatQueryImage(query) ?"rounded-lg mb-2 markdown-preview":"rounded-lg p-4 mb-2 markdown-preview"}
+              className={isChatQueryImage(query) ?"rounded-lg mb-2 markdown-preview":"rounded-lg p-3 mb-2 markdown-preview"}
               style={{
                 backgroundColor:"var(--markdown-assistant-background)",
                 color:"var(--markdown-assistant-text)"
@@ -111,16 +113,40 @@ const Conversation = () => {
 
         </div>
 
+        /**Assistant Chat Stream*/
+        : streamingResponse.trim()?
+        <div className="flex justify-start">
+
+          {/* Bubble Container */}
+          <div className="relative group max-w-[85%] px-4 p-2 mb-2">
+
+            <MarkdownPreview
+              source={ streamingResponse.trim() }
+              className="rounded-lg p-3 mb-2 markdown-preview"
+              style={{
+                backgroundColor:"var(--markdown-assistant-background)",
+                color:"var(--markdown-assistant-text)"
+              }}
+              wrapperElement={{ "data-color-mode": darkmode ? "dark" : "light" }}
+            /> 
+
+            
+          </div>
+
+        </div>
+
+        /**Assistant Chat loader*/
         :<div className="flex justify-start">
-          {isChatQueryImage(query) ? <Skeleton className='size-[400px]'/> : <div className='dots-loader mx-4 my-2 p-1'></div> }
+          {isChatQueryImage(query) ? <Skeleton className='size-[400px]  mx-4'/> : <div className='dots-loader mx-4 my-2 p-1'></div> }
         </div>}
-          
+
+        <div ref={scrollContainerRef} />
+
       </div>)}
 
-      <div ref={chatQueryEndRef} />
-
     </>
-    : <div className="flex justify-center items-center h-full"><div className='spinner-loader mx-4 my-2 p-1'></div></div>
+    : <div className="flex justify-center items-center h-full"><div className='spinner-loader mx-4 my-2 p-1'></div></div>}
+    </div>
   }
 
 export default Conversation

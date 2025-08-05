@@ -8,13 +8,14 @@ import TextareaAutosize from 'react-textarea-autosize';
 import useMutationChat from '../apis/mutations/useMutationChat';
 import { useUser } from '@clerk/clerk-react';
 import { useNavigate } from '@tanstack/react-router';
+import { streamSSE } from '../apis/stream/streamSSE';
 
 const InputBar = () => {  
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const inputPromptRef = useRef<HTMLTextAreaElement>(null);
 
-  const { activeChat, activeChatIndex, setNewChat, setChats, setActiveChatIndex, newChat } = useChatContext();
+  const { activeChat, activeChatIndex, setNewChat, setChats, setActiveChatIndex, newChat, setStreamingResponse } = useChatContext();
   const { mutate } = useMutationChat((data)=>handleSuccessfulMutation(data));
   const { user } = useUser();
   const navigate = useNavigate();
@@ -119,7 +120,7 @@ const InputBar = () => {
   }
 
   const sendChat = async () => {
-    const isThinking = activeChatIndex > 0 ? !!(activeChat.chatQueries[activeChat.chatQueries.length-1].response) : false;
+    const isThinking = activeChatIndex > 0 ? !(activeChat.chatQueries[activeChat.chatQueries.length-1].response) : false;
     if (!inputPromptRef.current || !inputPromptRef.current.value.trim() || !user || isThinking) return;
     const _prompt = inputPromptRef.current.value.trim()
     
@@ -166,7 +167,7 @@ const InputBar = () => {
 
 
   };
-  
+
   const handleSuccessfulMutation = async (data:CreateChatOutput) => {
 
     if(activeChatIndex<0){
@@ -197,12 +198,94 @@ const InputBar = () => {
         const chatQuery = temp[chatIndex].chatQueries.pop();
         if(!chatQuery)  return prev;
 
-        temp[chatIndex] = {...temp[chatIndex] , chatQueries:[...temp[chatIndex].chatQueries,{...chatQuery,...data}]}
+        temp[chatIndex] = {...temp[chatIndex] , chatQueries:[...temp[chatIndex].chatQueries,{...chatQuery,...data.chatQuery}]}
 
         return temp;
       });
 
     }
+  }
+
+  const sendChatStream = async () => {
+
+    // if(false){
+    //   //TODO: if mistakenly image model then redirect to sendChat()
+    // }
+
+    const isThinking = activeChatIndex > 0 ? !(activeChat.chatQueries[activeChat.chatQueries.length-1].response) : false;
+
+    if (!inputPromptRef.current || !inputPromptRef.current.value.trim() || !user || isThinking) return;
+    const _prompt = inputPromptRef.current.value.trim()
+    
+    inputPromptRef.current.value = "";
+
+    const chat : CreateChatInput = {
+      clerkUserId:user.id,
+      chatId:activeChat._id,
+      prompt:_prompt,
+      model:activeChat.model,
+      systemPrompt:activeChat.systemPrompt,
+      webSearch:activeChat.webSearch,
+      files:activeChat.files
+    }
+
+    const chatQuery : ChatQuery = {
+      _id:Date.now().toString(),
+      chatId:Date.now().toString(),
+      model:activeChat.model,
+      prompt:_prompt,
+      response:"",
+      systemPrompt:activeChat.systemPrompt,
+      webSearch:activeChat.webSearch,
+      createdAt:Date.now(),
+      updatedAt:Date.now()
+    }
+
+    if(activeChatIndex>=0){
+      setChats((prev) => {
+        const temp = [...prev];
+        const temp_chat = { ...temp[activeChatIndex] };
+        temp_chat.chatQueries = [...temp_chat.chatQueries,chatQuery]
+        temp[activeChatIndex] = temp_chat;
+        return [...temp];
+      });
+    }else{
+      setNewChat((prev)=>{
+        return {...prev,chatQueries:[chatQuery]}
+      })
+      console.log(newChat)
+    }
+
+    await streamSSE(chat,
+      async (response) => {
+        switch (response.type) {
+          case 'status':
+            console.log("Status:", response.message);
+            break;
+          case 'complete':
+            await handleSuccessfulMutation({chatQuery:response.chatQuery,chat:response.chat})
+            setStreamingResponse("");
+            break;
+          case 'metadata':
+            console.log(response);
+            break;
+          case 'error':
+            console.error("Server Error:", response.error);
+            break;
+          case 'content':
+            setStreamingResponse(prev => prev + response.content)
+            break;
+        }
+      },
+      () => {
+        console.log("Streaming complete");
+      },
+      (error) => {
+        console.error("Streaming failed:", error);
+      }
+    );
+
+
   }
   
   return (
@@ -231,7 +314,7 @@ const InputBar = () => {
             placeholder="Start typing"
             minRows={1}
             maxRows={10}
-            onKeyDown={(e) => { if (e.key == "Enter" && !e.shiftKey ) {e.preventDefault();sendChat()} }}
+            onKeyDown={(e) => { if (e.key == "Enter" && !e.shiftKey ) {e.preventDefault();sendChatStream()} }}
             ref={inputPromptRef}
             className={cn(
               "placeholder:text-muted-foreground",

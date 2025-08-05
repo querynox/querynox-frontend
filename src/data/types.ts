@@ -48,3 +48,22 @@ export type CreateChatOutput = {
   chatQuery:ChatQuery,
   chat?:Omit<Chat, 'chatQueries' | 'files' >
 }
+
+export type StreamChatOutput = {
+  type:  'status' ;
+  message:string;
+} | {
+  type: 'error' ;
+  error:string;
+} | {
+  type: 'metadata' ;
+  chatId:string;
+  chatName:string;
+} | {
+  type: 'complete' ;
+  chatQuery:ChatQuery;
+  chat:Omit<Chat, "chatQueries" | "files">;
+} | {
+  type: 'content' ;
+  content:string;
+}

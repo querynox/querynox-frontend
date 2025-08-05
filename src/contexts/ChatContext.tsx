@@ -6,10 +6,12 @@ export interface ChatContextType {
     newChat:Chat;
     activeChatIndex:number;
     activeChat:Chat;
+    streamingResponse:string;
 
     setChats: React.Dispatch<React.SetStateAction<Chat[]>>;
     setActiveChatIndex: React.Dispatch<React.SetStateAction<number>>;
     setNewChat:React.Dispatch<React.SetStateAction<Chat>>;
+    setStreamingResponse:React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const newChatDefaultObject : Chat = {
@@ -32,10 +34,12 @@ const defaultContext: ChatContextType = {
     activeChatIndex:-1,
     newChat:newChatDefaultObject,
     activeChat:newChatDefaultObject,
+    streamingResponse:"",
 
     setChats: () => { },
     setActiveChatIndex: () => { },
-    setNewChat: () => { }
+    setNewChat: () => { },
+    setStreamingResponse: () => { },
 };
 
 // Create Context
@@ -47,6 +51,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const [activeChatIndex, setActiveChatIndex] = useState<number>(defaultContext.activeChatIndex);
     const [newChat,setNewChat] = useState<Chat>(defaultContext.newChat);
     const [activeChat,setActiveChat] = useState<Chat>(defaultContext.activeChat);
+    const [streamingResponse,setStreamingResponse] = useState<string>(defaultContext.streamingResponse);
 
     useEffect(() => {
         const nextChat = activeChatIndex >= 0 && activeChatIndex < chats.length
@@ -60,11 +65,13 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         activeChatIndex,
         newChat,
         activeChat,
-        
+        streamingResponse,
+
         setChats,
         setActiveChatIndex,
         setNewChat,
-    }), [chats, activeChatIndex, newChat, activeChat]);
+        setStreamingResponse
+    }), [chats, activeChatIndex, newChat, activeChat, streamingResponse]);
 
     return (
         <ChatContext.Provider

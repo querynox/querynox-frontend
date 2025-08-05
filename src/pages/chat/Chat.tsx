@@ -54,7 +54,7 @@ const Chat = () => {
   if (!isUserLoaded || !isModelFetched) return <div className="w-screen h-screen flex justify-center items-center text-accent-foreground"> <div className="size-14 spinner-loader"/> </div>;
 
   return (
-    <div className={` ${isMobile ? "ml-0": open ? "ml-[16rem]" : "ml-[3rem]"} transition-all h-screen flex flex-col text-accent-foreground w-full dark:bg-[#1f1f1f] overflow-hidden`} >
+    <div className={` ${isMobile ? "ml-0": open ? "ml-[16rem]" : "ml-[3rem]"} transition-all h-screen flex flex-col text-accent-foreground w-full bg-background overflow-hidden`} >
 
         {/** Sign in Overlay if user is not signed in. */}
         <SignedOut>
@@ -71,10 +71,7 @@ const Chat = () => {
         <div className="flex flex-col flex-1 bg-grey-200 rounded-lg overflow-hidden">
 
           {/** Chat / Conversations */}
-        
-          <div className="flex-1 overflow-y-auto p-6 px-[16vw] hide-scrollbar bg-grey-50 thin-scrollbar mt-2 pt-1 transition-none ">
-            <Conversation /> 
-          </div>
+          <Conversation /> 
 
           {/* Input always at bottom */}
           <InputBar/>
