@@ -4,7 +4,6 @@ import { Provider as TanStackQueryProvider } from "@/integrations/tanstack-query
 import { router } from "@/router/route.tsx"
 
 import { ClerkProvider } from '@clerk/clerk-react'
-import { SidebarProvider } from './components/ui/sidebar.tsx'
 import { ChatProvider } from './contexts/ChatContext.tsx'
 import { SystemProvider, useSystemContext } from './contexts/SystemContext.tsx'
 import { dark } from '@clerk/themes'

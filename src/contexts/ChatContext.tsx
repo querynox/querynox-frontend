@@ -67,7 +67,7 @@ const ChatContext = createContext<ChatContextType>(defaultContext);
 export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [chats, setChats] = useState<Chat[]>(defaultContext.chats);
     const [activeChatIndex, setActiveChatIndex] = useState<number>(defaultContext.activeChatIndex);
-    const [newChat,setNewChat] = useState<Chat>(defaultContext.newChat);
+    const [newChat,setNewChat] = useState<Chat>({...defaultContext.newChat});
     const [activeChat,setActiveChat] = useState<Chat>(defaultContext.activeChat);
     const [streamingResponse,setStreamingResponse] = useState<string>(defaultContext.streamingResponse);
 
