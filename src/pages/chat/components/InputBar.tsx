@@ -162,10 +162,7 @@ const InputBar = () => {
       setNewChat((prev)=>{
         return {...prev,chatQueries:[chatQuery]}
       })
-      console.log(newChat)
     }
-
-
   };
 
   const handleSuccessfulMutation = async (data:CreateChatOutput) => {
@@ -208,10 +205,6 @@ const InputBar = () => {
 
   const sendChatStream = async () => {
 
-    // if(false){
-    //   //TODO: if mistakenly image model then redirect to sendChat()
-    // }
-
     const isThinking = activeChatIndex > 0 ? !(activeChat.chatQueries[activeChat.chatQueries.length-1].response) : false;
 
     if (!inputPromptRef.current || !inputPromptRef.current.value.trim() || !user || isThinking) return;
@@ -244,16 +237,23 @@ const InputBar = () => {
     if(activeChatIndex>=0){
       setChats((prev) => {
         const temp = [...prev];
-        const temp_chat = { ...temp[activeChatIndex] };
-        temp_chat.chatQueries = [...temp_chat.chatQueries,chatQuery]
-        temp[activeChatIndex] = temp_chat;
-        return [...temp];
+        const chat = { ...temp[activeChatIndex] };
+
+        // Combine current and new queries safely
+        const currentQueries = chat.chatQueries || [];
+
+        const alreadyExists = currentQueries.some(q => q._id === chatQuery._id);
+        if (!alreadyExists) {
+          chat.chatQueries = [...currentQueries, chatQuery];
+          temp[activeChatIndex] = chat;
+        }
+
+        return temp;
       });
     }else{
       setNewChat((prev)=>{
         return {...prev,chatQueries:[chatQuery]}
       })
-      console.log(newChat)
     }
 
     await streamSSE(chat,
