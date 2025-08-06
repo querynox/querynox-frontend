@@ -55,15 +55,15 @@ const Conversation = () => {
       <p className="text-muted-foreground">Start a new conversation or revisit your recent work.</p>
     </div>)
 
-  return <div className="flex-1 overflow-y-auto p-6 hide-scrollbar bg-grey-50 thin-scrollbar mt-2 pt-1 transition-none">
-    {activeChat.chatQueries.length>0 ? <div className='w-[800px] mx-auto'>
+  return <div className="flex-1 overflow-y-auto min-[650px]:p-6 min-[500px]:p-4 min-[400px]:p-[14px] min-[350px]:p-[12px] p-3 overflow-x-hidden bg-grey-50 thin-scrollbar mt-2 pt-1 transition-none">
+    {activeChat.chatQueries.length>0 ? <div className='min-[590px]:max-w-[800px] min-[590px]:w-full min-[200px]:w-full mx-auto'>
       {activeChat.chatQueries.map((query, index)=><div  key={index + query._id}>
       
         {/**User Chat */}
         <div className="flex justify-end ">
 
           {/* Bubble Container */}
-          <div className="relative group max-w-[85%] px-4 p-2 mb-2">
+          <div className="relative group max-w-[85%] min-[500px]:px-4 min-[400px]:px-[14px] min-[350px]:px-[12px] px-2 mb-2">
 
             <MarkdownPreview
               source={query.prompt}
@@ -84,7 +84,7 @@ const Conversation = () => {
         ?<div className="flex justify-start">
 
           {/* Bubble Container */}
-          <div className="relative group px-4 p-2 mb-2">
+          <div className="relative group px-4 py-2 mb-2">
 
             <MarkdownPreview
               source={isChatQueryImage(query) ?
@@ -93,7 +93,7 @@ const Conversation = () => {
               className={isChatQueryImage(query) ?"rounded-lg mb-2 markdown-preview":"rounded-lg p-3 mb-2 markdown-preview"}
               style={{
                 backgroundColor:"var(--markdown-assistant-background)",
-                color:"var(--markdown-assistant-text)"
+                color:"var(--markdown-assistant-text)",
               }}
               wrapperElement={{ "data-color-mode": darkmode ? "dark" : "light" }}
             /> 

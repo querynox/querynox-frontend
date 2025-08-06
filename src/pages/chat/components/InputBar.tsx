@@ -289,8 +289,8 @@ const InputBar = () => {
   }
   
   return (
-  <div className="flex flex-col pt-2 px-[16vw] pb-6 items-start">
-      <div className="rounded-lg pt-2 shadow-2xs border border-input w-[800px] mx-auto dark:bg-primary-foreground bg-primary-foreground">
+  <div className="flex flex-col px-4 pb-3 items-center justify-center">
+      <div className="flex-1 rounded-lg py-1 shadow-2xs border border-input max-w-[800px] w-full dark:bg-primary-foreground bg-primary-foreground">
 
         {/**Attached Files*/}
         {activeChat.files.length > 0 && <div className="flex gap-y-[2px] flex-col w-full pt-2 pl-4 dark:bg-primary-foreground">
@@ -298,16 +298,16 @@ const InputBar = () => {
         </div>}
 
         {/**Input Bar with Attachment and Send */}
-        <div className="flex w-full items-top justify-around">
+        <div className="flex w-full items-top justify-around min-[350px]:min-h-[50px] p-2">
 
 
-          <div onClick={handleAttachmentButtonClick} className="p-[15px] pr-2 pl-4 opacity-70 hover:opacity-100 cursor-pointer flex">
+          <div onClick={handleAttachmentButtonClick} className="min-[480px]:px-2 px-1 opacity-70 hover:opacity-100 cursor-pointer flex">
             <input type="file" className="hidden" accept="*/*" multiple ref={fileInputRef} onChange={handleFileChange}/> 
-            <Paperclip/>
+            <Paperclip className='size-[18px] min-[480px]:size-[24px]'/>
           </div>
 
-          <div onClick={toggleWebSearch} className="p-[15px] px-2 opacity-70 hover:opacity-100 cursor-pointer flex">
-            <Earth className={activeChat.webSearch ? "stroke-blue-700 dark:stroke-blue-500" : "" }/>
+          <div onClick={toggleWebSearch} className="min-[480px]:px-2 px-1 opacity-70 hover:opacity-100 cursor-pointer flex">
+            <Earth className={cn(activeChat.webSearch ? "stroke-blue-700 dark:stroke-blue-500" : "" , "size-[18px] min-[480px]:size-[24px]")}/>
           </div>
           
           <TextareaAutosize
@@ -318,15 +318,15 @@ const InputBar = () => {
             ref={inputPromptRef}
             className={cn(
               "placeholder:text-muted-foreground",
-              "flex w-full min-w-0  bg-transparent p-2 my-4 md:text-[16px] transition-[color,box-shadow] outline-none",
+              "flex w-full min-w-0 bg-transparent px-2 md:text-[16px] transition-[color,box-shadow] outline-none",
               "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 text-sm",
               "focus-visible:border-ring focus-visible:ring-ring/50",
-              "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive thin-scrollbar resize-none pt-0"
+              "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive thin-scrollbar resize-none"
             )}
           />
 
-          <div className="p-[15px] pr-4 pl-2 opacity-70 hover:opacity-100 cursor-pointer">
-            <Send onClick={sendChat}/>
+          <div className="min-[480px]:px-2 px-1 opacity-70 hover:opacity-100 cursor-pointer">
+            <Send onClick={sendChat} className='size-[18px] min-[480px]:size-[24px]'/>
           </div>
 
         </div>

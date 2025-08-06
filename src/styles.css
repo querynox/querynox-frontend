@@ -37,6 +37,24 @@ body {
   background-color: var(--scrollbar) !important;
 }
 
+.markdown-preview {
+  font-size: 0.65rem !important;
+
+  @media (min-width: 450px) {
+    font-size: 0.7rem !important;
+  }
+
+  @media (min-width: 490px) {
+    font-size: 0.8rem !important;
+  }
+
+  /* Responsive font size for small screens */
+  @media (min-width: 590px) {
+    font-size: 1rem !important;
+  }
+
+}
+
 :root {
   --markdown-user-background: var(--color-sky-600);
   --markdown-assistant-background: var(--secondary);
