@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { useSystemContext } from "@/contexts/SystemContext"
 import { Moon, Sun, Sparkles, Zap, Globe, FileText, Image, Brain, Search, Upload, MessageSquare } from "lucide-react"
 import { useEffect, useRef } from "react"
+import DemoVideoSection from "@/components/DemoVideoSection"
 
 const Home = () => {
   const { darkmode, setDarkmode } = useSystemContext()
@@ -120,6 +121,9 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Demo Video Section */}
+      <DemoVideoSection />
 
       {/* Features Section */}
       <section className="px-6 py-20 bg-muted/30">
