@@ -5,11 +5,26 @@ const DemoVideoSection = () => {
   const [selectedFeature, setSelectedFeature] = useState("multimodal")
 
   const videos: Record<string, { label: string; file: string }> = {
-    multimodal: { label: "Multi-Modal", file: "/videos/multimodal.mp4" },
-    websearch: { label: "Web Search", file: "/videos/webSearch.mp4" },
-    imagerag: { label: "Image RAG", file: "/videos/image-rag.mp4" },
-    pdfrag: { label: "PDF RAG", file: "/videos/pdf-rag.mp4" },
-    imagegen: { label: "Image Generation", file: "/videos/image-gen.mp4" },
+    multimodal: { 
+      label: "Multi-Modal", 
+      file: "https://cdn.jsdelivr.net/gh/SohamJoshi25/QueryNOX@main/public/videos/multimodal.mp4" 
+    },
+    websearch: { 
+      label: "Web Search", 
+      file: "https://cdn.jsdelivr.net/gh/SohamJoshi25/QueryNOX@main/public/videos/webSearch.mp4" 
+    },
+    imagerag: { 
+      label: "Image RAG", 
+      file: "https://cdn.jsdelivr.net/gh/SohamJoshi25/QueryNOX@main/public/videos/image-rag.mp4" 
+    },
+    pdfrag: { 
+      label: "PDF RAG", 
+      file: "https://cdn.jsdelivr.net/gh/SohamJoshi25/QueryNOX@main/public/videos/pdf-rag.mp4" 
+    },
+    imagegen: { 
+      label: "Image Generation", 
+      file: "https://cdn.jsdelivr.net/gh/SohamJoshi25/QueryNOX@main/public/videos/image-gen.mp4" 
+    },
   }
 
   return (
