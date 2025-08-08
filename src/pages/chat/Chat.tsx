@@ -21,7 +21,7 @@ const Chat = () => {
   const { setChats , setActiveChatIndex  } = useChatContext();
   const navigate = useNavigate();
 
-  const { refetch : refetchUserChats,  } = useQueryUserChats(user?.id);
+  const { refetch : refetchUserChats  } = useQueryUserChats(user?.id);
   const { isFetched:isModelFetched } = useQueryModels();
 
   useEffect(()=>{
@@ -31,7 +31,10 @@ const Chat = () => {
 
   const loadUserChats = async () => {
     const { data , isError} = await refetchUserChats();
-    if(!data || isError) return;
+    if(!data || isError){
+      navigate({to:"/chat"})
+      return;
+    }
 
     let aIndex = -1;
 
@@ -54,7 +57,7 @@ const Chat = () => {
   if (!isUserLoaded || !isModelFetched) return <div className="w-screen h-screen flex justify-center items-center text-accent-foreground"> <div className="size-14 spinner-loader"/> </div>;
 
   return (
-    <div className={` ${isMobile ? "ml-0": open ? "ml-[16rem]" : "ml-[3rem]"} transition-all h-screen flex flex-col text-accent-foreground w-full bg-background overflow-hidden`} >
+    <div className={` ${isMobile ? "ml-0": open ? "ml-[16rem]" : "ml-[3rem]"} transition-transform h-screen flex flex-col text-accent-foreground w-full bg-background overflow-hidden`} >
 
         {/** Sign in Overlay if user is not signed in. */}
         <SignedOut>

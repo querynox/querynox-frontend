@@ -12,7 +12,8 @@ const useQueryUserChats = (clerkUserId:string | undefined) =>  {
     return useQuery({
         queryKey:["GetUserChats",clerkUserId] as const,
         queryFn: () =>  getUserChats(clerkUserId) ,
-        enabled:!!clerkUserId
+        enabled:!!clerkUserId,
+        retry: false
     })
 };
 

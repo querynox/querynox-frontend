@@ -60,7 +60,7 @@ const Conversation = () => {
       {activeChat.chatQueries.map((query, index)=><div  key={index + query._id}>
       
         {/**User Chat */}
-        <div className="flex justify-end ">
+        <div className="flex justify-end">
 
           {/* Bubble Container */}
           <div className="relative group max-w-[85%] min-[500px]:px-4 min-[400px]:px-[14px] min-[350px]:px-[12px] px-2 mb-2">
@@ -84,7 +84,7 @@ const Conversation = () => {
         ?<div className="flex justify-start">
 
           {/* Bubble Container */}
-          <div className="relative group px-4 py-2 mb-2">
+          <div className="relative group px-4 py-2 mb-2  max-w-[100%]">
 
             <MarkdownPreview
               source={isChatQueryImage(query) ?
