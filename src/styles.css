@@ -13,14 +13,23 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.markdown-preview .code-highlight code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  background-color: var(--markdown-code-bg) !important;
+  color:var(--markdown-code);
+  padding: 4px !important;
+}
+
 .markdown-preview code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
   background-color: var(--markdown-code-bg) !important;
   color:var(--markdown-code);
-  scrollbar-color: var(--primary) transparent;
-  padding: 2px 5px 4px 5px !important;
-  max-width: 100%;
-  margin: 0px 1px !important;
+}
+
+.markdown-preview table {
+  width: 100%;
+  overflow-x: auto !important;
+  scrollbar-color: var(--primary) transparent !important;
 }
 
 .markdown-preview ul {
@@ -31,6 +40,9 @@ body {
 .markdown-preview pre {
   background-color: var(--markdown-code-bg) !important;
   padding: 0.5rem !important;
+  width: 100% !important;
+  overflow-x: visible !important;
+  scrollbar-color: var(--primary) transparent !important;
 }
 
 .wmde-markdown hr {
@@ -42,7 +54,6 @@ body {
 .markdown-preview {
   font-size: 0.65rem !important;
   max-width: 100% !important;
-  overflow-x: auto !important;
 
   @media (min-width: 450px) {
     font-size: 0.7rem !important;

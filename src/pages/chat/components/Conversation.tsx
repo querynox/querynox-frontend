@@ -67,7 +67,7 @@ const Conversation = () => {
 
             <MarkdownPreview
               source={query.prompt}
-              className="rounded-lg p-3 mb-2 markdown-preview"
+              className="rounded-lg p-3 mb-2 markdown-preview thin-scrollbar"
               style={{
                 backgroundColor: "var(--markdown-user-background)",
                 color: "var(--markdown-user-text)",
@@ -84,13 +84,13 @@ const Conversation = () => {
         ?<div className="flex justify-start">
 
           {/* Bubble Container */}
-          <div className="relative group px-4 py-2 mb-2  max-w-[100%]">
+          <div className="relative group max-w-full min-[500px]:px-4 min-[400px]:px-[14px] min-[350px]:px-[12px] px-2 mb-2">
 
             <MarkdownPreview
               source={isChatQueryImage(query) ?
                  `<img src="${query.response}" alt="${query.prompt}" loading="lazy" style="width: 400px; aspect-ratio: 1/1; background-color: #222; object-fit: cover; border-radius: 8px;" />` 
                  : query.response}
-              className={isChatQueryImage(query) ?"rounded-lg mb-2 markdown-preview":"rounded-lg p-3 mb-2 markdown-preview"}
+              className={isChatQueryImage(query) ?"rounded-lg mb-2 markdown-preview thin-scrollbar":"rounded-lg p-3 mb-2 markdown-preview thin-scrollbar"}
               style={{
                 backgroundColor:"var(--markdown-assistant-background)",
                 color:"var(--markdown-assistant-text)",
@@ -118,18 +118,19 @@ const Conversation = () => {
         <div className="flex justify-start">
 
           {/* Bubble Container */}
-          <div className="relative group px-4 p-2 mb-2">
+          <div className="relative group max-w-full min-[500px]:px-4 min-[400px]:px-[14px] min-[350px]:px-[12px] px-2 mb-2">
 
             <MarkdownPreview
-              source={ streamingResponse.trim() }
-              className="rounded-lg p-3 mb-2 markdown-preview"
+              source={isChatQueryImage(query) ?
+                 `<img src="${query.response}" alt="${query.prompt}" loading="lazy" style="width: 400px; aspect-ratio: 1/1; background-color: #222; object-fit: cover; border-radius: 8px;" />` 
+                 : query.response}
+              className="rounded-lg p-3 mb-2 markdown-preview thin-scrollbar"
               style={{
                 backgroundColor:"var(--markdown-assistant-background)",
-                color:"var(--markdown-assistant-text)"
+                color:"var(--markdown-assistant-text)",
               }}
               wrapperElement={{ "data-color-mode": darkmode ? "dark" : "light" }}
             /> 
-
             
           </div>
 
