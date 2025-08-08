@@ -9,6 +9,7 @@ import useMutationChat from '../apis/mutations/useMutationChat';
 import { useUser } from '@clerk/clerk-react';
 import { useNavigate } from '@tanstack/react-router';
 import { streamSSE } from '../apis/stream/streamSSE';
+import useQueryModels from '../apis/queries/useQueryModels';
 
 const InputBar = () => {  
   
@@ -17,6 +18,7 @@ const InputBar = () => {
 
   const { activeChat, activeChatIndex, setNewChat, setChats, setActiveChatIndex, newChat, setStreamingResponse } = useChatContext();
   const { mutate } = useMutationChat((data)=>handleSuccessfulMutation(data));
+  const { data: models  } = useQueryModels();
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -152,16 +154,20 @@ const InputBar = () => {
 
     if(activeChatIndex>=0){
       setChats((prev) => {
-        const temp = [...prev];
-        const temp_chat = { ...temp[activeChatIndex] };
-        temp_chat.chatQueries = [...temp_chat.chatQueries,chatQuery]
-        temp[activeChatIndex] = temp_chat;
-        return [...temp];
+        const prevChat = prev[activeChatIndex];
+        const updatedChat = {
+          ...prevChat,
+          chatQueries: [...prevChat.chatQueries, chatQuery],
+        };
+        const updatedChats = [...prev];
+        updatedChats[activeChatIndex] = updatedChat;
+        return updatedChats;
       });
     }else{
-      setNewChat((prev)=>{
-        return {...prev,chatQueries:[chatQuery]}
-      })
+      setNewChat((prev) => ({
+        ...prev,
+        chatQueries: [chatQuery],
+      }));
     }
   };
 
@@ -188,22 +194,26 @@ const InputBar = () => {
       const _chatQuery = data.chatQuery;
 
       setChats((prev) => {
-        const temp = [...prev];
-        const chatIndex = temp.findIndex((chat) => _chatQuery.chatId === chat._id);
-        if (chatIndex === -1) return prev;
+        const _chats = [...prev];
+        const _chat = {..._chats[activeChatIndex]};
+        const _chatQuerys = _chat.chatQueries.filter((q) => q.response.trim() !== "");
+        _chat.chatQueries = [..._chatQuerys, _chatQuery];
 
-        const chatQuery = temp[chatIndex].chatQueries.pop();
-        if(!chatQuery)  return prev;
+        _chats[activeChatIndex] = _chat;
 
-        temp[chatIndex] = {...temp[chatIndex] , chatQueries:[...temp[chatIndex].chatQueries,{...chatQuery,...data.chatQuery}]}
-
-        return temp;
+        return _chats;
       });
 
     }
   }
 
   const sendChatStream = async () => {
+
+    // If the model is for image generation, use Non Streaming sendChat
+    if(models?.find((model => model.name === activeChat.model))?.category == "Image Generation"){
+      sendChat();
+      return;
+    }
 
     const isThinking = activeChatIndex > 0 ? !(activeChat.chatQueries[activeChat.chatQueries.length-1].response) : false;
 
@@ -223,8 +233,8 @@ const InputBar = () => {
     }
 
     const chatQuery : ChatQuery = {
-      _id:Date.now().toString(),
-      chatId:Date.now().toString(),
+      _id: crypto.randomUUID(),
+      chatId: crypto.randomUUID(),
       model:activeChat.model,
       prompt:_prompt,
       response:"",
@@ -237,17 +247,9 @@ const InputBar = () => {
     if(activeChatIndex>=0){
       setChats((prev) => {
         const temp = [...prev];
-        const chat = { ...temp[activeChatIndex] };
-
-        // Combine current and new queries safely
-        const currentQueries = chat.chatQueries || [];
-
-        const alreadyExists = currentQueries.some(q => q._id === chatQuery._id);
-        if (!alreadyExists) {
-          chat.chatQueries = [...currentQueries, chatQuery];
-          temp[activeChatIndex] = chat;
-        }
-
+        const chat = { ...temp[activeChatIndex], chatQueries: [...temp[activeChatIndex].chatQueries, chatQuery] };
+        temp[activeChatIndex] = chat;
+        console.log("Updated Chats:", temp);
         return temp;
       });
     }else{
@@ -284,7 +286,6 @@ const InputBar = () => {
         console.error("Streaming failed:", error);
       }
     );
-
 
   }
   

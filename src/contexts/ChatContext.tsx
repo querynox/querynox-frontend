@@ -24,11 +24,8 @@ export const newChatDefaultObject : Chat = {
     webSearch: false,
     files: [],
     systemPrompt:  `You are a helpful assistant. Be Polite and Kind.
-        Always respond using **GitHub-flavored Markdown**.
-        - Use code blocks for all code examples using:
-        \`\`\`language_name
-        // your code here
-        \`\`\`
+        Always respond using **GitHub-flavored Markdown**. Width of messages should be short.
+        - Use code blocks wherever applicable.
         When additional context is provided, follow these rules:
         ---
         ### 🔍 Relevant information from web search  
