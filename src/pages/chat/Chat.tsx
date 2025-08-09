@@ -6,7 +6,6 @@ import { useChatContext } from "@/contexts/ChatContext";
 import { useUser, SignedOut } from "@clerk/clerk-react";
 import SignInOverlay from "@/pages/chat/components/SignInOverlay";
 import Conversation from "@/pages/chat/components/Conversation";
-import type { Chat } from "@/data/types";
 import InputBar from "./components/InputBar";
 import useQueryUserChats from "./apis/queries/useQueryUserChats";
 import { useEffect } from "react";

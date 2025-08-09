@@ -1,5 +1,5 @@
 
-export type ChatQuery = {
+export type ChatQueryType = {
   _id: string;
   chatId: string;
   prompt:string;
@@ -13,18 +13,18 @@ export type ChatQuery = {
   title?:string
 };
 
-export type Model = {
+export type ModelType = {
   name:string;
   category:string;
   description:string
 };
 
-export type Chat = {
+export type ChatType = {
   _id: string;
   userId:string;
   title:string;
   chatName:string;
-  chatQueries: ChatQuery[];
+  chatQueries: ChatQueryType[];
   model:string
   webSearch:boolean,
   files:File[];
@@ -33,7 +33,7 @@ export type Chat = {
   updatedAt: number;
 };
 
-export type CreateChatInput = {
+export type CreateChatInputType = {
   clerkUserId: string;
   chatId: string;
   prompt: string;
@@ -44,12 +44,12 @@ export type CreateChatInput = {
 }
 
 
-export type CreateChatOutput = {
-  chatQuery:ChatQuery,
-  chat?:Omit<Chat, 'chatQueries' | 'files' >
+export type CreateChatOutputType = {
+  chatQuery:ChatQueryType,
+  chat?:Omit<ChatType, 'chatQueries' | 'files' >
 }
 
-export type StreamChatOutput = {
+export type StreamChatOutputType = {
   type:  'status' ;
   message:string;
 } | {
@@ -61,8 +61,8 @@ export type StreamChatOutput = {
   chatName:string;
 } | {
   type: 'complete' ;
-  chatQuery:ChatQuery;
-  chat:Omit<Chat, "chatQueries" | "files">;
+  ChatQuery:ChatQueryType;
+  chat:Omit<ChatType, "chatQueries" | "files">;
 } | {
   type: 'content' ;
   content:string;

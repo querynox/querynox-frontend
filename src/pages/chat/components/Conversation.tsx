@@ -1,4 +1,4 @@
-import type { ChatQuery } from '@/data/types'
+import type { ChatQueryType } from '@/data/types'
 import { Check, ClipboardCopy, Save } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import MarkdownPreview from '@uiw/react-markdown-preview';
@@ -43,7 +43,7 @@ const Conversation = () => {
     navigator.clipboard.writeText(message)
   }
 
-  const isChatQueryImage = (chatQuery?:ChatQuery) : boolean => {
+  const isChatQueryImage = (chatQuery?:ChatQueryType) : boolean => {
     if(!chatQuery) chatQuery = activeChat.chatQueries[activeChat.chatQueries.length-1];
     if(!models) return false;
     return models.find(m => m.name == chatQuery.model)?.category == "Image Generation" || false;

@@ -1,20 +1,20 @@
-import type { Chat } from "@/data/types";
+import type { ChatType } from "@/data/types";
 import { createContext, useState, type ReactNode, useContext, useMemo, useEffect } from "react";
 
 export interface ChatContextType {
-    chats:Chat[];
-    newChat:Chat;
+    chats:ChatType[];
+    newChat:ChatType;
     activeChatIndex:number;
-    activeChat:Chat;
+    activeChat:ChatType;
     streamingResponse:string;
 
-    setChats: React.Dispatch<React.SetStateAction<Chat[]>>;
+    setChats: React.Dispatch<React.SetStateAction<ChatType[]>>;
     setActiveChatIndex: React.Dispatch<React.SetStateAction<number>>;
-    setNewChat:React.Dispatch<React.SetStateAction<Chat>>;
+    setNewChat:React.Dispatch<React.SetStateAction<ChatType>>;
     setStreamingResponse:React.Dispatch<React.SetStateAction<string>>;
 }
 
-export const newChatDefaultObject : Chat = {
+export const newChatDefaultObject : ChatType = {
     _id: "",
     userId: "",
     title: "",
@@ -62,10 +62,10 @@ const ChatContext = createContext<ChatContextType>(defaultContext);
 
 // Provider Component
 export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [chats, setChats] = useState<Chat[]>(defaultContext.chats);
+    const [chats, setChats] = useState<ChatType[]>(defaultContext.chats);
     const [activeChatIndex, setActiveChatIndex] = useState<number>(defaultContext.activeChatIndex);
-    const [newChat,setNewChat] = useState<Chat>({...defaultContext.newChat});
-    const [activeChat,setActiveChat] = useState<Chat>(defaultContext.activeChat);
+    const [newChat,setNewChat] = useState<ChatType>({...defaultContext.newChat});
+    const [activeChat,setActiveChat] = useState<ChatType>(defaultContext.activeChat);
     const [streamingResponse,setStreamingResponse] = useState<string>(defaultContext.streamingResponse);
 
     useEffect(() => {

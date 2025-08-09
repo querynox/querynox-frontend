@@ -1,10 +1,10 @@
 
-import type { CreateChatInput, CreateChatOutput } from "@/data/types";
+import type { CreateChatInputType, CreateChatOutputType } from "@/data/types";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "../apiClient"
 
 
-const chat = async (clerkUserId:string, chatId:string, prompt:string, model: string , systemPrompt:string , webSearch:boolean, files:File[] ) : Promise<CreateChatOutput> => {
+const chat = async (clerkUserId:string, chatId:string, prompt:string, model: string , systemPrompt:string , webSearch:boolean, files:File[] ) : Promise<CreateChatOutputType> => {
     const formData = new FormData();
     formData.append("clerkUserId",clerkUserId);
     formData.append("prompt",prompt);
@@ -17,17 +17,17 @@ const chat = async (clerkUserId:string, chatId:string, prompt:string, model: str
     });
 
     const url =  chatId ? ("/chat/" + chatId) : "/chat";
-    const response = await apiRequest<CreateChatOutput>(url,"POST",formData,{"Content-Type": "multipart/form-data"})
+    const response = await apiRequest<CreateChatOutputType>(url,"POST",formData,{"Content-Type": "multipart/form-data"})
     return response
 }
 
 const useMutationChat = (
-  onSuccess: (data: CreateChatOutput, variables: CreateChatInput, context: unknown) => void,
-  onError?: (error: unknown, variables: CreateChatInput, context: unknown) => void
+  onSuccess: (data: CreateChatOutputType, variables: CreateChatInputType, context: unknown) => void,
+  onError?: (error: unknown, variables: CreateChatInputType, context: unknown) => void
 ) =>
   useMutation({
     mutationKey: ['createChat'],
-    mutationFn: async (input : CreateChatInput) => {
+    mutationFn: async (input : CreateChatInputType) => {
       const { clerkUserId, chatId, prompt, model, systemPrompt, webSearch, files } = input;
       return chat(clerkUserId, chatId, prompt, model, systemPrompt, webSearch,files);
     },

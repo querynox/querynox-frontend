@@ -2,9 +2,10 @@ import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-reac
 import { Link } from "@tanstack/react-router"
 import { Button } from "@/components/ui/button"
 import { useSystemContext } from "@/contexts/SystemContext"
-import { Moon, Sun, Sparkles, Zap, Globe, FileText, Image, Brain, Search, Upload, MessageSquare } from "lucide-react"
+import { Moon, Sun, Sparkles, Zap, Globe, FileText, Image, Search, Upload, MessageSquare } from "lucide-react"
 import { useEffect, useRef } from "react"
-import DemoVideoSection from "@/components/DemoVideoSection"
+import DemoVideoSection from "@/pages/home/components/DemoVideoSection"
+import { Hackice20GithubLink, SohamJoshiGithubLink } from "@/data/constants"
 
 const Home = () => {
   const { darkmode, setDarkmode } = useSystemContext()
@@ -262,28 +263,39 @@ const Home = () => {
       {/* Footer */}
       <footer className="border-t bg-muted/30">
         <div className="px-6 py-12">
-                     <div className="mx-auto max-w-6xl flex flex-col md:flex-row justify-between items-center">
-             <div className="flex flex-col items-start mb-4 md:mb-0">
-               <div className="flex items-center space-x-3 mb-2">
-                 <img 
-                   src="/querynox.jpeg" 
-                   alt="QueryNox" 
-                   className="h-8 w-8 rounded-lg"
-                 />
-                 <span className="text-lg font-semibold">
-                   <span className="text-foreground">Query</span>
-                   <span className="text-muted-foreground">Nox</span>
-                 </span>
-               </div>
-               <p className="text-muted-foreground text-sm">
-                 © 2025 QueryNox. All rights reserved.
-               </p>
-             </div>
+          <div className="mx-auto max-w-6xl flex flex-col md:flex-row justify-between items-center">
+            <div className="flex flex-col items-start mb-4 md:mb-0">
+              <div className="flex items-center space-x-3 mb-2">
+                <img 
+                  src="/querynox.jpeg" 
+                  alt="QueryNox" 
+                  className="h-8 w-8 rounded-lg"
+                />
+                <span className="text-lg font-semibold">
+                  <span className="text-foreground">Query</span>
+                  <span className="text-muted-foreground">Nox</span>
+                </span>
+              </div>
+              <p className="text-muted-foreground text-sm">
+                © 2025 QueryNox. All rights reserved.
+              </p>
+
+              <div className="flex space-x-4 mt-2 text-sm">
+                <Link  to="/privacy-policy"  className="text-muted-foreground hover:text-foreground transition-colors">
+                  Privacy Policy
+                </Link>
+                <span className="text-muted-foreground">•</span>
+                <Link to="/terms-and-conditions" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Terms & Conditions
+                </Link>
+              </div> 
+            </div>  
+              
              <div className="text-center md:text-right">
                <p className="text-muted-foreground">
                  Made with love by{" "}
                  <a 
-                   href="https://github.com/sohamjoshi25" 
+                   href={SohamJoshiGithubLink} 
                    target="_blank" 
                    rel="noopener noreferrer"
                    className="text-foreground hover:underline font-medium"
@@ -292,7 +304,7 @@ const Home = () => {
                  </a>
                  {" "}and stirred with chaos by{" "}
                  <a 
-                   href="https://github.com/hackice20" 
+                   href={Hackice20GithubLink}  
                    target="_blank" 
                    rel="noopener noreferrer"
                    className="text-foreground hover:underline font-medium"

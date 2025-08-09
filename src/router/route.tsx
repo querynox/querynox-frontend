@@ -11,9 +11,13 @@ import { createRootRoute } from '@tanstack/react-router';
 
 //Routes
 import { homeRoute } from './routes/home.route';
-import { notFoundRoute } from './routes/notfound.route';
 import { chatRoute } from './routes/chat.route';
 import { chatIdRoute } from './routes/chatid.chat.route';
+import { termsConditionsRoute } from './routes/termsconditions.route';
+
+import NotFound from '@/pages/notfound/NotFound';
+import Error from '@/pages/error/Error';
+import { privacyPolicyRoute } from './routes/privacypolicy.route';
 
 //RootRoute
 export const rootRoute = createRootRoute();
@@ -21,10 +25,11 @@ export const rootRoute = createRootRoute();
 // Create the route tree by adding child routes to the root
 const routeTree = rootRoute.addChildren([
   homeRoute,
+  termsConditionsRoute,
+  privacyPolicyRoute,
   chatRoute.addChildren([
     chatIdRoute
   ]),
-  notFoundRoute,
 ]);
 
 // Create the router instance
@@ -37,4 +42,6 @@ export const router = createRouter({
   scrollRestoration: true,
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,
+  defaultNotFoundComponent:NotFound,
+  defaultErrorComponent:Error,
 });

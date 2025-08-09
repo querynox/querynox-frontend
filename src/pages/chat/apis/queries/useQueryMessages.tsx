@@ -1,9 +1,9 @@
-import type { Chat } from '@/data/types';
+import type { ChatType } from '@/data/types';
 import { apiRequest } from '../apiClient';
 import { useQuery } from '@tanstack/react-query';
 
-const fetchMessages = async (chatId:string): Promise<Omit<Chat,"files">> => {
-  const response = await apiRequest<Omit<Chat,"files">>('/chat/'+chatId,'GET');
+const fetchMessages = async (chatId:string): Promise<Omit<ChatType,"files">> => {
+  const response = await apiRequest<Omit<ChatType,"files">>('/chat/'+chatId,'GET');
   return response;
 };
 

@@ -1,9 +1,9 @@
 import { BACKEND_URL } from "@/data/constants";
-import type { CreateChatInput, StreamChatOutput } from "@/data/types";
+import type { CreateChatInputType, StreamChatOutputType } from "@/data/types";
 
 export const streamSSE = async (
-    input:CreateChatInput,
-    onData:(response:StreamChatOutput) => void,
+    input:CreateChatInputType,
+    onData:(response:StreamChatOutputType) => void,
     onEnd:() => void,
     onError:(error:any) => void,
 ) => {

@@ -1,5 +1,5 @@
 import { newChatDefaultObject, useChatContext } from '@/contexts/ChatContext';
-import type { Chat, ChatQuery, CreateChatInput, CreateChatOutput } from '@/data/types';
+import type { ChatType, ChatQueryType, CreateChatInputType, CreateChatOutputType } from '@/data/types';
 import { cn } from '@/lib/utils';
 import { X, Paperclip, Earth, Send } from 'lucide-react';
 import { useEffect, useRef } from 'react';
@@ -128,7 +128,7 @@ const InputBar = () => {
     
     inputPromptRef.current.value = "";
 
-    const chat : CreateChatInput = {
+    const chat : CreateChatInputType = {
       clerkUserId:user.id,
       chatId:activeChat._id,
       prompt:_prompt,
@@ -140,7 +140,7 @@ const InputBar = () => {
 
     mutate(chat);
 
-    const chatQuery : ChatQuery = {
+    const chatQuery : ChatQueryType = {
       _id:Date.now().toString(),
       chatId:Date.now().toString(),
       model:activeChat.model,
@@ -171,14 +171,14 @@ const InputBar = () => {
     }
   };
 
-  const handleSuccessfulMutation = async (data:CreateChatOutput) => {
+  const handleSuccessfulMutation = async (data:CreateChatOutputType) => {
 
     if(activeChatIndex<0){
       
       setChats((prev) => {
         const _chatQuery = data.chatQuery;
         if(data.chat){
-          const _chat : Chat =  {...data.chat, files:newChat.files, chatQueries:[_chatQuery]};
+          const _chat : ChatType =  {...data.chat, files:newChat.files, chatQueries:[_chatQuery]};
           const temp = [_chat,...prev];
           return temp;
         }else{
@@ -222,7 +222,7 @@ const InputBar = () => {
     
     inputPromptRef.current.value = "";
 
-    const chat : CreateChatInput = {
+    const chat : CreateChatInputType = {
       clerkUserId:user.id,
       chatId:activeChat._id,
       prompt:_prompt,
@@ -232,7 +232,7 @@ const InputBar = () => {
       files:activeChat.files
     }
 
-    const chatQuery : ChatQuery = {
+    const chatQuery : ChatQueryType = {
       _id: crypto.randomUUID(),
       chatId: crypto.randomUUID(),
       model:activeChat.model,
@@ -265,7 +265,7 @@ const InputBar = () => {
             console.log("Status:", response.message);
             break;
           case 'complete':
-            await handleSuccessfulMutation({chatQuery:response.chatQuery,chat:response.chat})
+            await handleSuccessfulMutation({chatQuery:response.ChatQuery,chat:response.chat})
             setStreamingResponse("");
             break;
           case 'metadata':
@@ -290,8 +290,8 @@ const InputBar = () => {
   }
   
   return (
-  <div className="flex flex-col px-4 pb-3 items-center justify-center">
-      <div className="flex-1 rounded-lg py-1 shadow-2xs border border-input max-w-[800px] w-full dark:bg-primary-foreground bg-primary-foreground">
+  <div className="flex flex-col px-4 pb-4 items-center justify-center">
+      <div className="flex-1 rounded-xl py-1 shadow-2xs border border-input max-w-[800px] w-full dark:bg-primary-foreground bg-primary-foreground">
 
         {/**Attached Files*/}
         {activeChat.files.length > 0 && <div className="flex gap-y-[2px] flex-col w-full pt-2 pl-4 dark:bg-primary-foreground">
@@ -299,7 +299,7 @@ const InputBar = () => {
         </div>}
 
         {/**Input Bar with Attachment and Send */}
-        <div className="flex w-full items-top justify-around min-[350px]:min-h-[50px] p-2">
+        <div className="flex w-full items-top justify-around min-[350px]:min-h-[50px] p-3">
 
 
           <div onClick={handleAttachmentButtonClick} className="min-[480px]:px-2 px-1 opacity-70 hover:opacity-100 cursor-pointer flex">

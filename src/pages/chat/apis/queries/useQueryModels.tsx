@@ -1,10 +1,10 @@
 // src/hooks/useFetchModels.ts
-import type { Model } from '@/data/types';
+import type { ModelType } from '@/data/types';
 import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '../apiClient';
 
-const fetchModels = async (): Promise<Model[]> => {
-  const response = await apiRequest<Model[]>('/models','GET');
+const fetchModels = async (): Promise<ModelType[]> => {
+  const response = await apiRequest<ModelType[]>('/models','GET');
   return response;
 };
 
