@@ -8,8 +8,6 @@ import { ChatProvider } from './contexts/ChatContext.tsx'
 import { SystemProvider, useSystemContext } from './contexts/SystemContext.tsx'
 import { dark } from '@clerk/themes'
 
-import { Toaster } from 'react-hot-toast';
-
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
 const InnerApp = () => {
@@ -31,7 +29,6 @@ const App = () => (
   <StrictMode>
     <SystemProvider>
       <TanStackQueryProvider>
-        <Toaster />
         <InnerApp />
       </TanStackQueryProvider>
     </SystemProvider>
