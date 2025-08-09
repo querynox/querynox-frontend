@@ -264,17 +264,17 @@ const InputBar = () => {
             //console.log("Status:", response.message);
             break;
           case 'complete':
-            await handleSuccessfulMutation({chatQuery:response.ChatQuery,chat:response.chat})
-            //setStreamingResponse("");
+            await handleSuccessfulMutation({chatQuery:response.chatQuery,chat:response.chat})
+            setStreamingResponse("");
             break;
           case 'metadata':
-            console.log(response);
+            //console.log(response);
             break;
           case 'error':
             //console.error("Server Error:", response.error);
             break;
           case 'content':
-            //setStreamingResponse(prev => prev + response.content)
+            setStreamingResponse(prev => prev + response.content)
             break;
         }
       },

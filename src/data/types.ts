@@ -61,7 +61,7 @@ export type StreamChatOutputType = {
   chatName:string;
 } | {
   type: 'complete' ;
-  ChatQuery:ChatQueryType;
+  chatQuery:ChatQueryType;
   chat:Omit<ChatType, "chatQueries" | "files">;
 } | {
   type: 'content' ;

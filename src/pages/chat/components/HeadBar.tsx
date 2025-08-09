@@ -6,7 +6,7 @@ import { useSystemContext } from "@/contexts/SystemContext";
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import useQueryModels from "@/pages/chat/apis/queries/useQueryModels";
-import type { Model } from "@/data/types";
+import type { ModelType } from "@/data/types";
 
 
 const HeadBar = () => {
@@ -14,14 +14,14 @@ const HeadBar = () => {
   const { chats, activeChatIndex, setChats, setNewChat, activeChat } = useChatContext();
   const { darkmode, setDarkmode } = useSystemContext();
   
-  const [groupedModels, setGroupedModels] = useState<Record<string, Model[]>>();
+  const [groupedModels, setGroupedModels] = useState<Record<string, ModelType[]>>();
   
   useEffect(()=>{
     if(models)
     setGroupedModels(generateGroupedModels(models));
   },[models])
   
-  const generateGroupedModels = (models:Model[]) :  Record<string, Model[]> => { return models.reduce((acc, model) => {
+  const generateGroupedModels = (models:ModelType[]) :  Record<string, ModelType[]> => { return models.reduce((acc, model) => {
     const category = model.category;
     if (!acc[category]) {
       acc[category] = [];
