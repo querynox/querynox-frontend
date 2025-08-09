@@ -1,5 +1,5 @@
 import type { ChatQueryType } from '@/data/types'
-import { Check, ClipboardCopy, Save } from 'lucide-react'
+import { Check, ClipboardCopy, Download, Save } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { Skeleton } from '../../../components/ui/skeleton';
@@ -11,6 +11,7 @@ import useQueryMessages from '../apis/queries/useQueryMessages';
 import '@uiw/react-markdown-preview/markdown.css';
 
 import { useSystemContext } from '@/contexts/SystemContext';
+import { cn } from '@/lib/utils';
 
 const Conversation = () => {
 
@@ -49,6 +50,17 @@ const Conversation = () => {
     return models.find(m => m.name == chatQuery.model)?.category == "Image Generation" || false;
   }
 
+  const handleImageDownload = (b64_image:string) => {
+    const link = document.createElement("a");
+    link.href = b64_image;
+    link.download = "image.png";
+
+    // Append, click, and remove
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   if( activeChatIndex < 0 && activeChat.chatQueries.length==0) 
     return (<div className="flex justify-center items-center flex-col h-full">
       <h2 className="text-2xl font-bold mb-2">Welcome back, {user?.fullName} 👋</h2>
@@ -60,7 +72,7 @@ const Conversation = () => {
       {activeChat.chatQueries.map((query, index)=><div  key={index + query._id}>
       
         {/**User Chat */}
-        <div className="flex justify-end">
+        <div className="flex justify-end mb-[6px]">
 
           {/* Bubble Container */}
           <div className="relative group max-w-[85%] min-[500px]:px-4 min-[400px]:px-[14px] min-[350px]:px-[12px] px-2 mb-2">
@@ -84,7 +96,7 @@ const Conversation = () => {
         ?<div className="flex justify-start">
 
           {/* Bubble Container */}
-          <div className="relative group max-w-full min-[500px]:px-4 min-[400px]:px-[14px] min-[350px]:px-[12px] px-2 mb-2">
+          <div className={cn("relative group min-[500px]:px-4 min-[400px]:px-[14px] min-[350px]:px-[12px] px-2", isChatQueryImage(query) ? "max-w-full":"w-full")}>
 
             <MarkdownPreview
               source={isChatQueryImage(query) ?
@@ -101,13 +113,12 @@ const Conversation = () => {
             {/* Copy Button / Save Button */}
             {!isChatQueryImage(query) ?
             <button  className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-white flex items-center gap-1 cursor-copy"  onClick={()=>handleClickCopy(query.response,index)} title="Copy message">
-              {copid == index ? <Check className="w-4 h-4 text-green-500" /> : <ClipboardCopy className="w-4 h-4" />}
+              {copid == index ? <Check className="w-4 h-4 text-green-500 mr-0.5" /> : <ClipboardCopy className="w-4 h-4 mr-0.5" />}
               Copy
             </button>
-            :<a href={query.response} target="_blank" rel="noopener noreferrer" className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-white flex items-center gap-1 cursor-pointer" title="Open image in new tab">
-                <Save className="w-4 h-4" />
-                Open & Save
-            </a>}
+            :<button className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-white flex items-center gap-1 cursor-pointer" title="Download Image" onClick={()=>{handleImageDownload(query.response)}}>
+                <Download className="w-4 h-4 mr-0.5" />Download
+            </button>}
             
           </div>
 
@@ -118,7 +129,7 @@ const Conversation = () => {
         <div className="flex justify-start">
 
           {/* Bubble Container */}
-          <div className="relative group max-w-full min-[500px]:px-4 min-[400px]:px-[14px] min-[350px]:px-[12px] px-2 mb-2">
+          <div className={cn("relative group min-[500px]:px-4 min-[400px]:px-[14px] min-[350px]:px-[12px] px-2", isChatQueryImage(query) ? "max-w-full":"w-full")}>
 
             <MarkdownPreview
               source={isChatQueryImage(query) ?
