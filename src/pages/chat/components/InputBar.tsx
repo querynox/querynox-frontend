@@ -249,7 +249,6 @@ const InputBar = () => {
         const temp = [...prev];
         const chat = { ...temp[activeChatIndex], chatQueries: [...temp[activeChatIndex].chatQueries, chatQuery] };
         temp[activeChatIndex] = chat;
-        console.log("Updated Chats:", temp);
         return temp;
       });
     }else{
@@ -262,25 +261,25 @@ const InputBar = () => {
       async (response) => {
         switch (response.type) {
           case 'status':
-            console.log("Status:", response.message);
+            //console.log("Status:", response.message);
             break;
           case 'complete':
             await handleSuccessfulMutation({chatQuery:response.ChatQuery,chat:response.chat})
-            setStreamingResponse("");
+            //setStreamingResponse("");
             break;
           case 'metadata':
             console.log(response);
             break;
           case 'error':
-            console.error("Server Error:", response.error);
+            //console.error("Server Error:", response.error);
             break;
           case 'content':
-            setStreamingResponse(prev => prev + response.content)
+            //setStreamingResponse(prev => prev + response.content)
             break;
         }
       },
       () => {
-        console.log("Streaming complete");
+        //console.log("Streaming complete");
       },
       (error) => {
         console.error("Streaming failed:", error);
