@@ -1,5 +1,5 @@
 import type { ChatQueryType } from '@/data/types'
-import { Check, ClipboardCopy, Download, Save } from 'lucide-react'
+import { Check, ClipboardCopy, Download } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { Skeleton } from '../../../components/ui/skeleton';
@@ -50,10 +50,10 @@ const Conversation = () => {
     return models.find(m => m.name == chatQuery.model)?.category == "Image Generation" || false;
   }
 
-  const handleImageDownload = (b64_image:string) => {
+  const handleImageDownload = (query:ChatQueryType) => {
     const link = document.createElement("a");
-    link.href = b64_image;
-    link.download = "image.png";
+    link.href = query.response;
+    link.download = query.prompt.split(" ").join("_")+".png";
 
     // Append, click, and remove
     document.body.appendChild(link);
@@ -116,7 +116,7 @@ const Conversation = () => {
               {copid == index ? <Check className="w-4 h-4 text-green-500 mr-0.5" /> : <ClipboardCopy className="w-4 h-4 mr-0.5" />}
               Copy
             </button>
-            :<button className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-white flex items-center gap-1 cursor-pointer" title="Download Image" onClick={()=>{handleImageDownload(query.response)}}>
+            :<button className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-white flex items-center gap-1 cursor-pointer" title="Download Image" onClick={()=>{handleImageDownload(query)}}>
                 <Download className="w-4 h-4 mr-0.5" />Download
             </button>}
             
