@@ -38,6 +38,8 @@ const Conversation = () => {
     }
   },[data])
 
+  useEffect(()=>{console.log(streamingResponse)},[streamingResponse])
+
   const handleClickCopy = (message:string, index:number) => {
     setCopid(index);
     setTimeout(()=>{setCopid(-1)},700)
@@ -129,12 +131,10 @@ const Conversation = () => {
         <div className="flex justify-start">
 
           {/* Bubble Container */}
-          <div className={cn("relative group min-[500px]:px-4 min-[400px]:px-[14px] min-[350px]:px-[12px] px-2", isChatQueryImage(query) ? "max-w-full":"w-full")}>
+          <div className="relative group min-[500px]:px-4 min-[400px]:px-[14px] min-[350px]:px-[12px] px-2 w-full">
 
             <MarkdownPreview
-              source={isChatQueryImage(query) ?
-                 `<img src="${query.response}" alt="${query.prompt}" loading="lazy" style="width: 400px; aspect-ratio: 1/1; background-color: #222; object-fit: cover; border-radius: 8px;" />` 
-                 : query.response}
+              source={streamingResponse}
               className="rounded-lg p-3 mb-2 markdown-preview thin-scrollbar"
               style={{
                 backgroundColor:"var(--markdown-assistant-background)",

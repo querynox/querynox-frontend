@@ -326,7 +326,7 @@ const InputBar = () => {
           />
 
           <div className="min-[480px]:px-2 px-1 opacity-70 hover:opacity-100 cursor-pointer">
-            <Send onClick={sendChat} className='size-[18px] min-[480px]:size-[24px]'/>
+            <Send onClick={sendChatStream} className='size-[18px] min-[480px]:size-[24px]'/>
           </div>
 
         </div>

@@ -165,6 +165,8 @@ const Home = () => {
         </div>
       </section>
 
+      <a href="https://buy.polar.sh/polar_cl_5lIB9iK7XDZqvXVjccnf8pFwdxNXXd48KY97b0OcqUn" data-polar-checkout data-polar-checkout-theme="dark">Purchase</a> <script src="https://cdn.jsdelivr.net/npm/@polar-sh/checkout@0.1/dist/embed.global.js" defer data-auto-init></script>
+
       {/* Advanced Features Section */}
       <section className="px-6 py-20">
         <div className="mx-auto max-w-6xl">
