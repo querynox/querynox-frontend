@@ -1,5 +1,5 @@
 import type { ChatType } from '@/data/types';
-import { apiRequest } from '../apiClient';
+import { apiRequest } from '../../../../lib/apiClient';
 import { useQuery } from '@tanstack/react-query';
 
 const fetchMessages = async (chatId:string): Promise<Omit<ChatType,"files">> => {

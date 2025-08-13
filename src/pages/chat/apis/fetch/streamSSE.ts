@@ -20,7 +20,7 @@ export const streamSSE = async (
         formData.append("files", file);
     });
 
-    const URL = input.chatId ? `${BACKEND_URL}/api/chat/${input.chatId}/stream` : `${BACKEND_URL}/api/chat/stream`
+    const URL = input.chatId ? `${BACKEND_URL}/api/v1/chat/${input.chatId}/stream` : `${BACKEND_URL}/api/v1/chat/stream`
 
     const response = await fetch(URL, {
       method: "POST",

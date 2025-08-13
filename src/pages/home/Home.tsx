@@ -1,4 +1,4 @@
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react"
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/clerk-react"
 import { Link } from "@tanstack/react-router"
 import { Button } from "@/components/ui/button"
 import { useSystemContext } from "@/contexts/SystemContext"
@@ -6,10 +6,12 @@ import { Moon, Sun, Sparkles, Zap, Globe, FileText, Image, Search, Upload, Messa
 import { useEffect, useRef } from "react"
 import DemoVideoSection from "@/pages/home/components/DemoVideoSection"
 import { Hackice20GithubLink, SohamJoshiGithubLink } from "@/data/constants"
+import getCheckoutLink from "./apis/axios/getCeheckoutLink"
 
 const Home = () => {
   const { darkmode, setDarkmode } = useSystemContext()
   const scrollRefs = useRef<(HTMLDivElement | null)[]>([])
+  const { user } = useUser();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -39,6 +41,12 @@ const Home = () => {
     if (el && !scrollRefs.current.includes(el)) {
       scrollRefs.current.push(el)
     }
+  }
+
+  const checkout = async (productID:string, plan:string, source:string) => {
+    const data = await getCheckoutLink(productID,user?.id!,plan,source,"http://localhost:5173/payments")
+    if(data.url)
+    window.location.href = data.url
   }
 
   return (
@@ -165,8 +173,6 @@ const Home = () => {
         </div>
       </section>
 
-      <a href="https://buy.polar.sh/polar_cl_5lIB9iK7XDZqvXVjccnf8pFwdxNXXd48KY97b0OcqUn" data-polar-checkout data-polar-checkout-theme="dark">Purchase</a> <script src="https://cdn.jsdelivr.net/npm/@polar-sh/checkout@0.1/dist/embed.global.js" defer data-auto-init></script>
-
       {/* Advanced Features Section */}
       <section className="px-6 py-20">
         <div className="mx-auto max-w-6xl">
@@ -234,6 +240,82 @@ const Home = () => {
         </div>
       </section>
 
+     {/* Pricing Plans Section */}
+      <section className="px-6 py-20 bg-muted/30">
+        <div className="mx-auto max-w-6xl text-center">
+          <h2 className="text-4xl font-bold mb-6 bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">
+            Choose Your Plan
+          </h2>
+          <p className="text-muted-foreground mb-16 max-w-2xl mx-auto">
+            Find the perfect plan for your needs — from getting started to scaling your AI-powered workflow.
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Free Plan */}
+            <div className="bg-background p-8 rounded-xl border shadow-sm hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out transform flex flex-col">
+              <h3 className="text-2xl font-semibold mb-4">Free</h3>
+              <p className="text-4xl font-bold mb-6">$0<span className="text-lg font-normal text-muted-foreground">/mo</span></p>
+              <ul className="text-muted-foreground mb-6 space-y-2 text-left">
+                <li>✔ 50 messages / month</li>
+                <li>✔ Access to GPT-3.5</li>
+                <li>✔ Web search integration</li>
+                <li>✖ Document & image uploads</li>
+                <li>✖ Priority support</li>
+              </ul>
+
+            <SignedIn>
+                <Button variant="outline" className="mt-auto cursor-pointer">
+                  <Link to="/chat">
+                    Start Chatting
+                  </Link>
+                </Button>
+            </SignedIn>
+
+            <SignedOut>
+              <SignInButton mode="modal">
+                <Button variant="outline" className="mt-auto cursor-pointer">
+                  Get Started
+                </Button>
+              </SignInButton>
+            </SignedOut>
+
+            </div>
+
+            {/* Pro Plan */}
+            <div className="bg-background p-8 rounded-xl border-2 border-yellow-500 shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 ease-in-out transform flex flex-col">
+              <h3 className="text-2xl font-semibold mb-4 text-yellow-600">Pro</h3>
+              <p className="text-4xl font-bold mb-6">$15<span className="text-lg font-normal text-muted-foreground">/mo</span></p>
+              <ul className="text-muted-foreground mb-6 space-y-2 text-left">
+                <li>✔ 2000 messages / month</li>
+                <li>✔ Access to GPT-4, Claude, Gemini</li>
+                <li>✔ Web search integration</li>
+                <li>✔ Document & image uploads</li>
+                <li>✔ Conversation memory</li>
+              </ul>
+              <Button className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white hover:opacity-90 mt-auto cursor-pointer" onClick={()=>{checkout("8dc2161d-c84c-4979-8a06-ba23afbd2472","pro","home")}}>
+                Upgrade to Pro
+              </Button>
+            </div>
+
+            {/* Enterprise Plan */}
+            <div className="bg-background p-8 rounded-xl border shadow-sm hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out transform flex flex-col">
+              <h3 className="text-2xl font-semibold mb-4">Enterprise</h3>
+              <p className="text-4xl font-bold mb-6">Custom</p>
+              <ul className="text-muted-foreground mb-6 space-y-2 text-left">
+                <li>✔ Unlimited messages</li>
+                <li>✔ Dedicated AI instance</li>
+                <li>✔ Advanced analytics</li>
+                <li>✔ Team collaboration features</li>
+                <li>✔ 24/7 premium support</li>
+              </ul>
+              <Button variant="outline" className="mt-auto cursor-pointer">
+                Contact Sales
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="px-6 py-20 bg-muted/30">
         <div className="mx-auto max-w-4xl text-center">
@@ -243,7 +325,7 @@ const Home = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <SignedIn>
-              <Button asChild size="lg" className="text-lg px-8 py-6">
+              <Button asChild size="lg" className="text-lg px-8 py-6 cursor-pointer">
                 <Link to="/chat">
                   <MessageSquare className="mr-2 h-5 w-5" />
                   Start Chatting Now
@@ -251,12 +333,10 @@ const Home = () => {
               </Button>
             </SignedIn>
             <SignedOut>
-              <SignInButton mode="modal">
-                <Button size="lg" className="text-lg px-8 py-6">
-                  <Sparkles className="mr-2 h-5 w-5" />
-                  Get Started Free
-                </Button>
-              </SignInButton>
+              <Button size="lg" className="text-lg px-8 py-6 cursor-pointer">
+                <Sparkles className="mr-2 h-5 w-5" />
+                Get Started Free
+              </Button>
             </SignedOut>
           </div>
         </div>

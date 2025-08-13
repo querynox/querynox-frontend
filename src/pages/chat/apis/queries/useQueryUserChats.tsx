@@ -1,10 +1,10 @@
 import type { ChatType } from '@/data/types';
 import { useQuery } from '@tanstack/react-query';
-import { apiRequest } from '../apiClient';
+import { apiRequest } from '../../../../lib/apiClient';
 
 const getUserChats = async (clerkUserId:string | undefined) : Promise<Omit<ChatType,"files" | "chatQueries">[]> => {
     if(!clerkUserId) return[];
-    const response = await apiRequest<Omit<ChatType,"files" | "chatQueries">[]>("/chats/user/"+clerkUserId,'GET');
+    const response = await apiRequest<Omit<ChatType,"files" | "chatQueries">[]>("/chat/user/"+clerkUserId,'GET');
     return response;
 }
 

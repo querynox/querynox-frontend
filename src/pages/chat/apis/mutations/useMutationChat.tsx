@@ -1,7 +1,7 @@
 
 import type { CreateChatInputType, CreateChatOutputType } from "@/data/types";
 import { useMutation } from "@tanstack/react-query";
-import { apiRequest } from "../apiClient"
+import { apiRequest } from "../../../../lib/apiClient"
 
 
 const chat = async (clerkUserId:string, chatId:string, prompt:string, model: string , systemPrompt:string , webSearch:boolean, files:File[] ) : Promise<CreateChatOutputType> => {

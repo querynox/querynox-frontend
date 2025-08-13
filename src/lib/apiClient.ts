@@ -3,7 +3,7 @@ import axios, { type AxiosResponse, type Method } from 'axios';
 
 
 const apiClient = axios.create({
-  baseURL:  BACKEND_URL+"/api",
+  baseURL:  BACKEND_URL+"/api/v1", //REMEMBER TO ALSO UPDATE pages/chats/apis/fetch/streamSSE.ts file for changes
   headers: {
     'Content-Type': 'application/json',
   },

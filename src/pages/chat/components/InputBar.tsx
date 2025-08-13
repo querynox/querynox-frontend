@@ -8,7 +8,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import useMutationChat from '../apis/mutations/useMutationChat';
 import { useUser } from '@clerk/clerk-react';
 import { useNavigate } from '@tanstack/react-router';
-import { streamSSE } from '../apis/stream/streamSSE';
+import { streamSSE } from '../apis/fetch/streamSSE';
 import useQueryModels from '../apis/queries/useQueryModels';
 
 const InputBar = () => {  
