@@ -54,7 +54,7 @@ const PrivacyPolicy = () => {
       <h2 className="text-2xl font-semibold text-foreground mt-10 mb-4">6. Your Rights</h2>
       <p className="mb-6">
         You have the right to access, correct, or delete your personal data. You can request account deletion 
-        by contacting us at <a href="mailto:support@querynox.com" className="text-foreground underline">support@querynox.com</a>.
+        by contacting us at <a href="mailto:support@querynox.in" className="text-foreground underline">support@querynox.in</a>.
       </p>
 
       <h2 className="text-2xl font-semibold text-foreground mt-10 mb-4">7. Third-Party Services</h2>
@@ -71,7 +71,7 @@ const PrivacyPolicy = () => {
       <h2 className="text-2xl font-semibold text-foreground mt-10 mb-4">9. Contact Us</h2>
       <p className="mb-6">
         If you have any questions about this Privacy Policy, please contact us at 
-        <a href="mailto:support@querynox.com" className="text-foreground underline"> support@querynox.com</a>.
+        <a href="mailto:support@querynox.in" className="text-foreground underline"> support@querynox.in</a>.
       </p>
     </div>
   )
