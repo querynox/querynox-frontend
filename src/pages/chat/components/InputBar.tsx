@@ -8,8 +8,8 @@ import TextareaAutosize from 'react-textarea-autosize';
 import useMutationChat from '../apis/mutations/useMutationChat';
 import { useUser } from '@clerk/clerk-react';
 import { useNavigate } from '@tanstack/react-router';
-import { streamSSE } from '../apis/fetch/streamSSE';
 import useQueryModels from '../apis/queries/useQueryModels';
+import { useStreamSSE } from '../apis/fetch/streamSSE';
 
 const InputBar = () => {  
   
@@ -21,6 +21,7 @@ const InputBar = () => {
   const { data: models  } = useQueryModels();
   const { user } = useUser();
   const navigate = useNavigate();
+  const streamSSE = useStreamSSE();
 
   useEffect(()=>{
     if(fileInputRef.current)
@@ -129,7 +130,6 @@ const InputBar = () => {
     inputPromptRef.current.value = "";
 
     const chat : CreateChatInputType = {
-      clerkUserId:user.id,
       chatId:activeChat._id,
       prompt:_prompt,
       model:activeChat.model,
@@ -223,7 +223,6 @@ const InputBar = () => {
     inputPromptRef.current.value = "";
 
     const chat : CreateChatInputType = {
-      clerkUserId:user.id,
       chatId:activeChat._id,
       prompt:_prompt,
       model:activeChat.model,
@@ -301,12 +300,12 @@ const InputBar = () => {
         <div className="flex w-full items-top justify-around min-[350px]:min-h-[50px] p-3">
 
 
-          <div onClick={handleAttachmentButtonClick} className="min-[480px]:px-2 px-1 opacity-70 hover:opacity-100 cursor-pointer flex">
+          <div onClick={handleAttachmentButtonClick} className="min-[480px]:px-2 px-1 opacity-70 hover:opacity-100 cursor-pointer flex " title="Attach files">
             <input type="file" className="hidden" accept="*/*" multiple ref={fileInputRef} onChange={handleFileChange}/> 
-            <Paperclip className='size-[18px] min-[480px]:size-[24px]'/>
+            <Paperclip className='size-[18px] min-[480px]:size-[24px]' />
           </div>
 
-          <div onClick={toggleWebSearch} className="min-[480px]:px-2 px-1 opacity-70 hover:opacity-100 cursor-pointer flex">
+          <div onClick={toggleWebSearch} className="min-[480px]:px-2 px-1 opacity-70 hover:opacity-100 cursor-pointer flex"  title="Toggle Web Search">
             <Earth className={cn(activeChat.webSearch ? "stroke-blue-700 dark:stroke-blue-500" : "" , "size-[18px] min-[480px]:size-[24px]")}/>
           </div>
           
@@ -325,7 +324,7 @@ const InputBar = () => {
             )}
           />
 
-          <div className="min-[480px]:px-2 px-1 opacity-70 hover:opacity-100 cursor-pointer">
+          <div className="min-[480px]:px-2 px-1 opacity-70 hover:opacity-100 cursor-pointer"  title="Send Chat">
             <Send onClick={sendChatStream} className='size-[18px] min-[480px]:size-[24px]'/>
           </div>
 

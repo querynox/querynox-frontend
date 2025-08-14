@@ -2,11 +2,11 @@
 import type { CreateChatInputType, CreateChatOutputType } from "@/data/types";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "../../../../lib/apiClient"
+import { useAuth } from "@clerk/clerk-react";
 
 
-const chat = async (clerkUserId:string, chatId:string, prompt:string, model: string , systemPrompt:string , webSearch:boolean, files:File[] ) : Promise<CreateChatOutputType> => {
+const chat = async (token:string | null, chatId:string, prompt:string, model: string , systemPrompt:string , webSearch:boolean, files:File[] ) : Promise<CreateChatOutputType> => {
     const formData = new FormData();
-    formData.append("clerkUserId",clerkUserId);
     formData.append("prompt",prompt);
     formData.append("model",model);
     formData.append("systemPrompt",systemPrompt);
@@ -17,22 +17,24 @@ const chat = async (clerkUserId:string, chatId:string, prompt:string, model: str
     });
 
     const url =  chatId ? ("/chat/" + chatId) : "/chat";
-    const response = await apiRequest<CreateChatOutputType>(url,"POST",formData,{"Content-Type": "multipart/form-data"})
+    const response = await apiRequest<CreateChatOutputType>(url,"POST",formData,{"Content-Type": "multipart/form-data","authorization":`Bearer ${token}`})
     return response
 }
 
 const useMutationChat = (
   onSuccess: (data: CreateChatOutputType, variables: CreateChatInputType, context: unknown) => void,
   onError?: (error: unknown, variables: CreateChatInputType, context: unknown) => void
-) =>
-  useMutation({
+) => {
+  const { getToken } = useAuth();
+  return useMutation({
     mutationKey: ['createChat'],
     mutationFn: async (input : CreateChatInputType) => {
-      const { clerkUserId, chatId, prompt, model, systemPrompt, webSearch, files } = input;
-      return chat(clerkUserId, chatId, prompt, model, systemPrompt, webSearch,files);
+      const token = await getToken(); 
+      const {chatId, prompt, model, systemPrompt, webSearch, files } = input;
+      return chat(token, chatId, prompt, model, systemPrompt, webSearch,files);
     },
     onSuccess,
     onError,
-  });
+})};
 
 export default useMutationChat;

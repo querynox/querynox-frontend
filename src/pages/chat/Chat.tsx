@@ -20,12 +20,13 @@ const Chat = () => {
   const { setChats , setActiveChatIndex  } = useChatContext();
   const navigate = useNavigate();
 
-  const { refetch : refetchUserChats  } = useQueryUserChats(user?.id);
+  const { refetch : refetchUserChats  } = useQueryUserChats();
   const { isFetched:isModelFetched } = useQueryModels();
 
   useEffect(()=>{
-    if(user)
-    loadUserChats();
+    if(user){
+      loadUserChats();
+    }
   },[user])
 
   const loadUserChats = async () => {

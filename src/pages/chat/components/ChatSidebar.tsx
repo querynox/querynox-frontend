@@ -51,8 +51,8 @@ export function ChatSidebar() {
   const deleteChatMutation = useDeleteChat();
   
 
-  const handleDelete = (chat:ChatType) => {
-    deleteChatMutation.mutate({chatId:chat._id, clerkUserId:user!.id});
+  const handleDelete = async (chat:ChatType) => {
+    deleteChatMutation.mutate({chatId:chat._id});
     setChats((prev)=>{
       const _chats = prev.filter(pchat => pchat._id != chat._id);
       return [..._chats];

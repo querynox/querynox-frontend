@@ -34,7 +34,6 @@ export type ChatType = {
 };
 
 export type CreateChatInputType = {
-  clerkUserId: string;
   chatId: string;
   prompt: string;
   model: string;

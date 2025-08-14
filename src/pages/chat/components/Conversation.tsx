@@ -26,7 +26,7 @@ const Conversation = () => {
 
   useEffect(() => {
     scrollContainerRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [activeChat.chatQueries.length]);
+  }, [activeChat.chatQueries]);
 
   useEffect(()=>{
     if(activeChatIndex>=0 && data){
@@ -37,8 +37,6 @@ const Conversation = () => {
       })
     }
   },[data])
-
-  useEffect(()=>{console.log(streamingResponse)},[streamingResponse])
 
   const handleClickCopy = (message:string, index:number) => {
     setCopid(index);

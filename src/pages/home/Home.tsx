@@ -6,12 +6,12 @@ import { Moon, Sun, Sparkles, Zap, Globe, FileText, Image, Search, Upload, Messa
 import { useEffect, useRef } from "react"
 import DemoVideoSection from "@/pages/home/components/DemoVideoSection"
 import { Hackice20GithubLink, SohamJoshiGithubLink } from "@/data/constants"
-import getCheckoutLink from "./apis/axios/getCeheckoutLink"
+import useCheckoutLink from "./apis/axios/useCheckoutLink"
 
 const Home = () => {
   const { darkmode, setDarkmode } = useSystemContext()
   const scrollRefs = useRef<(HTMLDivElement | null)[]>([])
-  const { user } = useUser();
+  const getCheckoutLink = useCheckoutLink();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -44,7 +44,7 @@ const Home = () => {
   }
 
   const checkout = async (productID:string, plan:string, source:string) => {
-    const data = await getCheckoutLink(productID,user?.id!,plan,source,"http://localhost:5173/payments")
+    const data = await getCheckoutLink(productID,plan,source,"http://localhost:5173/payments")
     if(data.url)
     window.location.href = data.url
   }
