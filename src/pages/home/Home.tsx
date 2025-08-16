@@ -243,9 +243,9 @@ const Home = () => {
      {/* Pricing Plans Section */}
       <section className="px-6 py-20 bg-muted/30">
         <div className="mx-auto max-w-6xl text-center">
-          <h2 className="text-4xl font-bold mb-6 bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">
-            Choose Your Plan
-          </h2>
+                     <h2 className="text-4xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+             Choose Your Plan
+           </h2>
           <p className="text-muted-foreground mb-16 max-w-2xl mx-auto">
             Find the perfect plan for your needs — from getting started to scaling your AI-powered workflow.
           </p>
@@ -282,19 +282,24 @@ const Home = () => {
             </div>
 
             {/* Pro Plan */}
-            <div className="bg-background p-8 rounded-xl border-2 border-yellow-500 shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 ease-in-out transform flex flex-col">
-              <h3 className="text-2xl font-semibold mb-4 text-yellow-600">Pro</h3>
-              <p className="text-4xl font-bold mb-6">$15<span className="text-lg font-normal text-muted-foreground">/mo</span></p>
-              <ul className="text-muted-foreground mb-6 space-y-2 text-left">
-                <li>✔ 2000 messages / month</li>
-                <li>✔ Access to GPT-4, Claude, Gemini</li>
-                <li>✔ Web search integration</li>
-                <li>✔ Document & image uploads</li>
-                <li>✔ Conversation memory</li>
-              </ul>
-              <Button className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white hover:opacity-90 mt-auto cursor-pointer" onClick={()=>{checkout("8dc2161d-c84c-4979-8a06-ba23afbd2472","pro","home")}}>
-                Upgrade to Pro
-              </Button>
+            <div className="relative bg-background p-8 rounded-xl border-2 border-purple-500/60 shadow-2xl hover:scale-105 hover:shadow-purple-500/25 transition-all duration-300 ease-in-out transform flex flex-col overflow-hidden">
+              
+              <div className="relative z-10">
+                <h3 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Pro</h3>
+                                 <p className="text-4xl font-bold mb-6 text-foreground">$15<span className="text-lg font-normal text-muted-foreground">/mo</span></p>
+                <ul className="text-muted-foreground mb-6 space-y-2 text-left">
+                  <li>✔ 2000 messages / month</li>
+                  <li>✔ Access to GPT-4, Claude, Gemini</li>
+                  <li>✔ Web search integration</li>
+                  <li>✔ Document & image uploads</li>
+                  <li>✔ Conversation memory</li>
+                </ul>
+                <Button className="relative bg-gradient-to-r from-purple-600 via-purple-500 to-pink-600 hover:from-purple-700 hover:via-purple-600 hover:to-pink-700 text-white border-0 mt-auto cursor-pointer transition-all duration-300 shadow-lg hover:shadow-purple-500/50 hover:scale-105" onClick={()=>{checkout("8dc2161d-c84c-4979-8a06-ba23afbd2472","pro","home")}}>
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-400/20 to-pink-400/20 rounded-md opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+                  <Sparkles className="mr-2 h-4 w-4 relative z-10" />
+                  <span className="relative z-10">Upgrade to Pro</span>
+                </Button>
+              </div>
             </div>
 
             {/* Enterprise Plan */}

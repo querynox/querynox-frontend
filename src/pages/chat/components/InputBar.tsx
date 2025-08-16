@@ -1,8 +1,8 @@
 import { newChatDefaultObject, useChatContext } from '@/contexts/ChatContext';
-import type { ChatType, ChatQueryType, CreateChatInputType, CreateChatOutputType } from '@/data/types';
+import type { ChatType, ChatQueryType, CreateChatInputType, CreateChatOutputType, ModelType } from '@/data/types';
 import { cn } from '@/lib/utils';
-import { X, Paperclip, Earth, Send } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { X, Paperclip, Earth, Send, ChevronDown } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 
 import TextareaAutosize from 'react-textarea-autosize';
 import useMutationChat from '../apis/mutations/useMutationChat';
@@ -42,10 +42,77 @@ const InputBar = () => {
   const navigate = useNavigate();
   const streamSSE = useStreamSSE();
 
+  const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(false);
+  const [groupedModels, setGroupedModels] = useState<Record<string, ModelType[]>>();
+  const modelDropdownRef = useRef<HTMLDivElement>(null);
+
   useEffect(()=>{
     if(fileInputRef.current)
     fileInputRef.current.value = "";
   },[activeChatIndex]);
+
+  useEffect(()=>{
+    if(models)
+    setGroupedModels(generateGroupedModels(models));
+  },[models])
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modelDropdownRef.current && !modelDropdownRef.current.contains(event.target as Node)) {
+        setIsModelDropdownOpen(false);
+      }
+    };
+
+    if (isModelDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isModelDropdownOpen]);
+  
+  const generateGroupedModels = (models:ModelType[]) :  Record<string, ModelType[]> => { 
+    return models.reduce((acc, model) => {
+      const category = model.category;
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(model);
+      return acc;
+    }, {} as Record<string, typeof models>)
+  }
+
+  const changeSelectedModel = (modelName:string) => {
+    if(activeChatIndex<0){
+      setNewChat((chat) => {
+        const uChat = {...chat,model:modelName};
+        return uChat;
+      })
+    }else if(activeChatIndex >= 0 && activeChat){
+      setChats(prev => {
+        const chats = [...prev];
+        const uChat = {...prev[activeChatIndex],model:modelName};
+        chats[activeChatIndex] = uChat;
+        return chats;
+      })
+    }
+    setIsModelDropdownOpen(false);
+  }
+
+  const getModelLogo = (modelName: string) => {
+    const lowerName = modelName.toLowerCase();
+    if (lowerName.includes('gpt') || lowerName.includes('openai') || lowerName.includes('dall-e')) {
+      return '/openai.svg';
+    } else if (lowerName.includes('claude')) {
+      return '/claude.png';
+    } else if (lowerName.includes('gemini')) {
+      return '/geminisvg.png';
+    } else if (lowerName.includes('meta') || lowerName.includes('llama')) {
+      return '/meta svg.png';
+    }
+    return '/querynox.jpeg'; // default logo
+  }
 
  
   const deleteFromFile = (index: number) => {
@@ -356,6 +423,68 @@ const InputBar = () => {
               "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive thin-scrollbar resize-none"
             )}
           />
+
+          {/* Model Selector */}
+          <div className="relative" ref={modelDropdownRef}>
+                         <div 
+               onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)} 
+               className="min-[480px]:px-2 px-1 opacity-70 hover:opacity-100 cursor-pointer flex items-center gap-1 hover:bg-white/10 dark:hover:bg-gray-800/20 rounded-lg p-1 transition-all duration-200" 
+               title="Select Model"
+             >
+                             <img 
+                 src={getModelLogo(activeChat.model)} 
+                 alt={activeChat.model} 
+                 className={cn(
+                   "size-[18px] min-[480px]:size-[20px] rounded-sm",
+                   activeChat.model.toLowerCase().includes('gpt') || activeChat.model.toLowerCase().includes('openai') || activeChat.model.toLowerCase().includes('dall-e') 
+                     ? "dark:invert" 
+                     : ""
+                 )}
+               />
+              <ChevronDown className="size-[12px] min-[480px]:size-[14px]" />
+            </div>
+            
+                         {isModelDropdownOpen && (
+               <div className="absolute bottom-full right-0 mb-2 w-80 max-h-96 overflow-y-auto bg-white/70 dark:bg-gray-900/70 backdrop-blur-2xl border border-white/30 dark:border-gray-600/50 rounded-2xl shadow-2xl z-50 ring-1 ring-white/20 dark:ring-gray-500/20">
+                {groupedModels && Object.keys(groupedModels).map((category) => (
+                  <div key={category} className="p-2">
+                                         <div className="text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide px-3 py-2 bg-white/20 dark:bg-gray-800/30 rounded-lg mb-2 backdrop-blur-sm border border-white/20 dark:border-gray-700/30">
+                       {category}
+                     </div>
+                                         {groupedModels[category].map((model) => (
+                       <div
+                         key={model.name}
+                         onClick={() => changeSelectedModel(model.name)}
+                         className={cn(
+                           "flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-white/30 dark:hover:bg-gray-800/60 rounded-lg transition-all duration-200 hover:shadow-lg hover:scale-[1.02]",
+                           activeChat.model === model.name && "bg-blue-500/20 dark:bg-blue-400/30 border border-blue-200/40 dark:border-blue-400/40 shadow-md"
+                         )}
+                       >
+                                                 <img 
+                           src={getModelLogo(model.name)} 
+                           alt={model.name} 
+                           className={cn(
+                             "size-5 rounded-sm",
+                             model.name.toLowerCase().includes('gpt') || model.name.toLowerCase().includes('openai') || model.name.toLowerCase().includes('dall-e') 
+                               ? "dark:invert" 
+                               : ""
+                           )}
+                         />
+                        <div className="flex-1">
+                          <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                            {model.name}
+                          </div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                            {model.description}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
           <div className="min-[480px]:px-2 px-1 opacity-70 hover:opacity-100 cursor-pointer"  title="Send Chat">
             <Send onClick={sendChatStream} className='size-[18px] min-[480px]:size-[24px]'/>

@@ -15,6 +15,7 @@ import { aboutRoute } from './routes/about.route';
 import { chatRoute } from './routes/chat.route';
 import { chatIdRoute } from './routes/chatid.chat.route';
 import { termsConditionsRoute } from './routes/termsconditions.route';
+import { paymentsRoute } from './routes/payments.route';
 
 import NotFound from '@/pages/notfound/NotFound';
 import Error from '@/pages/error/Error';
@@ -29,6 +30,7 @@ const routeTree = rootRoute.addChildren([
   aboutRoute,
   termsConditionsRoute,
   privacyPolicyRoute,
+  paymentsRoute,
   chatRoute.addChildren([
     chatIdRoute
   ]),
