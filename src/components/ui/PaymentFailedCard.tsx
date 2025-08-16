@@ -40,7 +40,7 @@ const PaymentFailedCard = ({ onTryAgain }: PaymentFailedCardProps) => {
         
         <button 
           onClick={onTryAgain}
-          className="bg-red-600 hover:bg-red-700 text-white px-10 py-4 rounded-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg animate-in slide-in-from-bottom-4 duration-500 delay-400 transform hover:rotate-1"
+          className="bg-red-600 hover:bg-red-700 text-white px-10 py-4 rounded-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg animate-in slide-in-from-bottom-4 duration-500 delay-400 transform"
         >
           Try Again
         </button>
