@@ -51,12 +51,17 @@ export function ChatSidebar() {
   const deleteChatMutation = useDeleteChat();
   
 
-  const handleDelete = async (chat:ChatType) => {
+  const handleDelete = async (chat:ChatType, index:number) => {
     deleteChatMutation.mutate({chatId:chat._id});
     setChats((prev)=>{
       const _chats = prev.filter(pchat => pchat._id != chat._id);
       return [..._chats];
     })
+    if(activeChatIndex==index){
+      setActiveChatIndex(-1);
+    }else if(activeChatIndex > index){
+      setActiveChatIndex(prev => prev-1);
+    }
   }
   
   return (
@@ -129,7 +134,7 @@ export function ChatSidebar() {
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
                                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction onClick={()=>handleDelete(chat)} className="hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-600 dark:hover:text-red-400">Delete!</AlertDialogAction>
+                                  <AlertDialogAction onClick={()=>handleDelete(chat,index)} className="hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-600 dark:hover:text-red-400">Delete!</AlertDialogAction>
                                 </AlertDialogFooter>
                               </AlertDialogContent>
                             </AlertDialog>
