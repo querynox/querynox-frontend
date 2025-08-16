@@ -431,16 +431,18 @@ const InputBar = () => {
                className="min-[480px]:px-2 px-1 opacity-70 hover:opacity-100 cursor-pointer flex items-center gap-1 hover:bg-white/10 dark:hover:bg-gray-800/20 rounded-lg p-1 transition-all duration-200" 
                title="Select Model"
              >
-                             <img 
-                 src={getModelLogo(activeChat.model)} 
-                 alt={activeChat.model} 
-                 className={cn(
-                   "size-[18px] min-[480px]:size-[20px] rounded-sm",
-                   activeChat.model.toLowerCase().includes('gpt') || activeChat.model.toLowerCase().includes('openai') || activeChat.model.toLowerCase().includes('dall-e') 
-                     ? "dark:invert" 
-                     : ""
-                 )}
-               />
+                                                           <img 
+                  src={getModelLogo(activeChat.model)} 
+                  alt={activeChat.model} 
+                  className={cn(
+                    "rounded-sm",
+                    (activeChat.model.toLowerCase().includes('gpt') || activeChat.model.toLowerCase().includes('openai') || activeChat.model.toLowerCase().includes('dall-e')) 
+                      ? "dark:invert size-[18px] min-[480px]:size-[20px]" 
+                      : activeChat.model.toLowerCase().includes('gemini')
+                      ? "h-[18px] min-[480px]:h-[20px] w-[32px] min-[480px]:w-[36px]"
+                      : "size-[18px] min-[480px]:size-[20px]"
+                  )}
+                />
               <ChevronDown className="size-[12px] min-[480px]:size-[14px]" />
             </div>
             
@@ -460,16 +462,18 @@ const InputBar = () => {
                            activeChat.model === model.name && "bg-blue-500/20 dark:bg-blue-400/30 border border-blue-200/40 dark:border-blue-400/40 shadow-md"
                          )}
                        >
-                                                 <img 
-                           src={getModelLogo(model.name)} 
-                           alt={model.name} 
-                           className={cn(
-                             "size-5 rounded-sm",
-                             model.name.toLowerCase().includes('gpt') || model.name.toLowerCase().includes('openai') || model.name.toLowerCase().includes('dall-e') 
-                               ? "dark:invert" 
-                               : ""
-                           )}
-                         />
+                                                                                                   <img 
+                            src={getModelLogo(model.name)} 
+                            alt={model.name} 
+                            className={cn(
+                              "rounded-sm",
+                              (model.name.toLowerCase().includes('gpt') || model.name.toLowerCase().includes('openai') || model.name.toLowerCase().includes('dall-e')) 
+                                ? "dark:invert size-5" 
+                                : model.name.toLowerCase().includes('gemini')
+                                ? "h-5 w-8"
+                                : "size-5"
+                            )}
+                          />
                         <div className="flex-1">
                           <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
                             {model.name}
