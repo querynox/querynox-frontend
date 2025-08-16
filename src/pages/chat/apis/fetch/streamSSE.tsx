@@ -39,6 +39,11 @@ export const useStreamSSE = () => {
           },
         });
 
+        if (!response.ok) {
+          const errorData = await response.clone().json(); 
+          throw new Error(errorData.error);
+        }
+
         const reader = response.body?.getReader();
         const decoder = new TextDecoder("utf-8");
 
@@ -66,7 +71,7 @@ export const useStreamSSE = () => {
         if (onEnd) onEnd();
       } catch (err) {
         if (onError) onError(err);
-        else console.error("Stream failed:", err);
+        else console.error(err);
       }
     },
     []

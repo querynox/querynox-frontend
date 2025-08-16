@@ -17,7 +17,26 @@ const InputBar = () => {
   const inputPromptRef = useRef<HTMLTextAreaElement>(null);
 
   const { activeChat, activeChatIndex, setNewChat, setChats, setActiveChatIndex, newChat, setStreamingResponse } = useChatContext();
-  const { mutate } = useMutationChat((data)=>handleSuccessfulMutation(data));
+  const { mutate } = useMutationChat(
+    (data)=>handleSuccessfulMutation(data),
+    (error) => {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      if(activeChatIndex>=0){
+        setChats((prev) => {
+          const temp = [...prev];
+          const _chatQuery = {...temp[activeChatIndex].chatQueries[temp[activeChatIndex].chatQueries.length-1],response:errorMessage}
+          const chat = { ...temp[activeChatIndex], chatQueries: [...temp[activeChatIndex].chatQueries.slice(0, -1),_chatQuery] };
+          temp[activeChatIndex] = chat;
+          return temp;
+        });
+      }else{
+        setNewChat((prev)=>{
+          const _chatQuery : ChatQueryType = {...prev.chatQueries[0],response:errorMessage}
+          return {...prev,chatQueries:[_chatQuery]}
+        })
+      }
+    }
+  );
   const { data: models  } = useQueryModels();
   const { user } = useUser();
   const navigate = useNavigate();
@@ -240,7 +259,7 @@ const InputBar = () => {
       systemPrompt:activeChat.systemPrompt,
       webSearch:activeChat.webSearch,
       createdAt:Date.now(),
-      updatedAt:Date.now()
+      updatedAt:Date.now(),
     }
 
     if(activeChatIndex>=0){
@@ -281,7 +300,21 @@ const InputBar = () => {
         //console.log("Streaming complete");
       },
       (error) => {
-        console.error("Streaming failed:", error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        if(activeChatIndex>=0){
+          setChats((prev) => {
+            const temp = [...prev];
+            const _chatQuery = {...temp[activeChatIndex].chatQueries[temp[activeChatIndex].chatQueries.length-1],response:errorMessage}
+            const chat = { ...temp[activeChatIndex], chatQueries: [...temp[activeChatIndex].chatQueries.slice(0, -1),_chatQuery] };
+            temp[activeChatIndex] = chat;
+            return temp;
+          });
+        }else{
+          setNewChat((prev)=>{
+            const _chatQuery : ChatQueryType = {...prev.chatQueries[0],response:errorMessage}
+            return {...prev,chatQueries:[_chatQuery]}
+          })
+        }
       }
     );
 
