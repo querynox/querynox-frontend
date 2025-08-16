@@ -16,7 +16,7 @@ const InputBar = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const inputPromptRef = useRef<HTMLTextAreaElement>(null);
 
-  const { activeChat, activeChatIndex, setNewChat, setChats, setActiveChatIndex, newChat, setStreamingResponse } = useChatContext();
+  const { activeChat, activeChatIndex, setNewChat, setChats, setActiveChatIndex, newChat, setStreamingResponse, setChatError } = useChatContext();
   const { mutate } = useMutationChat(
     (data)=>handleSuccessfulMutation(data),
     (error) => {
@@ -212,7 +212,7 @@ const InputBar = () => {
     const isThinking = activeChatIndex > 0 ? !(activeChat.chatQueries[activeChat.chatQueries.length-1].response) : false;
     if (!inputPromptRef.current || !inputPromptRef.current.value.trim() || !user || isThinking) return;
     const _prompt = inputPromptRef.current.value.trim()
-    
+
     inputPromptRef.current.value = "";
 
     const chat : CreateChatInputType = {
@@ -371,14 +371,14 @@ const InputBar = () => {
         if(activeChatIndex>=0){
           setChats((prev) => {
             const temp = [...prev];
-            const _chatQuery = {...temp[activeChatIndex].chatQueries[temp[activeChatIndex].chatQueries.length-1],response:errorMessage}
+            const _chatQuery = {...temp[activeChatIndex].chatQueries[temp[activeChatIndex].chatQueries.length-1],error:errorMessage}
             const chat = { ...temp[activeChatIndex], chatQueries: [...temp[activeChatIndex].chatQueries.slice(0, -1),_chatQuery] };
             temp[activeChatIndex] = chat;
             return temp;
           });
         }else{
           setNewChat((prev)=>{
-            const _chatQuery : ChatQueryType = {...prev.chatQueries[0],response:errorMessage}
+            const _chatQuery : ChatQueryType = {...prev.chatQueries[0],error:errorMessage}
             return {...prev,chatQueries:[_chatQuery]}
           })
         }

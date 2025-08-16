@@ -10,7 +10,8 @@ export type ChatQueryType = {
   createdAt: number;
   updatedAt: number;
   chatName?:string;
-  title?:string
+  title?:string;
+  error?:string;
 };
 
 export type ModelType = {
