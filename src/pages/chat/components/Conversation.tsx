@@ -92,8 +92,16 @@ const Conversation = () => {
         </div>
 
         {/**Assistant Chat */}
-        {query.response 
-        ?<div className="flex justify-start">
+        {query.error?.trim()?
+         <div className="flex justify-start">
+          {/* Bubble Container */}
+          <div className={cn("relative group min-[500px]:px-4 min-[400px]:px-[14px] min-[350px]:px-[12px] px-2", isChatQueryImage(query) ? "max-w-full":"w-full")}>
+            <div className='rounded-lg p-3 mb-6 markdown-preview thin-scrollbar dark:bg-red-800/20 dark:text-red-400 bg-red-200/80 text-red-800'>{query.error.trim()}</div>
+          </div>
+        </div>
+        
+        :query.response?
+        <div className="flex justify-start">
 
           {/* Bubble Container */}
           <div className={cn("relative group min-[500px]:px-4 min-[400px]:px-[14px] min-[350px]:px-[12px] px-2", isChatQueryImage(query) ? "max-w-full":"w-full")}>
@@ -125,7 +133,7 @@ const Conversation = () => {
         </div>
 
         /**Assistant Chat Stream*/
-        : streamingResponse.trim()?
+        :streamingResponse.trim()?
         <div className="flex justify-start">
 
           {/* Bubble Container */}
