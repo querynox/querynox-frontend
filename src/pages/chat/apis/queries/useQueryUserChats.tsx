@@ -16,7 +16,8 @@ const useQueryUserChats = () =>  {
             const token = await getToken(); 
             return getUserChats(token) 
         },
-        retry: false
+        retry: false,
+        enabled:false
     })
 };
 

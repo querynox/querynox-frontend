@@ -3,6 +3,7 @@ import { useSidebar } from "@/components/ui/sidebar";
 import { ChatSidebar } from "@/pages/chat/components/ChatSidebar";
 import HeadBar from "@/pages/chat/components/HeadBar";
 import { useChatContext } from "@/contexts/ChatContext";
+import { useUserContext } from "@/contexts/UserContext";
 import { useUser, SignedOut } from "@clerk/clerk-react";
 import SignInOverlay from "@/pages/chat/components/SignInOverlay";
 import Conversation from "@/pages/chat/components/Conversation";
@@ -11,35 +12,42 @@ import useQueryUserChats from "./apis/queries/useQueryUserChats";
 import { useEffect } from "react";
 
 import useQueryModels from "./apis/queries/useQueryModels";
+import useQueryUserInfo from "./apis/queries/useQueryUserInfo";
 
 const Chat = () => {
 
   const { open, isMobile } = useSidebar()
   const { chatId } = useParams({ strict: false})
   const { isLoaded : isUserLoaded ,user } = useUser()
+  const { setUser } = useUserContext();
   const { setChats , setActiveChatIndex  } = useChatContext();
   const navigate = useNavigate();
 
-  const { refetch : refetchUserChats  } = useQueryUserChats();
-  const { isFetched:isModelFetched } = useQueryModels();
+  const { refetch : refetchUserChats, isFetching:isFetchingUserChats } = useQueryUserChats();
+  const { isFetched:isModelFetched} = useQueryModels();
+  const { refetch:refetchUserInfo , isFetching: isFetchingUserInfo } = useQueryUserInfo();
 
   useEffect(()=>{
-    if(user){
-      loadUserChats();
+    if(user?.id){
+      loadUser();
     }
-  },[user])
+  },[user?.id])
 
-  const loadUserChats = async () => {
-    const { data , isError} = await refetchUserChats();
-    if(!data || isError){
+  const loadUser = async () => {
+    if(isFetchingUserChats || isFetchingUserInfo) return;
+    const { data:chatData , isError:chatError} = await refetchUserChats();
+    const { data:userData, error:userError} = await refetchUserInfo();
+
+    if(!userData || !chatData || chatError || userError){
       navigate({to:"/chat"})
       return;
     }
 
     let aIndex = -1;
 
+    setUser(userData)
     setChats((prev) => {
-      const uChats = data.map((chat, index)=>{ 
+      const uChats = chatData.map((chat, index)=>{ 
         let _chat = prev.find(prev => prev._id == chat._id);
         if(chat._id === chatId) aIndex = index;
         return {...chat,files:_chat? _chat.files : [],chatQueries:[]}
@@ -52,6 +60,8 @@ const Chat = () => {
       navigate({to:"/chat"})
     }
   }
+
+
 
 
   if (!isUserLoaded || !isModelFetched) return <div className="w-screen h-screen flex justify-center items-center text-accent-foreground"> <div className="size-14 spinner-loader"/> </div>;

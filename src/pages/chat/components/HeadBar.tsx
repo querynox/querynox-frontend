@@ -1,10 +1,10 @@
-
-import { useChatContext } from "@/contexts/ChatContext";
 import { useSystemContext } from "@/contexts/SystemContext";
+import { useUserContext } from "@/contexts/UserContext";
 import { Moon, Sun } from "lucide-react";
 
 const HeadBar = () => {
   const { darkmode, setDarkmode } = useSystemContext();
+  const { user } = useUserContext()
 
   return (
     <div className="flex flex-row items-center justify-between p-3 border-b-[1px] text-accent-foreground bg-secondary">
@@ -15,11 +15,16 @@ const HeadBar = () => {
               alt="QueryNox" 
               className="h-10 w-10 rounded-lg"
             />
-          <div className="flex items-center space-x-2">
-            <span className="font-semibold">
+          <div className="flex items-center space-x-1">
+            <span className="font-semibold z-20">
               <span className="text-foreground">Query</span>
               <span className="text-muted-foreground">Nox</span>
             </span>
+            
+            {/* Pro Label */}
+            {user?.isPro && <span className="relative bottom-2 right-1 z-10  px-[3px] py-[1px] text-[12px] rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-medium shadow-sm">
+              Pro
+            </span>}
           </div>
         </div>
 

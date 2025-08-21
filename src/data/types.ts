@@ -67,3 +67,51 @@ export type StreamChatOutputType = {
   type: 'content' ;
   content:string;
 }
+
+
+export type UserType = {
+  id:String,
+  chats:String[],
+  productId:String|null,
+  usedChatGeneration:number,
+  usedImageGeneration:number,
+  usedWebSearch:number,
+  usedFileRag:number,
+  limitsUpdatedAt:number,
+  createdAt:number,
+  isPro:true,
+  product?:{
+    metadata: {
+      fileRagLimit: number;
+      fileCountLimit: number;
+      webSearchLimit: number;
+      chatGenerationLimit: number;
+      imageGenerationLimit: number;
+    };
+    _id: string;
+    __v: number;
+    attachedCustomFields: any[];
+    benefits: any[];
+    createdAt: number;
+    description: string;
+    isArchived: boolean;
+    isRecurring: boolean;
+    medias: any[];
+    modifiedAt: number;
+    name: string;
+    organizationId: string;
+    prices: {
+      createdAt: string;        // ISO timestamp
+      modifiedAt: string;       // ISO timestamp
+      id: string;
+      amountType: string;       // e.g. "fixed"
+      isArchived: boolean;
+      productId: string;
+      type?: string;            // legacy field
+      recurringInterval?: string; // legacy field
+      priceCurrency: string;    // e.g. "usd"
+      priceAmount: number;
+    }[];
+    recurringInterval: "month" | "year" | string;
+  },
+}

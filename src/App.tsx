@@ -7,6 +7,7 @@ import { ClerkProvider } from '@clerk/clerk-react'
 import { ChatProvider } from './contexts/ChatContext.tsx'
 import { SystemProvider, useSystemContext } from './contexts/SystemContext.tsx'
 import { dark } from '@clerk/themes'
+import { UserProvider } from './contexts/UserContext.tsx'
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
@@ -19,7 +20,9 @@ const InnerApp = () => {
       appearance={{ baseTheme: darkmode ? dark : undefined }}
     >
       <ChatProvider>
-        <RouterProvider router={router} />
+        <UserProvider>
+          <RouterProvider router={router} />
+        </UserProvider>
       </ChatProvider>
     </ClerkProvider>
   );
