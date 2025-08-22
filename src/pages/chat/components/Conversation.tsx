@@ -111,7 +111,7 @@ const Conversation = () => {
               source={isChatQueryImage(query) ?
                  `<img src="${query.response}" alt="${query.prompt}" loading="lazy" style="width: 400px; aspect-ratio: 1/1; background-color: #222; object-fit: cover; border-radius: 8px;" />` 
                  : query.response}
-              className={isChatQueryImage(query) ?"rounded-lg mb-2 markdown-preview thin-scrollbar":"rounded-lg p-3 pl-1 mb-2 markdown-preview thin-scrollbar"}
+              className={isChatQueryImage(query) ?"rounded-lg mb-2 markdown-preview thin-scrollbar":"rounded-lg p-3 pl-0 mb-2 markdown-preview thin-scrollbar"}
               style={{
                 backgroundColor:"var(--markdown-assistant-background)",
                 color:"var(--markdown-assistant-text)",
@@ -142,7 +142,7 @@ const Conversation = () => {
 
             <MarkdownPreview
               source={streamingResponse}
-              className="rounded-lg p-3 pl-1 mb-2 markdown-preview thin-scrollbar"
+              className="rounded-lg p-3 pl-0 mb-2 markdown-preview thin-scrollbar"
               style={{
                 backgroundColor:"var(--markdown-assistant-background)",
                 color:"var(--markdown-assistant-text)",

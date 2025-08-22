@@ -37,6 +37,15 @@ body {
   padding-left: 1.25rem;
 }
 
+.markdown-preview ol {
+  list-style-type: decimal;
+  padding-left: 1.25rem;
+}
+
+.wmde-markdown h2,h1,h3 {
+  border-color: var(--foreground) !important;
+}
+
 .markdown-preview pre {
   background-color: var(--markdown-code-bg) !important;
   padding: 0.5rem !important;
@@ -45,10 +54,15 @@ body {
   scrollbar-color: var(--primary) transparent !important;
 }
 
+.markdown-preview img {
+  background-color: transparent !important;
+}
+
+
 .wmde-markdown hr {
   border: none !important;
   height:1px !important;
-  background-color: var(--scrollbar) !important;
+  background-color: var(--markdown-code) !important;
 }
 
 .markdown-preview {
