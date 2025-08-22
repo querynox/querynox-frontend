@@ -16,7 +16,7 @@ const InputBar = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const inputPromptRef = useRef<HTMLTextAreaElement>(null);
 
-  const { activeChat, activeChatIndex, setNewChat, setChats, setActiveChatIndex, newChat, setStreamingResponse, setChatError } = useChatContext();
+  const { activeChat, activeChatIndex, setNewChat, setChats, setActiveChatIndex, newChat, setStreamingResponse } = useChatContext();
   const { mutate } = useMutationChat(
     (data)=>handleSuccessfulMutation(data),
     (error) => {

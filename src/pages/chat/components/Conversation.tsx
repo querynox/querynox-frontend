@@ -1,5 +1,5 @@
 import type { ChatQueryType } from '@/data/types'
-import { Check, ClipboardCopy, Download } from 'lucide-react'
+import { Check, Copy, Download } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { Skeleton } from '../../../components/ui/skeleton';
@@ -72,14 +72,14 @@ const Conversation = () => {
       {activeChat.chatQueries.map((query, index)=><div  key={index + query._id}>
       
         {/**User Chat */}
-        <div className="flex justify-end mb-[6px]">
+        <div className="flex justify-end mb-[6px] py-4">
 
           {/* Bubble Container */}
           <div className="relative group max-w-[85%] min-[500px]:px-4 min-[400px]:px-[14px] min-[350px]:px-[12px] px-2 mb-2">
 
             <MarkdownPreview
               source={query.prompt}
-              className="rounded-lg p-3 mb-2 markdown-preview thin-scrollbar"
+              className="rounded-lg p-2 mb-2 markdown-preview thin-scrollbar"
               style={{
                 backgroundColor: "var(--markdown-user-background)",
                 color: "var(--markdown-user-text)",
@@ -94,6 +94,7 @@ const Conversation = () => {
         {/**Assistant Chat */}
         {query.error?.trim()?
          <div className="flex justify-start">
+
           {/* Bubble Container */}
           <div className={cn("relative group min-[500px]:px-4 min-[400px]:px-[14px] min-[350px]:px-[12px] px-2", isChatQueryImage(query) ? "max-w-full":"w-full")}>
             <div className='rounded-lg p-3 mb-6 markdown-preview thin-scrollbar dark:bg-red-800/20 dark:text-red-400 bg-red-200/80 text-red-800'>{query.error.trim()}</div>
@@ -110,7 +111,7 @@ const Conversation = () => {
               source={isChatQueryImage(query) ?
                  `<img src="${query.response}" alt="${query.prompt}" loading="lazy" style="width: 400px; aspect-ratio: 1/1; background-color: #222; object-fit: cover; border-radius: 8px;" />` 
                  : query.response}
-              className={isChatQueryImage(query) ?"rounded-lg mb-2 markdown-preview thin-scrollbar":"rounded-lg p-3 mb-2 markdown-preview thin-scrollbar"}
+              className={isChatQueryImage(query) ?"rounded-lg mb-2 markdown-preview thin-scrollbar":"rounded-lg p-3 pl-1 mb-2 markdown-preview thin-scrollbar"}
               style={{
                 backgroundColor:"var(--markdown-assistant-background)",
                 color:"var(--markdown-assistant-text)",
@@ -120,11 +121,11 @@ const Conversation = () => {
           
             {/* Copy Button / Save Button */}
             {!isChatQueryImage(query) ?
-            <button  className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-white flex items-center gap-1 cursor-copy"  onClick={()=>handleClickCopy(query.response,index)} title="Copy message">
-              {copid == index ? <Check className="w-4 h-4 text-green-500 mr-0.5" /> : <ClipboardCopy className="w-4 h-4 mr-0.5" />}
+            <button  className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-white flex items-center gap-1 cursor-copy ml-1"  onClick={()=>handleClickCopy(query.response,index)} title="Copy message">
+              {copid == index ? <Check className="w-4 h-4 text-green-500 mr-0.5" /> : <Copy className="w-4 h-4 mr-0.5" />}
               Copy
             </button>
-            :<button className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-white flex items-center gap-1 cursor-pointer" title="Download Image" onClick={()=>{handleImageDownload(query)}}>
+            :<button className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-white flex items-center gap-1 cursor-pointer ml-1" title="Download Image" onClick={()=>{handleImageDownload(query)}}>
                 <Download className="w-4 h-4 mr-0.5" />Download
             </button>}
             
@@ -141,7 +142,7 @@ const Conversation = () => {
 
             <MarkdownPreview
               source={streamingResponse}
-              className="rounded-lg p-3 mb-2 markdown-preview thin-scrollbar"
+              className="rounded-lg p-3 pl-1 mb-2 markdown-preview thin-scrollbar"
               style={{
                 backgroundColor:"var(--markdown-assistant-background)",
                 color:"var(--markdown-assistant-text)",
