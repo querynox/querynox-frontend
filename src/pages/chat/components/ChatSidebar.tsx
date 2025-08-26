@@ -7,6 +7,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu"
 
 import {
@@ -43,13 +44,43 @@ import {
 } from "@/components/ui/alert-dialog"
 
 import useDeleteChat from "../apis/mutations/useMutationDeleteChat";
+import useMutationShareChat from "../apis/mutations/useMutationShareChat";
+import useQueryBookmarkedChats from "../apis/queries/useQueryBookmarkedChats";
+import useMutationBookmarkChat from "../apis/mutations/useMutationBookmarkChat";
+import { useMemo, useState } from "react";
 
 export function ChatSidebar() {
 
   const {chats,setActiveChatIndex,activeChatIndex, setChats} = useChatContext();
   const {user} = useUser();
   const deleteChatMutation = useDeleteChat();
+  const shareChatMutation = useMutationShareChat();
+  const bookmarkMutation = useMutationBookmarkChat();
+  const { data: bookmarkedData } = useQueryBookmarkedChats();
+  const [showBookmarks, setShowBookmarks] = useState(false);
+
+  const bookmarkedIds = useMemo(() => new Set((bookmarkedData?.chats || []).map(c => c._id)), [bookmarkedData]);
   
+  const handleShareLinkCopy = (chat: ChatType) => {
+    const shareUrl = `${window.location.origin}/share/${chat._id}`
+    navigator.clipboard.writeText(shareUrl)
+  }
+
+  const setShareState = (chat: ChatType, index: number, isShared: boolean) => {
+    shareChatMutation.mutate({ chatId: chat._id, isShared }, {
+      onSuccess: () => {
+        setChats(prev => {
+          const copy = [...prev]
+          copy[index] = { ...copy[index], isShared }
+          return copy
+        })
+      }
+    })
+  }
+
+  const setBookmarkedState = (chatId: string, bookmarked: boolean) => {
+    bookmarkMutation.mutate({ chatId, bookmarked })
+  }
 
   const handleDelete = async (chat:ChatType, index:number) => {
     deleteChatMutation.mutate({chatId:chat._id});
@@ -91,6 +122,25 @@ export function ChatSidebar() {
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <button className={cn("w-full text-left rounded-md px-2 py-1.5 text-sm hover:bg-accent/30 transition-colors")}
+                          onClick={()=> setShowBookmarks(prev => !prev)}>
+                    {showBookmarks ? 'Hide Bookmarks' : 'Bookmarks'}
+                  </button>
+                </SidebarMenuItem>
+                {showBookmarks && (bookmarkedData?.chats || []).map((b)=> (
+                  <SidebarMenuItem key={b._id}>
+                    <SidebarMenuButton asChild className={cn("my-[0.7px]")}> 
+                      <Link to={`/chat/$chatId`} params={{chatId:b._id}} onClick={() => {
+                        const idx = chats.findIndex(c => c._id === b._id);
+                        setActiveChatIndex(idx);
+                      }} className="flex items-center gap-2">
+                        <MessageSquare size={"18px"}/>
+                        <span className="truncate w-[193px] inline-block" title={b.title}>{b.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -115,12 +165,22 @@ export function ChatSidebar() {
                         <circle cx="35" cy="10" r="5" />
                             </svg>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent className="w-56" align="start" side="right">
+                        <DropdownMenuContent className="w-64" align="start" side="right">
                           <DropdownMenuLabel>Chat Options</DropdownMenuLabel>
                           <DropdownMenuSeparator />
-                            <DropdownMenuItem >Option 1</DropdownMenuItem>
-                            <DropdownMenuItem >Option 2</DropdownMenuItem>
-                            <DropdownMenuItem >Option 3</DropdownMenuItem>
+                            <DropdownMenuItem onSelect={(e)=>{e.preventDefault(); handleShareLinkCopy(chat)}}>Copy share link</DropdownMenuItem>
+                            <DropdownMenuCheckboxItem
+                              checked={!!chat.isShared}
+                              onCheckedChange={(checked)=> setShareState(chat,index,!!checked)}
+                            >
+                              Share publicly
+                            </DropdownMenuCheckboxItem>
+                            <DropdownMenuCheckboxItem
+                              checked={bookmarkedIds.has(chat._id)}
+                              onCheckedChange={(checked)=> setBookmarkedState(chat._id, !!checked)}
+                            >
+                              Bookmark
+                            </DropdownMenuCheckboxItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
                             <AlertDialog>

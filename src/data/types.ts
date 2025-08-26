@@ -32,6 +32,7 @@ export type ChatType = {
   systemPrompt: string,
   createdAt: number;
   updatedAt: number;
+  isShared?: boolean;
 };
 
 export type CreateChatInputType = {

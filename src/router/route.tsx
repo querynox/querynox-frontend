@@ -16,6 +16,8 @@ import { chatRoute } from './routes/chat.route';
 import { chatIdRoute } from './routes/chatid.chat.route';
 import { termsConditionsRoute } from './routes/termsconditions.route';
 import { paymentsRoute } from './routes/payments.route';
+import { shareRoute } from './routes/share.route';
+import { shareIdRoute } from './routes/shareid.route';
 
 import NotFound from '@/pages/notfound/NotFound';
 import Error from '@/pages/error/Error';
@@ -33,6 +35,9 @@ const routeTree = rootRoute.addChildren([
   paymentsRoute,
   chatRoute.addChildren([
     chatIdRoute
+  ]),
+  shareRoute.addChildren([
+    shareIdRoute
   ]),
 ]);
 

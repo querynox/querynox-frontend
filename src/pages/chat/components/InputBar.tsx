@@ -406,7 +406,7 @@ const InputBar = () => {
           </div>
 
           <div onClick={toggleWebSearch} className="min-[480px]:px-2 px-1 opacity-70 hover:opacity-100 cursor-pointer flex"  title="Toggle Web Search">
-            <Earth className={cn(activeChat.webSearch ? "stroke-blue-700 dark:stroke-blue-500" : "" , "size-[18px] min-[480px]:size-[24px]")}/>
+            <Earth className={cn(activeChat.webSearch ? "stroke-primary dark:stroke-primary" : "" , "size-[18px] min-[480px]:size-[24px]")}/>
           </div>
           
           <TextareaAutosize
@@ -428,7 +428,7 @@ const InputBar = () => {
           <div className="relative" ref={modelDropdownRef}>
                          <div 
                onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)} 
-               className="min-[480px]:px-2 px-1 opacity-70 hover:opacity-100 cursor-pointer flex items-center gap-1 hover:bg-white/10 dark:hover:bg-gray-800/20 rounded-lg p-1 transition-all duration-200" 
+               className="min-[480px]:px-2 px-1 opacity-70 hover:opacity-100 cursor-pointer flex items-center gap-1 hover:bg-secondary/30 dark:hover:bg-secondary/20 rounded-lg p-1 transition-all duration-200" 
                title="Select Model"
              >
                                                            <img 
@@ -447,10 +447,10 @@ const InputBar = () => {
             </div>
             
                          {isModelDropdownOpen && (
-               <div className="absolute bottom-full right-0 mb-2 w-80 max-h-96 overflow-y-auto bg-white/70 dark:bg-gray-900/70 backdrop-blur-2xl border border-white/30 dark:border-gray-600/50 rounded-2xl shadow-2xl z-50 ring-1 ring-white/20 dark:ring-gray-500/20">
+               <div className="absolute bottom-full right-0 mb-2 w-80 max-h-96 overflow-y-auto bg-popover text-popover-foreground backdrop-blur-2xl border border-border rounded-2xl shadow-2xl z-50 ring-1 ring-ring/20">
                 {groupedModels && Object.keys(groupedModels).map((category) => (
                   <div key={category} className="p-2">
-                                         <div className="text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide px-3 py-2 bg-white/20 dark:bg-gray-800/30 rounded-lg mb-2 backdrop-blur-sm border border-white/20 dark:border-gray-700/30">
+                                         <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide px-3 py-2 bg-secondary/30 rounded-lg mb-2 backdrop-blur-sm border border-border">
                        {category}
                      </div>
                                          {groupedModels[category].map((model) => (
@@ -458,8 +458,8 @@ const InputBar = () => {
                          key={model.name}
                          onClick={() => changeSelectedModel(model.name)}
                          className={cn(
-                           "flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-white/30 dark:hover:bg-gray-800/60 rounded-lg transition-all duration-200 hover:shadow-lg hover:scale-[1.02]",
-                           activeChat.model === model.name && "bg-blue-500/20 dark:bg-blue-400/30 border border-blue-200/40 dark:border-blue-400/40 shadow-md"
+                           "flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-secondary/40 dark:hover:bg-secondary/40 rounded-lg transition-all duration-200 hover:shadow-lg hover:scale-[1.02]",
+                           activeChat.model === model.name && "bg-primary/20 border border-primary/40 shadow-md"
                          )}
                        >
                                                                                                    <img 

@@ -81,8 +81,8 @@ const Conversation = () => {
               source={query.prompt}
               className="rounded-lg p-2 mb-2 markdown-preview thin-scrollbar"
               style={{
-                backgroundColor: "var(--markdown-user-background)",
-                color: "var(--markdown-user-text)",
+                backgroundColor: "var(--secondary)",
+                color: "var(--secondary-foreground)",
               }}
               wrapperElement={{ "data-color-mode": darkmode ? "dark" : "light" }}
             />       
