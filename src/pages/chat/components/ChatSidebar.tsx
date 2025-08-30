@@ -181,10 +181,18 @@ export function ChatSidebar() {
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
-                    <button className={cn("w-full text-left rounded-md px-2 py-1.5 text-sm hover:bg-accent/30 transition-colors")}
-                            onClick={()=> setShowBookmarks(prev => !prev)}>
-                      {showBookmarks ? 'Hide Bookmarks' : 'Bookmarks'}
-                    </button>
+                    <SidebarMenuButton 
+                      onClick={()=> setShowBookmarks(prev => !prev)}
+                      tooltip={showBookmarks ? 'Hide Bookmarks' : 'Bookmarks'}
+                      className={cn("my-[0.7px]")}
+                    >
+                                             <img 
+                         src="/bookmarklogo.jpg" 
+                         alt="Bookmarks" 
+                         className="w-4 h-4 object-contain dark:brightness-0 dark:invert brightness-0"
+                       />
+                      <span>{showBookmarks ? 'Hide Bookmarks' : 'Bookmarks'}</span>
+                    </SidebarMenuButton>
                   </SidebarMenuItem>
                   {showBookmarks && (bookmarkedData?.chats || []).map((b)=> (
                     <SidebarMenuItem key={b._id}>
