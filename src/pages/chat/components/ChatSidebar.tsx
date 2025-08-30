@@ -43,6 +43,10 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Copy, Check } from "lucide-react"
+
 import useDeleteChat from "../apis/mutations/useMutationDeleteChat";
 import useMutationShareChat from "../apis/mutations/useMutationShareChat";
 import useQueryBookmarkedChats from "../apis/queries/useQueryBookmarkedChats";
@@ -58,12 +62,36 @@ export function ChatSidebar() {
   const bookmarkMutation = useMutationBookmarkChat();
   const { data: bookmarkedData } = useQueryBookmarkedChats();
   const [showBookmarks, setShowBookmarks] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const bookmarkedIds = useMemo(() => new Set((bookmarkedData?.chats || []).map(c => c._id)), [bookmarkedData]);
   
   const handleShareLinkCopy = (chat: ChatType) => {
     const shareUrl = `${window.location.origin}/share/${chat._id}`
     navigator.clipboard.writeText(shareUrl)
+  }
+
+  const handleShareChat = (chat: ChatType, index: number) => {
+    const shareUrl = `${window.location.origin}/share/${chat._id}`
+    navigator.clipboard.writeText(shareUrl)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+    
+    // Also set the chat as shared
+    shareChatMutation.mutate({ chatId: chat._id, isShared: true }, {
+      onSuccess: () => {
+        setChats(prev => {
+          const copy = [...prev]
+          copy[index] = { ...copy[index], isShared: true }
+          return copy
+        })
+      }
+    })
+  }
+
+  const handleBookmarkChat = (chat: ChatType, index: number) => {
+    const isBookmarked = bookmarkedIds.has(chat._id)
+    setBookmarkedState(chat._id, !isBookmarked)
   }
 
   const setShareState = (chat: ChatType, index: number, isShared: boolean) => {
@@ -168,19 +196,69 @@ export function ChatSidebar() {
                         <DropdownMenuContent className="w-64" align="start" side="right">
                           <DropdownMenuLabel>Chat Options</DropdownMenuLabel>
                           <DropdownMenuSeparator />
-                            <DropdownMenuItem onSelect={(e)=>{e.preventDefault(); handleShareLinkCopy(chat)}}>Copy share link</DropdownMenuItem>
-                            <DropdownMenuCheckboxItem
-                              checked={!!chat.isShared}
-                              onCheckedChange={(checked)=> setShareState(chat,index,!!checked)}
-                            >
-                              Share publicly
-                            </DropdownMenuCheckboxItem>
-                            <DropdownMenuCheckboxItem
-                              checked={bookmarkedIds.has(chat._id)}
-                              onCheckedChange={(checked)=> setBookmarkedState(chat._id, !!checked)}
-                            >
-                              Bookmark
-                            </DropdownMenuCheckboxItem>
+                            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                              <AlertDialog>
+                                <AlertDialogTrigger className="w-full text-start">Share Chat</AlertDialogTrigger>
+                                <AlertDialogContent>
+                                  <AlertDialogHeader>
+                                    <AlertDialogTitle>Share this chat</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                      Are you sure you want to share this chat? This will make it publicly accessible via the link below.
+                                    </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <div className="flex items-center space-x-2">
+                                    <Input
+                                      value={`${window.location.origin}/share/${chat._id}`}
+                                      readOnly
+                                      className="flex-1"
+                                    />
+                                    <Button
+                                      size="sm"
+                                      onClick={() => {
+                                        navigator.clipboard.writeText(`${window.location.origin}/share/${chat._id}`)
+                                        setCopied(true)
+                                        setTimeout(() => setCopied(false), 2000)
+                                      }}
+                                      className="shrink-0"
+                                    >
+                                      {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                                    </Button>
+                                  </div>
+                                  <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction onClick={() => handleShareChat(chat, index)} className="hover:bg-green-100 dark:hover:bg-green-900/40 hover:text-green-600 dark:hover:text-green-400">
+                                      Share!
+                                    </AlertDialogAction>
+                                  </AlertDialogFooter>
+                                </AlertDialogContent>
+                              </AlertDialog>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                              <AlertDialog>
+                                <AlertDialogTrigger className="w-full text-start">
+                                  {bookmarkedIds.has(chat._id) ? 'Remove Bookmark' : 'Bookmark'}
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                  <AlertDialogHeader>
+                                    <AlertDialogTitle>
+                                      {bookmarkedIds.has(chat._id) ? 'Remove Bookmark' : 'Bookmark this chat'}
+                                    </AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                      {bookmarkedIds.has(chat._id) 
+                                        ? 'Are you sure you want to remove this chat from your bookmarks?'
+                                        : 'Are you sure you want to bookmark this chat? It will be saved to your bookmarks for easy access.'
+                                      }
+                                    </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction onClick={() => handleBookmarkChat(chat, index)} className="hover:bg-blue-100 dark:hover:bg-blue-900/40 hover:text-blue-600 dark:hover:text-blue-400">
+                                      {bookmarkedIds.has(chat._id) ? 'Remove!' : 'Bookmark!'}
+                                    </AlertDialogAction>
+                                  </AlertDialogFooter>
+                                </AlertDialogContent>
+                              </AlertDialog>
+                            </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
                             <AlertDialog>

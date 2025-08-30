@@ -24,23 +24,35 @@ const ShareChat = () => {
         <div className="space-y-6">
           {data.chatQueries.map((q) => (
             <div key={q._id} className="space-y-2">
-              <MarkdownPreview
-                source={q.prompt}
-                className="rounded-lg p-2 markdown-preview"
-                style={{ backgroundColor: 'var(--secondary)', color: 'var(--secondary-foreground)' }}
-                wrapperElement={{ 'data-color-mode': darkmode ? 'dark' : 'light' }}
-              />
+              <div className="flex justify-end">
+                <div className="max-w-[80%]">
+                  <MarkdownPreview
+                    source={q.prompt}
+                    className="rounded-lg p-2 markdown-preview"
+                    style={{ backgroundColor: 'var(--secondary)', color: 'var(--secondary-foreground)' }}
+                    wrapperElement={{ 'data-color-mode': darkmode ? 'dark' : 'light' }}
+                  />
+                </div>
+              </div>
               {q.error?.trim() ? (
-                <div className="rounded-lg p-3 markdown-preview dark:bg-red-800/20 dark:text-red-400 bg-red-200/80 text-red-800">
-                  {q.error}
+                <div className="flex justify-end">
+                  <div className="max-w-[80%]">
+                    <div className="rounded-lg p-3 markdown-preview dark:bg-red-800/20 dark:text-red-400 bg-red-200/80 text-red-800">
+                      {q.error}
+                    </div>
+                  </div>
                 </div>
               ) : (
-                <MarkdownPreview
-                  source={q.response}
-                  className="rounded-lg p-3 pl-0 markdown-preview"
-                  style={{ backgroundColor: 'var(--markdown-assistant-background)', color: 'var(--markdown-assistant-text)' }}
-                  wrapperElement={{ 'data-color-mode': darkmode ? 'dark' : 'light' }}
-                />
+                <div className="flex justify-start">
+                  <div className="max-w-[80%]">
+                    <MarkdownPreview
+                      source={q.response}
+                      className="rounded-lg p-3 pl-0 markdown-preview"
+                      style={{ backgroundColor: 'var(--markdown-assistant-background)', color: 'var(--markdown-assistant-text)' }}
+                      wrapperElement={{ 'data-color-mode': darkmode ? 'dark' : 'light' }}
+                    />
+                  </div>
+                </div>
               )}
             </div>
           ))}
