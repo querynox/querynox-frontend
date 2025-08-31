@@ -116,3 +116,37 @@ export type UserType = {
     recurringInterval: "month" | "year" | string;
   },
 }
+
+export type PaymentSearchType = {
+  checkout_id: string
+  customer_session_token: string
+}
+
+export type CheckoutResponseType = {
+  id: string;
+  status: "pending"
+  | "succeeded"
+  | "failed"
+  | "canceled"
+  | "requires_action"
+  | "invalid";
+  customer: {
+    id: string;
+    email: string;
+    name: string;
+    clerkUserId: string;
+  };
+  product: {
+    id: string | null;
+    name: string | null;
+    description: string | null;
+    recurringInterval: "day" | "week" | "month" | "year" | null;
+    isRecurring: boolean | null;
+    isArchived: boolean | null;
+    organizationId: string | null;
+    modifiedAt: string | null; // ISO date string
+    createdAt: string | null;  // ISO date string
+  };
+  orderId: string | null;
+  createdAt: string; // ISO date string
+}

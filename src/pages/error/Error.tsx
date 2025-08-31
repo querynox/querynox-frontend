@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router"
 import { Button } from "@/components/ui/button"
 import { AlertTriangle, RefreshCw, Home } from "lucide-react"
-const Error = () => {
+const Error = ({error} : {error:Error})  => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-background px-6 text-center">
@@ -12,7 +12,7 @@ const Error = () => {
 
       {/* Heading */}
       <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
-        Oops! Something Went Wrong
+        {error.message || "Oops! Something Went Wrong"}
       </h1>
 
       {/* Subtext */}

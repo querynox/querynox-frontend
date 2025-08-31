@@ -1,22 +1,25 @@
 import { useSystemContext } from "@/contexts/SystemContext";
 import { Moon, Sun } from "lucide-react";
-import ProgressBarLoader from '@/components/ui/ProgressBarLoader';
-import PaymentFailedCard from '@/components/ui/PaymentFailedCard';
-import PaymentSuccessCard from '@/components/ui/PaymentSuccessCard';
+import ProgressBarLoader from '@/pages/payments/components/ProgressBarLoader';
+import PaymentFailedCard from '@/pages/payments/components/PaymentFailedCard';
+import PaymentSuccessCard from '@/pages/payments/components/PaymentSuccessCard';
+import { paymentsRoute } from "@/router/routes/payments.route"
+import type { PaymentSearchType } from "@/data/types";
+import useQueryPaymentStatus from "./apis/queries/useQueryStatus";
+import RetryLimitReachedCard from "./components/RetryLimitReached";
+import BrokenLinkCard from "./components/BrokenLinkCard";
 
 const Payments = () => {
   const { darkmode, setDarkmode } = useSystemContext();
-
-  const handleProgressComplete = () => {
-    console.log('Progress completed');
-  };
+  const query = paymentsRoute.useSearch() as PaymentSearchType
+  const { data, isLoading, refetch, error } = useQueryPaymentStatus(query)
 
   const handleTryAgain = () => {
-    console.log('Try again clicked');
+    refetch()
   };
 
   const handleStartChatting = () => {
-    console.log('Start chatting clicked');
+    window.location.replace("/chat");
   };
 
   return (
@@ -46,14 +49,21 @@ const Payments = () => {
       <div className="flex-1 p-6 overflow-y-auto">
         <div className="max-w-2xl mx-auto space-y-8">
           
-          {/* Progress Bar Loader */}
-          <ProgressBarLoader onComplete={handleProgressComplete} />
+            {/* Progress Bar Loader */}
+            {!error && (isLoading || !data || data.status === "pending") && <ProgressBarLoader paymentData={data} />}
+ 
+            {/* Payment Failed Card */}
+            {!error && !isLoading && data &&  (data.status === "failed" || data.status === "requires_action" || data.status === "canceled") && <PaymentFailedCard onTryAgain={handleTryAgain} paymentData={data} />}
 
-          {/* Payment Failed Card */}
-          <PaymentFailedCard onTryAgain={handleTryAgain} />
+            {/* Payment Success Card */}
+            {!error && !isLoading && data && (data.status === "succeeded") && <PaymentSuccessCard onStartChatting={handleStartChatting} paymentData={data}/>}
 
-          {/* Payment Success Card */}
-          <PaymentSuccessCard onStartChatting={handleStartChatting} />
+            {/* Invalid CheckoutID or Session Id */}
+            {error && error.response?.data.status === "invalid" && <BrokenLinkCard/>} 
+            
+            {/*Retry Limit Reached*/}
+            {error && !error.response && <RetryLimitReachedCard  paymentData={error}/>} 
+          
         </div>
       </div>
     </div>

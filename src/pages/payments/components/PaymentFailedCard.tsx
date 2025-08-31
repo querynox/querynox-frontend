@@ -1,10 +1,12 @@
+import type { CheckoutResponseType } from '@/data/types';
 import { X } from 'lucide-react';
 
 interface PaymentFailedCardProps {
   onTryAgain?: () => void;
+  paymentData:CheckoutResponseType;
 }
 
-const PaymentFailedCard = ({ onTryAgain }: PaymentFailedCardProps) => {
+const PaymentFailedCard = ({ onTryAgain, paymentData }: PaymentFailedCardProps) => {
   return (
     <div className="bg-background p-8 rounded-xl border shadow-sm hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out transform">
       <div className="text-center">
@@ -19,9 +21,12 @@ const PaymentFailedCard = ({ onTryAgain }: PaymentFailedCardProps) => {
           Payment Failed
         </h2>
         
-        <p className="text-muted-foreground mb-8 text-lg animate-in slide-in-from-bottom-4 duration-500 delay-200">
-          We couldn't process your payment. Please check your payment details and try again.
+        <p className="text-muted-foreground mb-2 text-lg animate-in slide-in-from-bottom-4 duration-500 delay-200">
+          We couldn't process your payment for {paymentData.customer.email}. Please check your payment details and try again. If it has been processed, it will be refunded in next 3-4 banking days.
         </p>
+         {paymentData &&<p className="text-muted-foreground mb-8 text-lg animate-in slide-in-from-bottom-4 duration-500 delay-200">
+          {paymentData && ` Payment ID ${paymentData?.id}. Order ID ${paymentData?.orderId} Customer ID  ${paymentData?.customer.clerkUserId}  ${paymentData?.customer.id}`}
+        </p>}
         
         <div className="space-y-4 text-left bg-red-50 dark:bg-red-900/10 rounded-lg p-6 mb-8 animate-in slide-in-from-left-4 duration-500 delay-300">
           <div className="flex items-center space-x-4">

@@ -52,5 +52,7 @@ export const router = createRouter({
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,
   defaultNotFoundComponent:NotFound,
-  defaultErrorComponent:Error,
+  defaultErrorComponent: (error) => {
+    return <Error error={error.error} />
+  },
 });

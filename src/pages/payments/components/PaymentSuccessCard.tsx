@@ -1,10 +1,12 @@
+import type { CheckoutResponseType } from '@/data/types';
 import { Check, Sparkles } from 'lucide-react';
 
 interface PaymentSuccessCardProps {
   onStartChatting?: () => void;
+  paymentData:CheckoutResponseType;
 }
 
-const PaymentSuccessCard = ({ onStartChatting }: PaymentSuccessCardProps) => {
+const PaymentSuccessCard = ({ onStartChatting, paymentData }: PaymentSuccessCardProps) => {
   return (
     <div className="bg-background p-8 rounded-xl border shadow-sm hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out transform">
       <div className="text-center">
@@ -22,7 +24,7 @@ const PaymentSuccessCard = ({ onStartChatting }: PaymentSuccessCardProps) => {
         </h2>
         
         <p className="text-muted-foreground mb-8 text-lg animate-in slide-in-from-bottom-4 duration-500 delay-200">
-          Your payment has been processed successfully. Welcome to QueryNox Pro!
+          Your payment has been processed successfully for account {paymentData.customer.email}. Welcome to QueryNox {paymentData.product.name}!
         </p>
         
         <div className="space-y-4 text-left bg-green-50 dark:bg-green-900/10 rounded-lg p-6 mb-8 animate-in slide-in-from-left-4 duration-500 delay-300">

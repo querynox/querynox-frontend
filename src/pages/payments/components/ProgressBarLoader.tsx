@@ -1,10 +1,7 @@
+import type { CheckoutResponseType } from '@/data/types';
 import { Loader2, Zap } from 'lucide-react';
 
-interface ProgressBarLoaderProps {
-  onComplete?: () => void;
-}
-
-const ProgressBarLoader = ({ onComplete }: ProgressBarLoaderProps) => {
+const ProgressBarLoader = ({paymentData}:{paymentData:CheckoutResponseType | undefined}) => {
   return (
     <div className="bg-background p-8 rounded-xl border shadow-sm hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out transform">
       <div className="text-center mb-8">
@@ -13,7 +10,7 @@ const ProgressBarLoader = ({ onComplete }: ProgressBarLoaderProps) => {
           <Loader2 className="w-10 h-10 text-green-600 animate-spin group-hover:scale-110 transition-transform duration-300" style={{ animationDuration: '3.5s' }} />
         </div>
         <h2 className="text-3xl font-bold text-foreground mb-3">
-          Processing Payment
+          Processing Payment {paymentData?.product.name}
         </h2>
         <p className="text-muted-foreground text-lg">
           Please wait while we process your payment...
@@ -49,7 +46,7 @@ const ProgressBarLoader = ({ onComplete }: ProgressBarLoaderProps) => {
         </span>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes moveStripes {
           0% {
             transform: translateX(-50%);
