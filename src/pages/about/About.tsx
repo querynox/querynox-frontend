@@ -2,12 +2,42 @@ import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-reac
 import { Link } from "@tanstack/react-router"
 import { Button } from "@/components/ui/button"
 import { useSystemContext } from "@/contexts/SystemContext"
-import { Moon, Sun, Sparkles, Zap, ArrowLeft } from "lucide-react"
+import { Moon, Sun, Sparkles, Zap, ArrowLeft, Heart, Users, Globe, MessageSquare } from "lucide-react"
+import { Hackice20GithubLink, SohamJoshiGithubLink } from "@/data/constants"
 import { useEffect, useState } from "react"
 
 const About = () => {
   const { darkmode, setDarkmode } = useSystemContext()
+  const [sohamAvatar, setSohamAvatar] = useState<string>("")
+  const [hackiceAvatar, setHackiceAvatar] = useState<string>("")
   const [rotation, setRotation] = useState(0)
+
+  useEffect(() => {
+    // Fetch GitHub avatars
+    const fetchGitHubAvatars = async () => {
+      try {
+        // Extract username from GitHub URLs
+        const sohamUsername = SohamJoshiGithubLink.split('/').pop()
+        const hackiceUsername = Hackice20GithubLink.split('/').pop()
+        
+        if (sohamUsername) {
+          const sohamResponse = await fetch(`https://api.github.com/users/${sohamUsername}`)
+          const sohamData = await sohamResponse.json()
+          setSohamAvatar(sohamData.avatar_url)
+        }
+        
+        if (hackiceUsername) {
+          const hackiceResponse = await fetch(`https://api.github.com/users/${hackiceUsername}`)
+          const hackiceData = await hackiceResponse.json()
+          setHackiceAvatar(hackiceData.avatar_url)
+        }
+      } catch (error) {
+        console.error('Error fetching GitHub avatars:', error)
+      }
+    }
+
+    fetchGitHubAvatars()
+  }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -104,75 +134,163 @@ const About = () => {
           </p>
         </div>
 
-        {/* Central Logo with Revolving Company Logos */}
-        <div className="flex justify-center items-center mb-20">
-          <div className="relative w-96 h-96">
-            {/* Central QueryNOX Logo */}
-            <div className="absolute inset-0 flex items-center justify-center z-10">
-              <div className="w-32 h-32 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-primary/30 shadow-2xl">
-                <img 
-                  src="/querynox.jpeg" 
-                  alt="QueryNOX" 
-                  className="w-20 h-20 rounded-lg"
-                />
+
+
+        {/* What We Do Section */}
+        <div className="mb-16">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-3xl font-bold mb-6">What We Do</h2>
+              <p className="text-lg text-muted-foreground mb-6">
+                QueryNOX is more than just another AI chat platform. We're your digital companion, 
+                designed to make conversations meaningful, productive, and downright enjoyable. 
+                Whether you're brainstorming ideas, seeking answers, or just want to chat with 
+                an intelligent friend, we've got you covered.
+              </p>
+              <p className="text-lg text-muted-foreground">
+                Our platform brings together cutting-edge AI technology with a user experience 
+                that feels natural and intuitive. No complicated interfaces, no steep learning curves 
+                – just pure, intelligent conversation at your fingertips.
+              </p>
+            </div>
+            <div className="flex justify-center">
+              <div className="relative w-64 h-64">
+                                 {/* Central QueryNOX Logo */}
+                 <div className="absolute inset-0 flex items-center justify-center z-10">
+                   <div className="w-24 h-24 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-primary/30 shadow-2xl">
+                     <img 
+                       src="/querynox.jpeg" 
+                       alt="QueryNOX" 
+                       className="w-16 h-16 rounded-lg"
+                     />
+                   </div>
+                 </div>
+
+                {/* Orbital Ring */}
+                <div className="absolute inset-0 border border-gray-300 rounded-full"></div>
+
+                {/* Rotating AI Company Logos */}
+                {companyLogos.map((logo, index) => {
+                  const { x, y } = getOrbitalPosition(logo.angle, 80) // Smaller radius for this section
+                  return (
+                    <div
+                      key={index}
+                      className="absolute w-12 h-12 bg-white rounded-full border border-gray-300 flex items-center justify-center shadow-lg"
+                      style={{
+                        left: `calc(50% + ${x}px - 24px)`,
+                        top: `calc(50% + ${y}px - 24px)`,
+                      }}
+                    >
+                      <img src={logo.src} alt={logo.alt} className="w-8 h-8 object-contain" />
+                    </div>
+                  )
+                })}
               </div>
             </div>
-
-            {/* Orbital Ring */}
-            <div className="absolute inset-0 border-2 border-primary/20 rounded-full animate-pulse"></div>
-
-            {/* Revolving Company Logos */}
-            {companyLogos.map((logo, index) => {
-              const position = getOrbitalPosition(logo.angle, 120) // 120px radius
-              return (
-                <div
-                  key={index}
-                  className="absolute w-16 h-16 transition-transform duration-100 ease-linear"
-                  style={{
-                    left: `calc(50% + ${position.x}px - 32px)`,
-                    top: `calc(50% + ${position.y}px - 32px)`,
-                  }}
-                >
-                  <div className="w-full h-full bg-white rounded-full shadow-lg border-2 border-primary/20 flex items-center justify-center backdrop-blur-sm">
-                    <img 
-                      src={logo.src} 
-                      alt={logo.alt} 
-                      className="w-10 h-10 object-contain"
-                    />
-                  </div>
-                </div>
-              )
-            })}
           </div>
         </div>
 
-        {/* Description Section */}
-        <div className="max-w-4xl mx-auto text-center mb-16">
-          <h2 className="text-3xl font-bold mb-6">Powered by Leading AI Models</h2>
-          <p className="text-lg text-muted-foreground mb-8">
-            QueryNOX integrates with the world's most advanced AI models to provide you with 
-            intelligent, context-aware conversations. Our platform seamlessly connects you to 
-            cutting-edge AI technology, making complex interactions feel natural and effortless.
-          </p>
-          <div className="grid md:grid-cols-2 gap-8">
+        {/* Features Section */}
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold text-center mb-12">Why Choose QueryNOX?</h2>
+          <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center p-6 rounded-lg border bg-card">
-              <h3 className="text-xl font-semibold mb-3">Multi-Model Integration</h3>
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Sparkles className="w-8 h-8 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3">Smart Conversations</h3>
               <p className="text-muted-foreground">
-                Access to OpenAI, Google Gemini, Anthropic Claude, and Meta AI models
+                Engage in intelligent discussions that adapt to your style and preferences
               </p>
             </div>
             <div className="text-center p-6 rounded-lg border bg-card">
-              <h3 className="text-xl font-semibold mb-3">Seamless Experience</h3>
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Globe className="w-8 h-8 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3">Always Available</h3>
               <p className="text-muted-foreground">
-                Unified interface that works across all major AI platforms
+                Your AI companion is ready to chat 24/7, whenever inspiration strikes
               </p>
+            </div>
+            <div className="text-center p-6 rounded-lg border bg-card">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Users className="w-8 h-8 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3">User-Friendly</h3>
+              <p className="text-muted-foreground">
+                Clean, intuitive interface that makes AI conversations feel natural
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Humorous Section */}
+        <div className="mb-16">
+          <div className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-2xl p-8 text-center">
+            <Heart className="w-12 h-12 text-primary mx-auto mb-4" />
+            <h3 className="text-2xl font-bold mb-4">We Wish to Do So Much More</h3>
+            <p className="text-lg text-muted-foreground mb-6">
+              Our team has big dreams and even bigger plans for QueryNOX. 
+              We're constantly working on new features, improvements, and exciting capabilities.
+            </p>
+            <p className="text-xl font-semibold text-primary">
+              If you buy the PRO version, we promise to do so much more!
+            </p>
+          </div>
+        </div>
+
+        {/* Team Section */}
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold text-center mb-12">Meet the Team</h2>
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div className="text-center p-6 rounded-lg border bg-card">
+              <div className="w-20 h-20 rounded-full mx-auto mb-4 overflow-hidden border-2 border-primary/20">
+                {sohamAvatar ? (
+                  <img 
+                    src={sohamAvatar} 
+                    alt="Soham Joshi" 
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
+                    <span className="text-white font-bold text-xl">SJ</span>
+                  </div>
+                )}
+              </div>
+              <h3 className="text-xl font-semibold mb-4">Soham Joshi</h3>
+              <Button asChild variant="outline" size="sm">
+                <a href={SohamJoshiGithubLink} target="_blank" rel="noopener noreferrer">
+                  GitHub
+                </a>
+              </Button>
+            </div>
+            <div className="text-center p-6 rounded-lg border bg-card">
+              <div className="w-20 h-20 rounded-full mx-auto mb-4 overflow-hidden border-2 border-primary/20">
+                {hackiceAvatar ? (
+                  <img 
+                    src={hackiceAvatar} 
+                    alt="Hackice20" 
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-green-400 to-blue-500 flex items-center justify-center">
+                    <span className="text-white font-bold text-xl">HK</span>
+                  </div>
+                )}
+              </div>
+              <h3 className="text-xl font-semibold mb-4">Hackice20</h3>
+              <Button asChild variant="outline" size="sm">
+                <a href={Hackice20GithubLink} target="_blank" rel="noopener noreferrer">
+                  GitHub
+                </a>
+              </Button>
             </div>
           </div>
         </div>
 
         {/* CTA Section */}
         <div className="text-center">
-          <h2 className="text-3xl font-bold mb-6">Ready to Experience the Future of AI?</h2>
+          <h2 className="text-3xl font-bold mb-6">Ready to Get Started?</h2>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <SignedIn>
               <Button asChild size="lg">
@@ -185,7 +303,7 @@ const About = () => {
             <SignedOut>
               <SignInButton mode="modal">
                 <Button size="lg">
-                  <Sparkles className="mr-2 h-4 w-4" />
+                  <Sparkles className="mr-2 h-5 w-5" />
                   Get Started Free
                 </Button>
               </SignInButton>
