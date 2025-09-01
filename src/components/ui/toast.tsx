@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { cn } from '@/lib/utils'
-import { Check, X, Copy, Share, Bookmark, Trash2 } from 'lucide-react'
+import { Check, X, Copy, Trash2 } from 'lucide-react'
 
 interface ToastProps {
   message: string

@@ -25,7 +25,7 @@ const useQueryPaymentStatus = (params:PaymentSearchType) => {
         if(failureCount>20) return false;
         return true;
     },
-    retryDelay(failureCount, error) {
+    retryDelay(failureCount, _) {
         if(failureCount<5) return 3000;
         else if(failureCount<10) return 7000;
         else if(failureCount<15) return 15000;

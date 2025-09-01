@@ -6,8 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  DropdownMenuCheckboxItem,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 
 import {
@@ -86,11 +85,11 @@ export function ChatSidebar() {
     setToast(prev => ({ ...prev, isVisible: false }));
   };
 
-  const handleShareLinkCopy = (chat: ChatType) => {
-    const shareUrl = `${window.location.origin}/share/${chat._id}`
-    navigator.clipboard.writeText(shareUrl)
-    showToast('Link copied to clipboard', 'info');
-  }
+  // const handleShareLinkCopy = (chat: ChatType) => {
+  //   const shareUrl = `${window.location.origin}/share/${chat._id}`
+  //   navigator.clipboard.writeText(shareUrl)
+  //   showToast('Link copied to clipboard', 'info');
+  // }
 
   const handleShareChat = (chat: ChatType, index: number) => {
     const shareUrl = `${window.location.origin}/share/${chat._id}`
@@ -111,7 +110,7 @@ export function ChatSidebar() {
     })
   }
 
-  const handleBookmarkChat = (chat: ChatType, index: number) => {
+  const handleBookmarkChat = (chat: ChatType) => {
     const isBookmarked = bookmarkedIds.has(chat._id)
     setBookmarkedState(chat._id, !isBookmarked)
     
@@ -122,17 +121,17 @@ export function ChatSidebar() {
     }
   }
 
-  const setShareState = (chat: ChatType, index: number, isShared: boolean) => {
-    shareChatMutation.mutate({ chatId: chat._id, isShared }, {
-      onSuccess: () => {
-        setChats(prev => {
-          const copy = [...prev]
-          copy[index] = { ...copy[index], isShared }
-          return copy
-        })
-      }
-    })
-  }
+  // const setShareState = (chat: ChatType, index: number, isShared: boolean) => {
+  //   shareChatMutation.mutate({ chatId: chat._id, isShared }, {
+  //     onSuccess: () => {
+  //       setChats(prev => {
+  //         const copy = [...prev]
+  //         copy[index] = { ...copy[index], isShared }
+  //         return copy
+  //       })
+  //     }
+  //   })
+  // }
 
   const setBookmarkedState = (chatId: string, bookmarked: boolean) => {
     bookmarkMutation.mutate({ chatId, bookmarked })
@@ -291,7 +290,7 @@ export function ChatSidebar() {
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                      <AlertDialogAction onClick={() => handleBookmarkChat(chat, index)} className="hover:bg-blue-100 dark:hover:bg-blue-900/40 hover:text-blue-600 dark:hover:text-blue-400">
+                                      <AlertDialogAction onClick={() => handleBookmarkChat(chat)} className="hover:bg-blue-100 dark:hover:bg-blue-900/40 hover:text-blue-600 dark:hover:text-blue-400">
                                         {bookmarkedIds.has(chat._id) ? 'Remove!' : 'Bookmark!'}
                                       </AlertDialogAction>
                                     </AlertDialogFooter>
