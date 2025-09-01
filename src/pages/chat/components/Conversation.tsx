@@ -50,17 +50,6 @@ const Conversation = () => {
     return models.find(m => m.name == chatQuery.model)?.category == "Image Generation" || false;
   }
 
-  const handleImageDownload = (query:ChatQueryType) => {
-    const link = document.createElement("a");
-    link.href = query.response;
-    link.download = query.prompt.split(" ").join("_")+".png";
-
-    // Append, click, and remove
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-
   if( activeChatIndex < 0 && activeChat.chatQueries.length==0) 
     return (<div className="flex justify-center items-center flex-col h-full">
       <h2 className="text-2xl font-bold mb-2">Welcome back, {user?.fullName} 👋</h2>
@@ -125,8 +114,8 @@ const Conversation = () => {
               {copid == index ? <Check className="w-4 h-4 text-green-500 mr-0.5" /> : <Copy className="w-4 h-4 mr-0.5" />}
               Copy
             </button>
-            :<button className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-white flex items-center gap-1 cursor-pointer ml-1" title="Download Image" onClick={()=>{handleImageDownload(query)}}>
-                <Download className="w-4 h-4 mr-0.5" />Download
+            :<button className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-white" title="Download Image">
+                <a className='flex items-center gap-1' href={query.meta?.downloadUrl || query.response} download><Download className="w-4 h-4 mr-0.5" />Download</a>
             </button>}
             
           </div>

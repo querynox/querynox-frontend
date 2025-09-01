@@ -12,6 +12,7 @@ export type ChatQueryType = {
   chatName?:string;
   title?:string;
   error?:string;
+  meta?:Record<string, string>; 
 };
 
 export type ModelType = {
