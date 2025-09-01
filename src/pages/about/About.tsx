@@ -2,7 +2,7 @@ import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-reac
 import { Link } from "@tanstack/react-router"
 import { Button } from "@/components/ui/button"
 import { useSystemContext } from "@/contexts/SystemContext"
-import { Moon, Sun, Sparkles, Zap, ArrowLeft, Heart, Users, Globe, MessageSquare } from "lucide-react"
+import { Moon, Sun, Sparkles, Zap, ArrowLeft, Heart, Users, Globe } from "lucide-react"
 import { Hackice20GithubLink, SohamJoshiGithubLink } from "@/data/constants"
 import { useEffect, useState } from "react"
 
