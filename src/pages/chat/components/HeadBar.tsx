@@ -1,4 +1,5 @@
 import { useSystemContext } from "@/contexts/SystemContext";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useUserContext } from "@/contexts/UserContext";
 import { Moon, Sun } from "lucide-react";
 
@@ -10,6 +11,9 @@ const HeadBar = () => {
     <div className="flex flex-row items-center justify-between p-3 border-b-[1px] text-accent-foreground bg-secondary">
 
         <div className="flex items-center space-x-3">
+            <div className="md:hidden mr-1">
+              <SidebarTrigger />
+            </div>
             <img 
               src="/querynox.jpeg" 
               alt="QueryNox" 

@@ -30,7 +30,7 @@ const BrokenLinkCard = ( ) => {
           <div className="flex items-center space-x-4">
             <Mail className="w-4 h-4 text-red-600" />
             <span className="text-red-700 dark:text-red-300 font-medium">
-              Contact: <a href={`mailto:contact@querynox.in`} className="underline hover:text-red-800">contact@querynox.in</a>
+              Contact: <a href={`mailto:contact@querynox.xyz`} className="underline hover:text-red-800">contact@querynox.xyz</a>
             </span>
           </div>
         </div>

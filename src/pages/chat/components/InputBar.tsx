@@ -10,6 +10,7 @@ import { useUser } from '@clerk/clerk-react';
 import { useNavigate } from '@tanstack/react-router';
 import useQueryModels from '../apis/queries/useQueryModels';
 import { useStreamSSE } from '../apis/fetch/streamSSE';
+import { generateUUID } from '@/utils/uuid';
 
 const InputBar = () => {  
   
@@ -294,16 +295,25 @@ const InputBar = () => {
   }
 
   const sendChatStream = async () => {
+    console.log("🚀 sendChatStream called");
 
     // If the model is for image generation, use Non Streaming sendChat
     if(models?.find((model => model.name === activeChat.model))?.category == "Image Generation"){
+      console.log("🖼️ Using image generation model, falling back to non-stream");
       sendChat();
       return;
     }
 
     const isThinking = activeChatIndex > 0 ? !(activeChat.chatQueries[activeChat.chatQueries.length-1].response) : false;
 
-    if (!inputPromptRef.current || !inputPromptRef.current.value.trim() || !user || isThinking) return;
+    if (!inputPromptRef.current || !inputPromptRef.current.value.trim() || !user || isThinking) {
+      console.log("❌ sendChatStream blocked:", {
+        hasInput: !!inputPromptRef.current?.value.trim(),
+        hasUser: !!user,
+        isThinking
+      });
+      return;
+    }
     const _prompt = inputPromptRef.current.value.trim()
     
     inputPromptRef.current.value = "";
@@ -318,8 +328,8 @@ const InputBar = () => {
     }
 
     const chatQuery : ChatQueryType = {
-      _id: crypto.randomUUID(),
-      chatId: crypto.randomUUID(),
+      _id: generateUUID(),
+      chatId: generateUUID(),
       model:activeChat.model,
       prompt:_prompt,
       response:"",

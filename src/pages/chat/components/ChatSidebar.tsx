@@ -21,6 +21,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar"
 
 import { SignedIn, UserButton , useUser} from "@clerk/clerk-react"
@@ -57,6 +58,7 @@ export function ChatSidebar() {
 
   const {chats,setActiveChatIndex,activeChatIndex, setChats} = useChatContext();
   const {user} = useUser();
+  const { isMobile, setOpenMobile } = useSidebar();
   const deleteChatMutation = useDeleteChat();
   const shareChatMutation = useMutationShareChat();
   const bookmarkMutation = useMutationBookmarkChat();
@@ -83,6 +85,13 @@ export function ChatSidebar() {
 
   const hideToast = () => {
     setToast(prev => ({ ...prev, isVisible: false }));
+  };
+
+  // Helper function to close mobile sidebar when selecting items
+  const handleMobileSidebarClose = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
   };
 
   // const handleShareLinkCopy = (chat: ChatType) => {
@@ -173,7 +182,10 @@ export function ChatSidebar() {
               <SidebarMenu>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild className={cn("my-[0.7px]",activeChatIndex < 0 ? "bg-accent/30" : "" )}>
-                      <Link to={`/chat`} onClick={() => setActiveChatIndex(-1)}>
+                      <Link to={`/chat`} onClick={() => {
+                        setActiveChatIndex(-1);
+                        handleMobileSidebarClose();
+                      }}>
                         <MessageSquarePlus/>
                         <span>New Chat</span>
                       </Link>
@@ -199,6 +211,7 @@ export function ChatSidebar() {
                         <Link to={`/chat/$chatId`} params={{chatId:b._id}} onClick={() => {
                           const idx = chats.findIndex(c => c._id === b._id);
                           setActiveChatIndex(idx);
+                          handleMobileSidebarClose();
                         }} className="flex items-center gap-2">
                           <MessageSquare size={"18px"}/>
                           <span className="truncate w-[193px] inline-block" title={b.title}>{b.title}</span>
@@ -218,7 +231,10 @@ export function ChatSidebar() {
                   <SidebarMenuItem key = {index+chat._id}>
                     <SidebarMenuButton asChild className={cn("my-[0.7px]",index == activeChatIndex ? "bg-accent/40" : "" )}>
                       <div className="flex justify-start items-center group/messages gap-0">
-                        <Link to={`/chat/$chatId`} params={{chatId:chat._id}} onClick={() => {setActiveChatIndex(index)}} className="flex justify-start items-center gap-2 transition-all duration-300">
+                        <Link to={`/chat/$chatId`} params={{chatId:chat._id}} onClick={() => {
+                          setActiveChatIndex(index);
+                          handleMobileSidebarClose();
+                        }} className="flex justify-start items-center gap-2 transition-all duration-300">
                           <MessageSquare size={"18px"}/>
                           <span className="truncate w-[193px] group-hover/messages:w-[168px] inline-block transition-all duration-300" title={chat.title}>{chat.title}</span>
                         </Link>

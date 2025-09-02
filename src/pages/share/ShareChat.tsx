@@ -88,10 +88,10 @@ const ShareChat = () => {
               {!isChatQueryImage(query) ?
               <button  className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-white flex items-center gap-1 cursor-copy ml-1"  onClick={()=>handleClickCopy(query.response,index)} title="Copy message">
                 {copid == index ? <Check className="w-4 h-4 text-green-500 mr-0.5" /> : <Copy className="w-4 h-4 mr-0.5" />}
-                Copy
+                <span className="hidden sm:inline">Copy</span>
               </button>
               :<button className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-white" title="Download Image">
-                  <a className='flex items-center gap-1' href={query.meta?.downloadUrl || query.response} download><Download className="w-4 h-4 mr-0.5" />Download</a>
+                  <a className='flex items-center gap-1' href={query.meta?.downloadUrl || query.response} download><Download className="w-4 h-4 mr-0.5" /><span className="hidden sm:inline">Download</span></a>
               </button>}
               
             </div>

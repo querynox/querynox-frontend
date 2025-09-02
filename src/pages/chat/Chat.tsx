@@ -24,7 +24,7 @@ const Chat = () => {
   const navigate = useNavigate();
 
   const { refetch : refetchUserChats, isFetching:isFetchingUserChats } = useQueryUserChats();
-  const { isFetched:isModelFetched} = useQueryModels();
+  const { isFetched:isModelFetched, isError:isModelError } = useQueryModels();
   const { refetch:refetchUserInfo , isFetching: isFetchingUserInfo } = useQueryUserInfo();
 
   useEffect(()=>{
@@ -35,10 +35,20 @@ const Chat = () => {
 
   const loadUser = async () => {
     if(isFetchingUserChats || isFetchingUserInfo) return;
+    
+    console.log("🔄 Loading user data and chats...");
     const { data:chatData , isError:chatError} = await refetchUserChats();
     const { data:userData, error:userError} = await refetchUserInfo();
 
+    console.log("📊 Load results:", {
+      userData: !!userData,
+      chatData: !!chatData,
+      chatError,
+      userError
+    });
+
     if(!userData || !chatData || chatError || userError){
+      console.log("❌ User load failed, redirecting to /chat");
       navigate({to:"/chat"})
       return;
     }
@@ -64,7 +74,7 @@ const Chat = () => {
 
 
 
-  if (!isUserLoaded || !isModelFetched) return <div className="w-screen h-screen flex justify-center items-center text-accent-foreground"> <div className="size-14 spinner-loader"/> </div>;
+  if (!isUserLoaded || (!isModelFetched && !isModelError)) return <div className="w-screen h-screen flex justify-center items-center text-accent-foreground"> <div className="size-14 spinner-loader"/> </div>;
 
   return (
     <div className={` ${isMobile ? "ml-0": open ? "ml-[16rem]" : "ml-[3rem]"} transition-transform h-screen flex flex-col text-accent-foreground w-full bg-background overflow-hidden`} >

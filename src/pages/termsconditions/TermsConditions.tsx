@@ -79,7 +79,7 @@ const TermsConditions = () => {
       <h2 className="text-2xl font-semibold text-foreground mt-10 mb-4">11. Contact Us</h2>
       <p className="mb-6">
         For questions about these Terms, contact us at 
-        <a href="mailto:support@querynox.in" className="text-foreground underline"> support@querynox.in</a>.
+        <a href="mailto:support@querynox.xyz" className="text-foreground underline"> support@querynox.xyz</a>.
       </p>
     </div>
   )

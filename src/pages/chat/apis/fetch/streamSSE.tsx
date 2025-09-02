@@ -1,4 +1,3 @@
-import { BACKEND_URL } from "@/data/constants";
 import type { CreateChatInputType, StreamChatOutputType } from "@/data/types";
 import { useAuth } from "@clerk/clerk-react";
 import { useCallback } from "react";
@@ -25,11 +24,13 @@ export const useStreamSSE = () => {
         });
 
         const URL = input.chatId
-          ? `${BACKEND_URL}/api/v1/chat/${input.chatId}/stream`
-          : `${BACKEND_URL}/api/v1/chat/stream`;
+          ? `/api/v1/chat/${input.chatId}/stream`
+          : `/api/v1/chat/stream`;
 
         const token = await getToken(); 
 
+        console.log("🔄 Streaming to:", URL, "with token:", token ? "present" : "missing");
+        
         const response = await fetch(URL, {
           method: "POST",
           body: formData,
@@ -39,9 +40,17 @@ export const useStreamSSE = () => {
           },
         });
 
+        console.log("📡 Stream response status:", response.status, response.statusText);
+
         if (!response.ok) {
-          const errorData = await response.clone().json(); 
-          throw new Error(errorData.error);
+          const errorText = await response.clone().text();
+          console.error("❌ Stream error response:", errorText);
+          try {
+            const errorData = JSON.parse(errorText);
+            throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+          } catch {
+            throw new Error(`HTTP ${response.status}: ${response.statusText} - ${errorText}`);
+          }
         }
 
         const reader = response.body?.getReader();

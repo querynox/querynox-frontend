@@ -11,6 +11,10 @@ body {
     'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Mobile touch optimizations */
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .markdown-preview .code-highlight code {
@@ -50,7 +54,7 @@ body {
   background-color: var(--markdown-code-bg) !important;
   padding: 0.5rem !important;
   width: 100% !important;
-  overflow-x: visible !important;
+  overflow-x: auto !important;
   scrollbar-color: var(--primary) transparent !important;
 }
 
@@ -355,4 +359,41 @@ body {
 .animate-on-scroll.animate-in {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Mobile-specific optimizations */
+@media screen and (max-width: 768px) {
+  /* Prevent horizontal scroll on mobile */
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+  
+  /* Better touch targets */
+  button, [role="button"], input, textarea, select {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Improve mobile scrolling */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Fix iOS Safari bottom bar issues */
+  .h-screen {
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for mobile browsers */
+  }
+}
+
+/* PWA and mobile browser safe areas */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .mobile-safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .mobile-safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }
