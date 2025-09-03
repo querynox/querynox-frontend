@@ -10,6 +10,8 @@ import { dark } from '@clerk/themes'
 import { UserProvider } from './contexts/UserContext.tsx'
 import MobileDebug from './components/MobileDebug.tsx'
 
+import { Analytics } from "@vercel/analytics/react"
+
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
 const InnerApp = () => {
@@ -37,6 +39,7 @@ const App = () => (
         <InnerApp />
       </TanStackQueryProvider>
     </SystemProvider>
+    <Analytics/> 
   </StrictMode>
 );
 
