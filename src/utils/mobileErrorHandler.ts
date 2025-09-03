@@ -1,7 +1,8 @@
 // Mobile error handler to catch and display errors on mobile devices
 export const initMobileErrorHandler = () => {
-  // Only enable in development
-  if (import.meta.env.DEV) {
+  // Only enable in development when client is actual phone
+  const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if (import.meta.env.DEV && isMobile) {
     const originalConsoleError = console.error;
     const originalConsoleWarn = console.warn;
     
