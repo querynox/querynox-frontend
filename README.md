@@ -1,6 +1,11 @@
 # QueryNOX
 
-> **Next-Generation AI Chat Platform** - Where cutting-edge technology meets beautiful design
+ **Next-Generation AI Chat Platform** - Where cutting-edge technology meets beautiful design
+
+![First Image](https://github.com/SohamJoshi25/QueryNOX/raw/main/firstimage.png)
+![Second Image](https://github.com/SohamJoshi25/QueryNOX/raw/main/secondimage.png)
+![Third Image](https://github.com/SohamJoshi25/QueryNOX/raw/main/thirdimage.png)
+
 
 QueryNOX is a sophisticated, multi-modal AI chat application that brings together the latest in web technology to deliver an unparalleled conversational AI experience. Built with modern React architecture and mobile-first design principles.
 
