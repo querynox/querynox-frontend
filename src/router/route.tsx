@@ -27,6 +27,7 @@ import { privacyPolicyRoute } from './routes/privacypolicy.route';
 export const rootRoute = createRootRoute();
 
 // Create the route tree by adding child routes to the root
+//IMPORTANT: ALWAYS UPDATE sitemap.xml in /public/
 const routeTree = rootRoute.addChildren([
   homeRoute,
   aboutRoute,
