@@ -457,7 +457,7 @@ const InputBar = () => {
             </div>
             
                          {isModelDropdownOpen && (
-               <div className="absolute bottom-full right-0 mb-2 w-80 max-h-96 overflow-y-auto bg-popover text-popover-foreground backdrop-blur-2xl border border-border rounded-2xl shadow-2xl z-50 ring-1 ring-ring/20">
+               <div className="absolute bottom-full right-0 mb-2 w-80 max-h-96 overflow-y-auto bg-popover text-popover-foreground backdrop-blur-2xl border border-border rounded-2xl shadow-2xl z-50 ring-1 ring-ring/20 thin-scrollbar">
                 {groupedModels && Object.keys(groupedModels).map((category) => (
                   <div key={category} className="p-2">
                                          <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide px-3 py-2 bg-secondary/30 rounded-lg mb-2 backdrop-blur-sm border border-border">
