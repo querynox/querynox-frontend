@@ -8,16 +8,19 @@ const getUserChats = async (token:string | null) : Promise<Omit<ChatType,"files"
     return response;
 }
 
-const useQueryUserChats = () =>  { 
+const useQueryUserChats = (userid:string|undefined) =>  { 
     const { getToken } = useAuth();
     return useQuery({
-        queryKey:["GetUserChats"],
+        queryKey:["GetUserChats",userid],
         queryFn: async () =>  {
             const token = await getToken(); 
             return getUserChats(token) 
         },
         retry: false,
-        enabled:false
+        enabled:!!userid,
+        refetchOnMount:false,
+        refetchOnWindowFocus:true,
+        refetchOnReconnect:true
     })
 };
 

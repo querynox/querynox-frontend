@@ -8,17 +8,21 @@ const getUserInfo = async (token:string | null) : Promise<UserType> => {
     return response.user;
 }
 
-const useQueryUserInfo = () =>  { 
+const useQueryUserInfo = (userid:string|undefined) =>  { 
     const { getToken } = useAuth();
-    return useQuery({
-        queryKey:["GetUserInfo"],
+    const query = useQuery({
+        queryKey:["GetUserInfo",userid],
         queryFn: async () =>  {
             const token = await getToken(); 
             return getUserInfo(token) 
         },
         retry: false,
-        enabled:false
+        enabled:!!userid,
+        refetchOnMount:false,
+        refetchOnWindowFocus:'always',
+        refetchOnReconnect:true
     })
+    return query
 };
 
 export default useQueryUserInfo;

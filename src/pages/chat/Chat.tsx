@@ -23,32 +23,19 @@ const Chat = () => {
   const { setChats , setActiveChatIndex  } = useChatContext();
   const navigate = useNavigate();
 
-  const { refetch : refetchUserChats, isFetching:isFetchingUserChats } = useQueryUserChats();
+  const { data:chatData , isError:chatError, isFetching:isFetchingUserChats, isFetchedAfterMount:isFetchedAfterMountUserChats  } = useQueryUserChats(user?.id);
   const { isFetched:isModelFetched, isError:isModelError } = useQueryModels();
-  const { refetch:refetchUserInfo , isFetching: isFetchingUserInfo } = useQueryUserInfo();
+  const { data:userData, isError:userError, isFetching: isFetchingUserInfo , isFetchedAfterMount:isFetchedAfterMountUserInfo} = useQueryUserInfo(user?.id);
 
   useEffect(()=>{
-    if(user?.id){
+    if(!isFetchingUserChats && !isFetchingUserInfo){
       loadUser();
     }
-  },[user?.id])
+  },[isFetchedAfterMountUserChats,isFetchedAfterMountUserInfo])
 
   const loadUser = async () => {
-    if(isFetchingUserChats || isFetchingUserInfo) return;
-    
-    console.log("🔄 Loading user data and chats...");
-    const { data:chatData , isError:chatError} = await refetchUserChats();
-    const { data:userData, error:userError} = await refetchUserInfo();
-
-    console.log("📊 Load results:", {
-      userData: !!userData,
-      chatData: !!chatData,
-      chatError,
-      userError
-    });
 
     if(!userData || !chatData || chatError || userError){
-      console.log("❌ User load failed, redirecting to /chat");
       navigate({to:"/chat"})
       return;
     }
@@ -70,7 +57,6 @@ const Chat = () => {
       navigate({to:"/chat"})
     }
   }
-
 
 
 

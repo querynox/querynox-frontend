@@ -1,10 +1,11 @@
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react"
+import { SignedIn, SignedOut, SignInButton } from "@clerk/clerk-react"
 import { Link } from "@tanstack/react-router"
 import { Button } from "@/components/ui/button"
 import { useSystemContext } from "@/contexts/SystemContext"
 import { Moon, Sun, Sparkles, Zap, ArrowLeft, Heart, Users, Globe } from "lucide-react"
 import { Hackice20GithubLink, SohamJoshiGithubLink } from "@/data/constants"
 import { useEffect, useState } from "react"
+import ClerkUserButton from "@/components/clerk/ClerkUserButton"
 
 const About = () => {
   const { darkmode, setDarkmode } = useSystemContext()
@@ -93,13 +94,7 @@ const About = () => {
                     Start Chat
                   </Link>
                 </Button>
-                <UserButton 
-                  appearance={{
-                    elements: {
-                      avatarBox: "h-8 w-8"
-                    }
-                  }}
-                />
+                <ClerkUserButton/>
               </div>
             </SignedIn>
             <SignedOut>

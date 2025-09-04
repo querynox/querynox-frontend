@@ -1,4 +1,5 @@
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react"
+import { SignedIn, SignedOut, SignInButton } from "@clerk/clerk-react"
+import ClerkUserButton from "@/components/clerk/ClerkUserButton.js"
 import { Link } from "@tanstack/react-router"
 import { Button } from "@/components/ui/button"
 import { useSystemContext } from "@/contexts/SystemContext"
@@ -80,13 +81,8 @@ const Home = () => {
                     Start Chat
                   </Link>
                 </Button>
-                <UserButton 
-                  appearance={{
-                    elements: {
-                      avatarBox: "h-8 w-8"
-                    }
-                  }}
-                />
+                <ClerkUserButton/>
+
               </div>
             </SignedIn>
             <SignedOut>

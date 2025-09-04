@@ -1,7 +1,8 @@
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react"
+import { SignedIn, SignedOut, SignInButton } from "@clerk/clerk-react"
 import { Link } from "@tanstack/react-router"
 import { Button } from "./button"
 import { Sparkles, Zap } from "lucide-react"
+import ClerkUserButton from "../clerk/ClerkUserButton"
 
 const Navbar = () => {
   return (
@@ -34,13 +35,7 @@ const Navbar = () => {
                   Start Chat
                 </Link>
               </Button>
-              <UserButton 
-                appearance={{
-                  elements: {
-                    avatarBox: "h-8 w-8"
-                  }
-                }}
-              />
+              <ClerkUserButton/>
             </div>
           </SignedIn>
           <SignedOut>

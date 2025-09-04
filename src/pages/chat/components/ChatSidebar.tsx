@@ -53,6 +53,7 @@ import useMutationShareChat from "../apis/mutations/useMutationShareChat";
 import useQueryBookmarkedChats from "../apis/queries/useQueryBookmarkedChats";
 import useMutationBookmarkChat from "../apis/mutations/useMutationBookmarkChat";
 import { useMemo, useState } from "react";
+import ClerkUserButton from "@/components/clerk/ClerkUserButton";
 
 export function ChatSidebar() {
 
@@ -350,7 +351,7 @@ export function ChatSidebar() {
         <SidebarFooter className="pb-4 overflow-x-hidden">
             <div className="flex flex-1 overflow-auto justify-left items-center gap-2 overflow-x-hidden pt-1 pl-[2px]">
               <SignedIn>
-                  <UserButton />
+                  <ClerkUserButton />
                   <span className="text-nowrap ml-2">{user?.fullName}</span>
               </SignedIn>
             </div>
