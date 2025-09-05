@@ -415,8 +415,8 @@ const InputBar = () => {
             <Paperclip className='size-[18px] min-[480px]:size-[24px]' />
           </div>
 
-          <div onClick={toggleWebSearch} className="min-[480px]:px-2 px-1 opacity-70 hover:opacity-100 cursor-pointer flex"  title="Toggle Web Search">
-            <Earth className={cn(activeChat.webSearch ? "stroke-primary dark:stroke-primary" : "" , "size-[18px] min-[480px]:size-[24px]")}/>
+          <div onClick={toggleWebSearch} className="min-[480px]:px-2 px-1 opacity-80 hover:opacity-100 cursor-pointer flex"  title="Toggle Web Search">
+            <Earth className={cn(activeChat.webSearch ? "stroke-black dark:stroke-white opacity-100" : "opacity-40" , "size-[18px] min-[480px]:size-[24px]")}/>
           </div>
           
           <TextareaAutosize

@@ -226,7 +226,7 @@ export function ChatSidebar() {
 
           {chats.length > 0 && <SidebarGroup className="mt-0 py-0 overflow-hidden group-data-[state=expanded]:pr-0">
             <SidebarGroupLabel className="">Previous Chats</SidebarGroupLabel>
-            <SidebarGroupContent className="h-full overflow-auto group-data-[state=collapsed]:overflow-clip ml-0 thin-scrollbar pr-1">
+            <SidebarGroupContent className="h-full overflow-auto group-data-[state=collapsed]:overflow-clip ml-0 thin-scrollbar pr-2">
               <SidebarMenu>
                 {chats.map((chat,index)=>
                   <SidebarMenuItem key = {index+chat._id}>
@@ -237,7 +237,7 @@ export function ChatSidebar() {
                           handleMobileSidebarClose();
                         }} className="flex justify-start items-center gap-2 transition-all duration-300">
                           <MessageSquare size={"18px"}/>
-                          <span className="truncate w-[193px] group-hover/messages:w-[168px] inline-block transition-all duration-300" title={chat.title}>{chat.title}</span>
+                          <span className="truncate w-[196px] group-hover/messages:w-[163px] inline-block transition-all duration-300" title={chat.title}>{chat.title}</span>
                         </Link>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
