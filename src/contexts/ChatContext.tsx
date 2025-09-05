@@ -6,16 +6,16 @@ export interface ChatContextType {
     newChat:ChatType;
     activeChatIndex:number;
     activeChat:ChatType;
-    streamingResponse:string;
-    chatError:string;
-    chatStatus: string;
+    streamingResponse:{chatid:string,content:string};
+    chatError:{chatid:string,content:string};
+    chatStatus:{chatid:string,content:string};
 
     setChats: React.Dispatch<React.SetStateAction<ChatType[]>>;
     setActiveChatIndex: React.Dispatch<React.SetStateAction<number>>;
     setNewChat:React.Dispatch<React.SetStateAction<ChatType>>;
-    setStreamingResponse:React.Dispatch<React.SetStateAction<string>>;
-    setChatError:React.Dispatch<React.SetStateAction<string>>;
-    setChatStatus: React.Dispatch<React.SetStateAction<string>>;
+    setStreamingResponse:React.Dispatch<React.SetStateAction<{chatid:string,content:string}>>;
+    setChatError:React.Dispatch<React.SetStateAction<{chatid:string,content:string}>>;
+    setChatStatus: React.Dispatch<React.SetStateAction<{chatid:string,content:string}>>;
 }
 
 export const newChatDefaultObject : ChatType = {
@@ -53,9 +53,9 @@ const defaultContext: ChatContextType = {
     activeChatIndex:-1,
     newChat:newChatDefaultObject,
     activeChat:newChatDefaultObject,
-    streamingResponse:"",
-    chatError:"",
-    chatStatus: "",
+    streamingResponse:{chatid:"",content:""},
+    chatError:{chatid:"",content:""},
+    chatStatus:{chatid:"",content:""},
 
     setChats: () => { },
     setActiveChatIndex: () => { },
@@ -74,9 +74,9 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const [activeChatIndex, setActiveChatIndex] = useState<number>(defaultContext.activeChatIndex);
     const [newChat,setNewChat] = useState<ChatType>({...defaultContext.newChat});
     const [activeChat,setActiveChat] = useState<ChatType>(defaultContext.activeChat);
-    const [streamingResponse,setStreamingResponse] = useState<string>(defaultContext.streamingResponse);
-    const [chatError,setChatError] = useState<string>(defaultContext.chatError);
-    const [chatStatus, setChatStatus] = useState<string>(defaultContext.chatStatus);
+    const [streamingResponse,setStreamingResponse] = useState<{chatid:string,content:string}>(defaultContext.streamingResponse);
+    const [chatError,setChatError] = useState<{chatid:string,content:string}>(defaultContext.chatError);
+    const [chatStatus, setChatStatus] = useState<{chatid:string,content:string}>(defaultContext.chatStatus);
 
     useEffect(() => {
         const nextChat = activeChatIndex >= 0 && activeChatIndex < chats.length

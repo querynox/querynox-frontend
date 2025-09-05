@@ -11,7 +11,6 @@ export type ChatQueryType = {
   updatedAt: number;
   chatName?:string;
   title?:string;
-  error?:string;
   meta?:Record<string, string>; 
 };
 
@@ -52,11 +51,13 @@ export type CreateChatOutputType = {
 }
 
 export type StreamChatOutputType = {
-  type:  'status' ;
+  type:  'status';
   message:string;
+  chatId:string;
 } | {
   type: 'error' ;
   error:string;
+  chatId:string;
 } | {
   type: 'metadata' ;
   chatId:string;
@@ -68,6 +69,7 @@ export type StreamChatOutputType = {
 } | {
   type: 'content' ;
   content:string;
+  chatId:string;
 }
 
 

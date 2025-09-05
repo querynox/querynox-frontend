@@ -10,8 +10,7 @@ export const useStreamSSE = () => {
     async (
       input: CreateChatInputType,
       onData: (response: StreamChatOutputType) => void,
-      onEnd: () => void,
-      onError: (error: any) => void
+      onError: (error: {error:Error | any,chatid:string}) => void
     ) => {
       try {
         const formData = new FormData();
@@ -47,7 +46,8 @@ export const useStreamSSE = () => {
         if (!response.ok) {
           const errorText = await response.clone().text();
           const errorData = JSON.parse(errorText);
-          throw new Error(errorData.error || String(errorData));
+          onError(errorData)
+          return;
         }
 
         const reader = response.body?.getReader();
@@ -74,10 +74,8 @@ export const useStreamSSE = () => {
           if (buffer.endsWith("\n")) buffer = "";
         }
 
-        if (onEnd) onEnd();
       } catch (err) {
-        if (onError) onError(err);
-        else console.error(err);
+        console.error(err);
       }
     },
     []

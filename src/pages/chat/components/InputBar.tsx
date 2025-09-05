@@ -17,7 +17,7 @@ const InputBar = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const inputPromptRef = useRef<HTMLTextAreaElement>(null);
 
-  const { activeChat, activeChatIndex, setNewChat, setChats, setActiveChatIndex, newChat, setStreamingResponse, setChatStatus } = useChatContext();
+  const { activeChat, activeChatIndex, setNewChat, setChats, setActiveChatIndex, newChat, setStreamingResponse, setChatStatus, setChatError } = useChatContext();
   const { mutate } = useMutationChat(
     (data)=>handleSuccessfulMutation(data),
     (error) => {
@@ -349,46 +349,32 @@ const InputBar = () => {
       async (response) => {
         switch (response.type) {
           case 'status':
-            setChatStatus(response.message)
+            setChatStatus({chatid:response.chatId,content:response.message})
             break;
           case 'complete':
             await handleSuccessfulMutation({chatQuery:response.chatQuery,chat:response.chat})
-            setStreamingResponse("");
+            setStreamingResponse({chatid:"",content:""});
+            setChatStatus({chatid:"",content:""})
             break;
           case 'metadata':
-            //console.log(response);
+            //TODO:
             break;
           case 'error':
-            //console.error("Server Error:", response.error);
+            console.log(response)
+            setChatError({chatid:response.chatId,content:response.error})
             break;
           case 'content':
-            console.log("CONTENT:"+response.content)
-            setStreamingResponse(prev => prev + response.content)
+            setStreamingResponse(prev =>{ return {chatid:response.chatId,content:(prev.content + response.content)}})
             break;
         }
-      },
-      () => {
-        setChatStatus("")
-        //console.log("Streaming complete");
       },
       (error) => {
         console.log(error)
-        setChatStatus("")
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        if(activeChatIndex>=0){
-          setChats((prev) => {
-            const temp = [...prev];
-            const _chatQuery = {...temp[activeChatIndex].chatQueries[temp[activeChatIndex].chatQueries.length-1],error:errorMessage}
-            const chat = { ...temp[activeChatIndex], chatQueries: [...temp[activeChatIndex].chatQueries.slice(0, -1),_chatQuery] };
-            temp[activeChatIndex] = chat;
-            return temp;
-          });
-        }else{
-          setNewChat((prev)=>{
-            const _chatQuery : ChatQueryType = {...prev.chatQueries[0],error:errorMessage}
-            return {...prev,chatQueries:[_chatQuery]}
-          })
-        }
+        if(error.chatid != "") setNewChat(newChatDefaultObject);
+        setChatStatus({chatid:"",content:""})
+        setStreamingResponse({chatid:"",content:""})
+        setChatError({chatid:error.chatid, content:error.error})
+
       }
     );
 

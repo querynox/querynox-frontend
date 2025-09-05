@@ -19,7 +19,7 @@ const Conversation = () => {
   const [copid, setCopid] = useState<number>(-1)
   
   const { data: models  } = useQueryModels();
-  const { activeChat, activeChatIndex, setChats, streamingResponse,chatStatus } = useChatContext();
+  const { activeChat, activeChatIndex, setChats, streamingResponse,chatStatus, chatError } = useChatContext();
   const { darkmode } = useSystemContext()
   const { user } = useUser();
   const { data } = useQueryMessages(activeChat._id);
@@ -83,18 +83,18 @@ const Conversation = () => {
                 
         </div>
 
-        {chatStatus.trim() && (index == activeChat.chatQueries.length-1) &&
+        {chatStatus.content.trim() && (index == activeChat.chatQueries.length-1) && chatStatus.chatid == activeChat._id &&
           <div className={cn("relative group min-[500px]:px-4 min-[400px]:px-[14px] min-[350px]:px-[12px] px-2", isChatQueryImage(query) ? "max-w-full":"w-full")}>
-            <div className='rounded-lg mb-2 breathing-text text-xl'>{chatStatus.trim()}</div>
+            <div className='rounded-lg mb-2 breathing-text text-xl'>{chatStatus.content.trim()}</div>
           </div>}
 
         {/**Assistant Chat */}
-        {query.error?.trim()?
+        {chatError.content.trim() && (index == activeChat.chatQueries.length-1) && chatError.chatid == activeChat._id?
          <div className="flex justify-start">
 
           {/* Bubble Container */}
           <div className={cn("relative group min-[500px]:px-4 min-[400px]:px-[14px] min-[350px]:px-[12px] px-2")}>
-            <div className='rounded-lg p-3 mb-6 markdown-preview thin-scrollbar dark:bg-red-800/20 dark:text-red-400 bg-red-200/80 text-red-800'>{query.error.trim()}</div>
+            <div className='rounded-lg p-3 mb-6 markdown-preview thin-scrollbar dark:bg-red-800/20 dark:text-red-400 bg-red-200/80 text-red-800'>{chatError.content.trim()}</div>
           </div>
         </div>
         
@@ -131,14 +131,14 @@ const Conversation = () => {
         </div>
 
         /**Assistant Chat Stream*/
-        :streamingResponse.trim()?
+        :streamingResponse.content.trim() && streamingResponse.chatid == activeChat._id?
         <div className="flex justify-start">
 
           {/* Bubble Container */}
           <div className="relative group min-[500px]:px-4 min-[400px]:px-[14px] min-[350px]:px-[12px] px-2 w-full">
 
             <MarkdownPreview
-              source={streamingResponse}
+              source={streamingResponse.content}
               className="rounded-lg p-3 pl-0 mb-2 markdown-preview thin-scrollbar"
               style={{
                 backgroundColor:"var(--markdown-assistant-background)",
@@ -152,7 +152,7 @@ const Conversation = () => {
         </div>
 
         /**Assistant Chat loader*/
-        :<div className="flex justify-start">
+        : (index == activeChat.chatQueries.length-1) && <div className="flex justify-start">
           {isChatQueryImage(query) ? <Skeleton className='size-[400px]  mx-4'/> : <div className='dots-loader mx-4 my-2 p-1'></div> }
         </div>}
 
