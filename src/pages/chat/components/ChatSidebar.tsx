@@ -24,7 +24,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 
-import { SignedIn, UserButton , useUser} from "@clerk/clerk-react"
+import { SignedIn , useUser} from "@clerk/clerk-react"
 import { Link } from "@tanstack/react-router";
 import { useChatContext } from "@/contexts/ChatContext";
 import { Separator } from "../../../components/ui/separator";
