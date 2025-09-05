@@ -6,7 +6,7 @@ import { useSystemContext } from "@/contexts/SystemContext"
 import { Moon, Sun, Sparkles, Zap, Globe, FileText, Image, Search, Upload, MessageSquare } from "lucide-react"
 import { useEffect, useRef } from "react"
 import DemoVideoSection from "@/pages/home/components/DemoVideoSection"
-import { Hackice20GithubLink, SohamJoshiGithubLink } from "@/data/constants"
+import { FRONTEND_HOST, Hackice20GithubLink, SohamJoshiGithubLink } from "@/data/constants"
 import useCheckoutLink from "./apis/axios/useCheckoutLink"
 
 const Home = () => {
@@ -45,7 +45,7 @@ const Home = () => {
   }
 
   const checkout = async (productID:string, plan:string, source:string) => {
-    const data = await getCheckoutLink(productID,plan,source,"http://localhost:5173/payments")
+    const data = await getCheckoutLink(productID,plan,source,FRONTEND_HOST+"/payments")
     if(data.url)
     window.location.href = data.url
   }
