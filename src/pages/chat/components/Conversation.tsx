@@ -19,7 +19,7 @@ const Conversation = () => {
   const [copid, setCopid] = useState<number>(-1)
   
   const { data: models  } = useQueryModels();
-  const { activeChat, activeChatIndex, setChats, streamingResponse } = useChatContext();
+  const { activeChat, activeChatIndex, setChats, streamingResponse,chatStatus } = useChatContext();
   const { darkmode } = useSystemContext()
   const { user } = useUser();
   const { data } = useQueryMessages(activeChat._id);
@@ -37,6 +37,9 @@ const Conversation = () => {
       })
     }
   },[data])
+
+  useEffect(() => {
+  }, [chatStatus]);
 
   const handleClickCopy = (message:string, index:number) => {
     setCopid(index);
@@ -80,12 +83,17 @@ const Conversation = () => {
                 
         </div>
 
+        {chatStatus.trim() && (index == activeChat.chatQueries.length-1) &&
+          <div className={cn("relative group min-[500px]:px-4 min-[400px]:px-[14px] min-[350px]:px-[12px] px-2", isChatQueryImage(query) ? "max-w-full":"w-full")}>
+            <div className='rounded-lg mb-2 breathing-text text-xl'>{chatStatus.trim()}</div>
+          </div>}
+
         {/**Assistant Chat */}
         {query.error?.trim()?
          <div className="flex justify-start">
 
           {/* Bubble Container */}
-          <div className={cn("relative group min-[500px]:px-4 min-[400px]:px-[14px] min-[350px]:px-[12px] px-2", isChatQueryImage(query) ? "max-w-full":"w-full")}>
+          <div className={cn("relative group min-[500px]:px-4 min-[400px]:px-[14px] min-[350px]:px-[12px] px-2")}>
             <div className='rounded-lg p-3 mb-6 markdown-preview thin-scrollbar dark:bg-red-800/20 dark:text-red-400 bg-red-200/80 text-red-800'>{query.error.trim()}</div>
           </div>
         </div>

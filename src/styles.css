@@ -262,6 +262,19 @@ body {
   }
 }
 
+@keyframes breathe {
+  0%, 100% {
+    color: rgb(108, 108, 108);
+  }
+  50% {
+    color: rgb(67, 67, 67); 
+  }
+}
+
+.breathing-text {
+  animation: breathe 2s ease-in-out infinite;
+}
+
 .thin-scrollbar,  .thin-scrollbar * {
   /* Firefox */
   scrollbar-width: thin;

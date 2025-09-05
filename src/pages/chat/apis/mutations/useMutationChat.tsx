@@ -17,11 +17,9 @@ const chat = async (token:string | null, chatId:string, prompt:string, model: st
     });
 
     const url =  chatId ? ("/chat/" + chatId) : "/chat";
-    console.log("🔄 Non-stream request to:", url, "with token:", token ? "present" : "missing");
     
     try {
       const response = await apiRequest<CreateChatOutputType>(url,"POST",formData,{"Content-Type": "multipart/form-data","authorization":`Bearer ${token}`})
-      console.log("✅ Non-stream response received");
       return response;
     } catch (error) {
       console.error("❌ Non-stream error:", error);
