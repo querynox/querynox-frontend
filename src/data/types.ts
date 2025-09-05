@@ -83,6 +83,7 @@ export type UserType = {
   usedFileRag:number,
   limitsUpdatedAt:number,
   createdAt:number,
+  updatedAt:number,
   isPro:true,
   product?:{
     metadata: {
