@@ -226,7 +226,7 @@ export function ChatSidebar() {
 
           {chats.length > 0 && <SidebarGroup className="mt-0 py-0 overflow-hidden group-data-[state=expanded]:pr-0">
             <SidebarGroupLabel className="">Previous Chats</SidebarGroupLabel>
-            <SidebarGroupContent className="h-full overflow-auto group-data-[state=collapsed]:overflow-clip ml-0 thin-scrollbar pr-3">
+            <SidebarGroupContent className="h-full overflow-auto group-data-[state=collapsed]:overflow-clip ml-0 thin-scrollbar pr-1">
               <SidebarMenu>
                 {chats.map((chat,index)=>
                   <SidebarMenuItem key = {index+chat._id}>
