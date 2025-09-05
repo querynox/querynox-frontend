@@ -12,6 +12,8 @@ export default defineConfig(({ mode }) => {
       ? env.VITE_BACKEND_HOST
       : 'http://localhost:8080'
 
+  console.log('Using BACKEND_HOST =', BACKEND_HOST)
+
   return {
     plugins: [viteReact(), tailwindcss()],
     server: {
