@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 import { resolve } from 'node:path'
 
-const BACKEND_HOST = process.env.NODE_ENV == "production" ? "http://localhost:8080" : "";
+const BACKEND_HOST = process.env.NODE_ENV !=  "production" ? "http://localhost:8080" : "" ;
 
 // https://vitejs.dev/config/
 export default defineConfig({
