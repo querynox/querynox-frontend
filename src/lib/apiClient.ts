@@ -28,10 +28,8 @@ export const apiRequest = async <T>(
       params
     });
 
-    console.log("✅ API response:", response.status, response.statusText);
     return response.data;
   } catch (error: any) {
-    console.error("❌ API error:", error.response?.status, error.response?.statusText, error.response?.data);
     throw error;
   }
 };

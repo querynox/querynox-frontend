@@ -17,10 +17,11 @@ const InputBar = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const inputPromptRef = useRef<HTMLTextAreaElement>(null);
 
-  const { activeChat, activeChatIndex, setNewChat, setChats, setActiveChatIndex, newChat, setStreamingResponse } = useChatContext();
+  const { activeChat, activeChatIndex, setNewChat, setChats, setActiveChatIndex, newChat, setStreamingResponse, setChatStatus } = useChatContext();
   const { mutate } = useMutationChat(
     (data)=>handleSuccessfulMutation(data),
     (error) => {
+      console.log(error)
       const errorMessage = error instanceof Error ? error.message : String(error);
       if(activeChatIndex>=0){
         setChats((prev) => {
@@ -295,11 +296,8 @@ const InputBar = () => {
   }
 
   const sendChatStream = async () => {
-    console.log("🚀 sendChatStream called");
-
     // If the model is for image generation, use Non Streaming sendChat
     if(models?.find((model => model.name === activeChat.model))?.category == "Image Generation"){
-      console.log("🖼️ Using image generation model, falling back to non-stream");
       sendChat();
       return;
     }
@@ -307,11 +305,6 @@ const InputBar = () => {
     const isThinking = activeChatIndex > 0 ? !(activeChat.chatQueries[activeChat.chatQueries.length-1].response) : false;
 
     if (!inputPromptRef.current || !inputPromptRef.current.value.trim() || !user || isThinking) {
-      console.log("❌ sendChatStream blocked:", {
-        hasInput: !!inputPromptRef.current?.value.trim(),
-        hasUser: !!user,
-        isThinking
-      });
       return;
     }
     const _prompt = inputPromptRef.current.value.trim()
@@ -356,7 +349,7 @@ const InputBar = () => {
       async (response) => {
         switch (response.type) {
           case 'status':
-            //console.log("Status:", response.message);
+            setChatStatus(response.message)
             break;
           case 'complete':
             await handleSuccessfulMutation({chatQuery:response.chatQuery,chat:response.chat})
@@ -369,14 +362,18 @@ const InputBar = () => {
             //console.error("Server Error:", response.error);
             break;
           case 'content':
+            console.log("CONTENT:"+response.content)
             setStreamingResponse(prev => prev + response.content)
             break;
         }
       },
       () => {
+        setChatStatus("")
         //console.log("Streaming complete");
       },
       (error) => {
+        console.log(error)
+        setChatStatus("")
         const errorMessage = error instanceof Error ? error.message : String(error);
         if(activeChatIndex>=0){
           setChats((prev) => {

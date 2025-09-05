@@ -3,7 +3,6 @@ import { AlertTriangle, Mail } from "lucide-react";
 
 
 const RetryLimitReachedCard = ( {paymentData}:{paymentData : CheckoutResponseType | undefined}) => {
-    console.log(paymentData)
   return (
     <div className="bg-background p-8 rounded-xl border shadow-sm hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out transform">
       <div className="text-center">
