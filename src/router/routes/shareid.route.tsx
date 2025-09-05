@@ -4,6 +4,6 @@ import ShareChat from '@/pages/share/ShareChat'
 
 export const shareIdRoute = createRoute({
   getParentRoute: () => shareRoute,
-  path: '$chatId',
+  path: '$shareChatId',
   component: () => <ShareChat />,
 })

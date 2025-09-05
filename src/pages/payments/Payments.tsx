@@ -3,15 +3,15 @@ import { Moon, Sun } from "lucide-react";
 import ProgressBarLoader from '@/pages/payments/components/ProgressBarLoader';
 import PaymentFailedCard from '@/pages/payments/components/PaymentFailedCard';
 import PaymentSuccessCard from '@/pages/payments/components/PaymentSuccessCard';
-import { paymentsRoute } from "@/router/routes/payments.route"
 import type { PaymentSearchType } from "@/data/types";
 import useQueryPaymentStatus from "./apis/queries/useQueryStatus";
 import RetryLimitReachedCard from "./components/RetryLimitReached";
 import BrokenLinkCard from "./components/BrokenLinkCard";
+import { useSearch } from "@tanstack/react-router";
 
 const Payments = () => {
   const { darkmode, setDarkmode } = useSystemContext();
-  const query = paymentsRoute.useSearch() as PaymentSearchType
+  const query = useSearch({ from: "/payments" }) as PaymentSearchType;
   const { data, isLoading, refetch, error } = useQueryPaymentStatus(query)
 
   const handleTryAgain = () => {

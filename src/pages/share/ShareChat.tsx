@@ -9,8 +9,8 @@ import type { ChatQueryType } from '@/data/types'
 import { Check, Copy, Download } from 'lucide-react'
 
 const ShareChat = () => {
-  const params = useParams({ from: '/share/$chatId' })
-  const { data, isLoading } = useQueryPublicChat(params.chatId)
+  const params = useParams({ from: '/share/$shareChatId' })
+  const { data, isLoading } = useQueryPublicChat(params.shareChatId)
   const { data: models  } = useQueryModels();
   const { darkmode } = useSystemContext()
   
