@@ -22,21 +22,10 @@ const InputBar = () => {
     (data)=>handleSuccessfulMutation(data),
     (error) => {
       console.log(error)
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      if(activeChatIndex>=0){
-        setChats((prev) => {
-          const temp = [...prev];
-          const _chatQuery = {...temp[activeChatIndex].chatQueries[temp[activeChatIndex].chatQueries.length-1],response:errorMessage}
-          const chat = { ...temp[activeChatIndex], chatQueries: [...temp[activeChatIndex].chatQueries.slice(0, -1),_chatQuery] };
-          temp[activeChatIndex] = chat;
-          return temp;
-        });
-      }else{
-        setNewChat((prev)=>{
-          const _chatQuery : ChatQueryType = {...prev.chatQueries[0],response:errorMessage}
-          return {...prev,chatQueries:[_chatQuery]}
-        })
-      }
+        if(error.chatid != "") setNewChat(newChatDefaultObject);
+        setChatStatus({chatid:"",content:""})
+        setStreamingResponse({chatid:"",content:""})
+        setChatError({chatid:error.chatid, content:error.error})
     }
   );
   const { data: models  } = useQueryModels();
@@ -374,7 +363,6 @@ const InputBar = () => {
         setChatStatus({chatid:"",content:""})
         setStreamingResponse({chatid:"",content:""})
         setChatError({chatid:error.chatid, content:error.error})
-
       }
     );
 

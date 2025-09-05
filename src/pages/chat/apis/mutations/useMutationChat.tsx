@@ -3,6 +3,7 @@ import type { CreateChatInputType, CreateChatOutputType } from "@/data/types";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "../../../../lib/apiClient"
 import { useAuth } from "@clerk/clerk-react";
+import { AxiosError } from "axios";
 
 
 const chat = async (token:string | null, chatId:string, prompt:string, model: string , systemPrompt:string , webSearch:boolean, files:File[] ) : Promise<CreateChatOutputType> => {
@@ -22,14 +23,16 @@ const chat = async (token:string | null, chatId:string, prompt:string, model: st
       const response = await apiRequest<CreateChatOutputType>(url,"POST",formData,{"Content-Type": "multipart/form-data","authorization":`Bearer ${token}`})
       return response;
     } catch (error) {
-      console.error("❌ Non-stream error:", error);
+      if(error instanceof AxiosError){
+        throw error.response?.data
+      }
       throw error;
     }
 }
 
 const useMutationChat = (
   onSuccess: (data: CreateChatOutputType, variables: CreateChatInputType, context: unknown) => void,
-  onError?: (error: unknown, variables: CreateChatInputType, context: unknown) => void
+  onError?: (error: {chatid:string,error:string}, variables: CreateChatInputType, context: unknown) => void
 ) => {
   const { getToken } = useAuth();
   return useMutation({
