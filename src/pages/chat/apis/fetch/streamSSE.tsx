@@ -1,3 +1,4 @@
+import { BACKEND_HOST } from "@/data/constants";
 import type { CreateChatInputType, StreamChatOutputType } from "@/data/types";
 import { useAuth } from "@clerk/clerk-react";
 import { useCallback } from "react";
@@ -24,12 +25,11 @@ export const useStreamSSE = () => {
         });
 
         const URL = input.chatId
-          ? `/api/v1/chat/${input.chatId}/stream`
-          : `/api/v1/chat/stream`;
+          ? `${BACKEND_HOST}/api/v1/chat/${input.chatId}/stream`
+          : `${BACKEND_HOST}/api/v1/chat/stream`;
 
         const token = await getToken(); 
 
-        console.log("🔄 Streaming to:", URL, "with token:", token ? "present" : "missing");
         
         const response = await fetch(URL, {
           method: "POST",
@@ -37,20 +37,17 @@ export const useStreamSSE = () => {
           headers: {
             Accept: "text/event-stream",
             authorization: `Bearer ${token}`,
+            ...(BACKEND_HOST.includes("ngrok") && {
+              "ngrok-skip-browser-warning": "true",
+            }),
           },
         });
 
-        console.log("📡 Stream response status:", response.status, response.statusText);
 
         if (!response.ok) {
           const errorText = await response.clone().text();
-          console.error("❌ Stream error response:", errorText);
-          try {
-            const errorData = JSON.parse(errorText);
-            throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
-          } catch {
-            throw new Error(`HTTP ${response.status}: ${response.statusText} - ${errorText}`);
-          }
+          const errorData = JSON.parse(errorText);
+          throw new Error(errorData.error || String(errorData));
         }
 
         const reader = response.body?.getReader();

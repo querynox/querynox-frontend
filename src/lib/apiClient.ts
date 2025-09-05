@@ -1,12 +1,15 @@
+import { BACKEND_HOST } from '@/data/constants';
 import axios, { type AxiosResponse, type Method } from 'axios';
 
-
 const apiClient = axios.create({
-  baseURL:  "/api/v1", //REMEMBER TO ALSO UPDATE pages/chats/apis/fetch/streamSSE.ts file for changes
+  baseURL: BACKEND_HOST + "/api/v1",
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
+    ...(BACKEND_HOST.includes("ngrok") && {
+      "ngrok-skip-browser-warning": "true",
+    }),
   },
-});
+})
 
 export const apiRequest = async <T>(
     url: string,
@@ -15,7 +18,6 @@ export const apiRequest = async <T>(
     headers?: Record<string, string>,
     params?: Record<string, any>,
 ): Promise<T> => {
-  console.log("🌐 API request:", method, url, "headers:", headers ? Object.keys(headers) : "none");
   
   try {
     const response: AxiosResponse<T> = await apiClient({
