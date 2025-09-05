@@ -226,7 +226,7 @@ export function ChatSidebar() {
 
           {chats.length > 0 && <SidebarGroup className="mt-0 py-0 overflow-hidden group-data-[state=expanded]:pr-0">
             <SidebarGroupLabel className="">Previous Chats</SidebarGroupLabel>
-            <SidebarGroupContent className="h-full overflow-auto group-data-[state=collapsed]:overflow-clip ml-0 thin-scrollbar pr-2">
+            <SidebarGroupContent className="h-full overflow-auto group-data-[state=collapsed]:overflow-clip ml-0 thin-scrollbar pr-2.5">
               <SidebarMenu>
                 {chats.map((chat,index)=>
                   <SidebarMenuItem key = {index+chat._id}>
@@ -241,10 +241,10 @@ export function ChatSidebar() {
                         </Link>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                              <svg viewBox="0 0 40 20" className=" group-hover/messages:block justify-center items-center opacity-60 fill-accent-foreground hover:opacity-100 cursor-pointer" onClick={()=>{}}>
-                          <circle cx="5" cy="10" r="5"/>
-                          <circle cx="20" cy="10" r="5" />
-                          <circle cx="35" cy="10" r="5" />
+                              <svg viewBox="0 0 40 20" className=" group-hover/messages:block justify-center items-center opacity-60 duration-300 fill-accent-foreground hover:opacity-100 cursor-pointer" onClick={()=>{}}>
+                                <circle cx="5" cy="10" r="5"/>
+                                <circle cx="20" cy="10" r="5" />
+                                <circle cx="35" cy="10" r="5" />
                               </svg>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent className="w-64" align="start" side="right">
