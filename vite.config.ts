@@ -12,8 +12,6 @@ export default defineConfig(({ mode }) => {
       ? env.VITE_BACKEND_HOST
       : 'http://localhost:8080'
 
-  console.log('Using BACKEND_HOST =', BACKEND_HOST)
-
   return {
     plugins: [viteReact(), tailwindcss()],
     server: {
@@ -23,6 +21,9 @@ export default defineConfig(({ mode }) => {
           target: BACKEND_HOST,
           changeOrigin: true,
           secure: false,
+          headers: {
+            ...(BACKEND_HOST.includes("ngrok") && { "ngrok-skip-browser-warning": "true" }),
+          },
         },
       },
     },
