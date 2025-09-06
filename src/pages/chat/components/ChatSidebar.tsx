@@ -207,12 +207,11 @@ export function ChatSidebar() {
                       {showBookmarks ? <BookmarkMinusIcon size={"18px"}/> : <Bookmark size={"18px"}/>}
                       <span>{showBookmarks ? 'Hide Bookmarks' : 'Bookmarks'}</span>
                     </SidebarMenuButton>
-                      { /*FIXME: Overflow x axis chats when mobile view and opened bookmarks */}
                     {showBookmarks && (
-                      <SidebarMenu className="ml-3 mt-1 flex flex-col gap-1 transition-all duration-300">
+                      <SidebarMenu className="ml-3 mt-1 flex flex-col gap-1 transition-all duration-300 w-[calc(100%)-20px]">
                         {(bookmarkedData?.chats || []).map((b) => (
-                          <SidebarMenuItem key={b._id}>
-                            <SidebarMenuButton asChild className="w-[calc(100%-13px)]">
+                          <SidebarMenuItem key={b._id} >
+                            <SidebarMenuButton asChild >
                               <Link
                                 to={`/chat/$chatId`}
                                 params={{ chatId: b._id }}
