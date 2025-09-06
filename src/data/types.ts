@@ -84,7 +84,7 @@ export type UserType = {
   limitsUpdatedAt:number,
   createdAt:number,
   updatedAt:number,
-  isPro:true,
+  isPro:boolean,
   product?:{
     metadata: {
       fileRagLimit: number;
