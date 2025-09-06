@@ -76,7 +76,7 @@ export function useSignInOverlay() {
             <Button
               className="w-full relative bg-gradient-to-r from-purple-600 via-purple-500 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 cursor-pointer transition-all duration-300 shadow-lg hover:shadow-purple-500/50"
               onClick={() =>
-                checkout("8dc2161d-c84c-4979-8a06-ba23afbd2472", "pro", "GetProOverlay")
+                checkout("5f318c59-6185-42a5-aa03-56c9f86f526f", "pro", "GetProOverlay")
               }
             >
               <Sparkles className="mr-2 h-4 w-4 relative z-10" />

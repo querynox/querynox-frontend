@@ -291,7 +291,7 @@ const Home = () => {
                   <li>✔ Document & image uploads</li>
                   <li>✔ Conversation memory</li>
                 </ul>
-                <Button className="relative bg-gradient-to-r from-purple-600 via-purple-500 to-pink-600 hover:from-purple-700 hover:via-purple-600 hover:to-pink-700 text-white border-0 mt-auto cursor-pointer transition-all duration-300 shadow-lg hover:shadow-purple-500/50 hover:scale-105" onClick={()=>{checkout("8dc2161d-c84c-4979-8a06-ba23afbd2472","pro","home")}}>
+                <Button className="relative bg-gradient-to-r from-purple-600 via-purple-500 to-pink-600 hover:from-purple-700 hover:via-purple-600 hover:to-pink-700 text-white border-0 mt-auto cursor-pointer transition-all duration-300 shadow-lg hover:shadow-purple-500/50 hover:scale-105" onClick={()=>{checkout("5f318c59-6185-42a5-aa03-56c9f86f526f","pro","home")}}>
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-400/20 to-pink-400/20 rounded-md opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
                   <Sparkles className="mr-2 h-4 w-4 relative z-10" />
                   <span className="relative z-10">Upgrade to Pro</span>

@@ -207,7 +207,7 @@ export function ChatSidebar() {
                       {showBookmarks ? <BookmarkMinusIcon size={"18px"}/> : <Bookmark size={"18px"}/>}
                       <span>{showBookmarks ? 'Hide Bookmarks' : 'Bookmarks'}</span>
                     </SidebarMenuButton>
-
+                      { /*FIXME: Overflow x axis chats when mobile view and opened bookmarks */}
                     {showBookmarks && (
                       <SidebarMenu className="ml-3 mt-1 flex flex-col gap-1 transition-all duration-300">
                         {(bookmarkedData?.chats || []).map((b) => (
