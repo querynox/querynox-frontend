@@ -1,4 +1,4 @@
-import { MessageSquarePlus ,MessageSquare } from "lucide-react"
+import { MessageSquarePlus ,MessageSquare, Bookmark, BookmarkPlus, BookmarkPlusIcon, BookmarkMinusIcon, Link2Icon } from "lucide-react"
 
 import {
   DropdownMenu,
@@ -182,9 +182,10 @@ export function ChatSidebar() {
         
         <SidebarContent >
 
-          <SidebarGroup className="my-0 pt-2">
+          <SidebarGroup className="my-0 transition-all duration-100">
             <SidebarGroupContent>
               <SidebarMenu>
+
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild className={cn("my-[0.7px]",activeChatIndex < 0 ? "bg-accent/30" : "" )}>
                       <Link to={`/chat`} onClick={() => {
@@ -196,34 +197,36 @@ export function ChatSidebar() {
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
+
                   <SidebarMenuItem>
                     <SidebarMenuButton 
                       onClick={()=> setShowBookmarks(prev => !prev)}
                       tooltip={showBookmarks ? 'Hide Bookmarks' : 'Bookmarks'}
                       className={cn("my-[0.7px]")}
                     >
-                                             <img 
-                         src="/bookmarklogo.jpg" 
-                         alt="Bookmarks" 
-                         className="w-4 h-4 object-contain dark:brightness-0 dark:invert brightness-0"
-                       />
+                     {showBookmarks ? <BookmarkMinusIcon size={"18px"}/> : <Bookmark size={"18px"}/>}
                       <span>{showBookmarks ? 'Hide Bookmarks' : 'Bookmarks'}</span>
                     </SidebarMenuButton>
+
+                    {showBookmarks && 
+                      <div className="ml-3 flex flex-col gap-1 mt-1 transition-all duration-300">
+                      {(bookmarkedData?.chats || []).map((b)=> (
+                        <SidebarMenuItem key={b._id}>
+                          <SidebarMenuButton asChild className={cn("my-[0.7px]")}> 
+                            <Link to={`/chat/$chatId`} params={{chatId:b._id}} onClick={() => {
+                              const idx = chats.findIndex(c => c._id === b._id);
+                              setActiveChatIndex(idx);
+                              handleMobileSidebarClose();
+                            }} className="flex items-center gap-2 ">
+                              <Link2Icon size={"18px"}/>
+                              <span className="truncate w-[126px] inline-block transition-all duration-300" title={b.title}>{b.title}</span>
+                            </Link>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>))}
+                      </div>}
+
                   </SidebarMenuItem>
-                  {showBookmarks && (bookmarkedData?.chats || []).map((b)=> (
-                    <SidebarMenuItem key={b._id}>
-                      <SidebarMenuButton asChild className={cn("my-[0.7px]")}> 
-                        <Link to={`/chat/$chatId`} params={{chatId:b._id}} onClick={() => {
-                          const idx = chats.findIndex(c => c._id === b._id);
-                          setActiveChatIndex(idx);
-                          handleMobileSidebarClose();
-                        }} className="flex items-center gap-2">
-                          <MessageSquare size={"18px"}/>
-                          <span className="truncate w-[193px] inline-block" title={b.title}>{b.title}</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
+
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
