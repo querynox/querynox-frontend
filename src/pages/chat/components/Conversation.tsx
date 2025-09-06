@@ -55,8 +55,8 @@ const Conversation = () => {
 
   if( activeChatIndex < 0 && activeChat.chatQueries.length==0) 
     return (<div className="flex justify-center items-center flex-col h-full">
-      <h2 className="text-2xl font-bold mb-2">Welcome back, {user?.fullName} 👋</h2>
-      <p className="text-muted-foreground">Start a new conversation or revisit your recent work.</p>
+      <h2 className="text-2xl font-bold mb-2 px-10">Welcome back, {user?.fullName} 👋</h2>
+      <p className="text-muted-foreground px-10">Start a new conversation or revisit your recent work.</p>
     </div>)
 
   return <div className="flex-1 overflow-y-auto min-[650px]:p-6 min-[500px]:p-4 min-[400px]:p-[14px] min-[350px]:p-[12px] p-3 overflow-x-hidden bg-grey-50 thin-scrollbar mt-2 pt-1 transition-none">

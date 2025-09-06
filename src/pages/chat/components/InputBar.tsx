@@ -392,7 +392,7 @@ const InputBar = () => {
         </div>}
 
         {/**Input Bar with Attachment and Send */}
-        <div className="flex w-full items-top justify-around min-[350px]:min-h-[50px] p-3">
+        <div className="flex w-full items-top justify-around min-[350px]:min-h-[50px] min-[550px]:py-3 px-3 pt-3 ">
 
 
           <div onClick={handleAttachmentButtonClick} className="min-[480px]:px-2 px-1 opacity-70 hover:opacity-100 cursor-pointer flex " title="Attach files">
@@ -411,11 +411,13 @@ const InputBar = () => {
             onKeyDown={(e) => { if (e.key == "Enter" && !e.shiftKey ) {e.preventDefault();sendChatStream()} }}
             ref={inputPromptRef}
             className={cn(
-              "placeholder:text-muted-foreground",
-              "flex w-full min-w-0 bg-transparent px-2 md:text-[16px] transition-[color,box-shadow] outline-none",
-              "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 text-sm",
+              "flex-1 relative -top-1 w-full min-w-0 h-0", // flex-1 grows & shrinks
+              "placeholder:text-muted-foreground bg-transparent px-2 py-1 ",
+              "text-sm md:text-base transition-[color,box-shadow] outline-none",
+              "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
               "focus-visible:border-ring focus-visible:ring-ring/50",
-              "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive thin-scrollbar resize-none"
+              "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+              "thin-scrollbar resize-none"
             )}
           />
 
@@ -423,7 +425,7 @@ const InputBar = () => {
           <div className="relative" ref={modelDropdownRef}>
             <div 
                onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)} 
-               className="min-[480px]:px-2 px-1 opacity-70 hover:opacity-100 cursor-pointer flex items-center gap-1 hover:bg-secondary/30 dark:hover:bg-secondary/20 rounded-lg p-1 transition-all duration-200" 
+               className="min-[480px]:px-2 px-1 opacity-70 hover:opacity-100 cursor-pointer flex items-center gap-1 hover:bg-secondary/30 dark:hover:bg-secondary/20 rounded-lg pb-1.5 pt-0.5  transition-all duration-200" 
                title="Select Model"
              >
                 <img 
@@ -432,8 +434,8 @@ const InputBar = () => {
                   className={cn(
                     "rounded-sm ml-2",
                     (activeChat.model.toLowerCase().includes('gpt') || activeChat.model.toLowerCase().includes('openai') || activeChat.model.toLowerCase().includes('dall-e') || activeChat.model.toLowerCase().includes('grok')) 
-                      ? "dark:invert size-[18px] min-[480px]:size-[20px]" 
-                      : "size-[18px] min-[480px]:size-[20px]"
+                      ? "dark:invert size-[18px] min-[480px]:size-[20px] min-[880px]:size-[22px]" 
+                      : "size-[18px] min-[480px]:size-[20px] min-[880px]:size-[22px]"
                   )}
                 />
               <ChevronDown className="size-[12px] min-[480px]:size-[14px]" />
