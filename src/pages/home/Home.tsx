@@ -283,7 +283,7 @@ const Home = () => {
               
               <div className="relative z-10">
                 <h3 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Pro</h3>
-                                 <p className="text-4xl font-bold mb-6 text-foreground">$15<span className="text-lg font-normal text-muted-foreground">/mo</span></p>
+                <p className="text-4xl font-bold mb-6 text-foreground">$2<span className="text-lg font-normal text-muted-foreground">/month</span></p>
                 <ul className="text-muted-foreground mb-6 space-y-2 text-left">
                   <li>✔ 2000 messages / month</li>
                   <li>✔ Access to GPT-4, Claude, Gemini</li>

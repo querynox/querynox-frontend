@@ -57,9 +57,9 @@ export function useSignInOverlay() {
 
             {/* Price */}
             <p className="text-center text-4xl font-bold mb-6 text-foreground">
-              $15
+              $2
               <span className="text-lg font-normal text-muted-foreground">
-                /mo
+                /month
               </span>
             </p>
 
