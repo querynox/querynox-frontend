@@ -251,7 +251,7 @@ export function ChatSidebar() {
                                 <circle cx="35" cy="10" r="5" />
                               </svg>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent className="w-64" align="start" side="right">
+                          <DropdownMenuContent className="min-[600px]:w-56 w-48" align="start" side="right">
                             <DropdownMenuLabel>Chat Options</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                               <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
