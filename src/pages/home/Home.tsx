@@ -268,7 +268,7 @@ const Home = () => {
                 </SignedIn>
 
                 <SignedOut>
-                  <SignInButton mode="modal" fallbackRedirectUrl={FRONTEND_HOST} forceRedirectUrl={FRONTEND_HOST+"/chat"}>
+                  <SignInButton mode="modal" forceRedirectUrl={FRONTEND_HOST+"/chat"}>
                     <Button variant="outline" className="mt-auto cursor-pointer">
                       Get Started
                     </Button>

@@ -11,11 +11,15 @@ import { useNavigate } from '@tanstack/react-router';
 import useQueryModels from '../apis/queries/useQueryModels';
 import { useStreamSSE } from '../apis/fetch/streamSSE';
 import { generateUUID } from '@/utils/uuid';
+import { useUserContext } from '@/contexts/UserContext';
+import { useSignInOverlay } from '@/hooks/useGetProOverlay';
 
 const InputBar = () => {  
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const inputPromptRef = useRef<HTMLTextAreaElement>(null);
+
+  const { Overlay , openOverlay} = useSignInOverlay()
 
   const { activeChat, activeChatIndex, setNewChat, setChats, setActiveChatIndex, newChat, setStreamingResponse, setChatStatus, setChatError } = useChatContext();
   const { mutate } = useMutationChat(
@@ -30,6 +34,7 @@ const InputBar = () => {
   );
   const { data: models  } = useQueryModels();
   const { user } = useUser();
+  const {user:userInfo} = useUserContext()
   const navigate = useNavigate();
   const streamSSE = useStreamSSE();
 
@@ -74,16 +79,20 @@ const InputBar = () => {
     }, {} as Record<string, typeof models>)
   }
 
-  const changeSelectedModel = (modelName:string) => {
+  const changeSelectedModel = (model:ModelType) => {
+    if(  !userInfo?.isPro && model.pro ){
+      openOverlay()
+      return;
+    }
     if(activeChatIndex<0){
       setNewChat((chat) => {
-        const uChat = {...chat,model:modelName};
+        const uChat = {...chat,model:model.name};
         return uChat;
       })
     }else if(activeChatIndex >= 0 && activeChat){
       setChats(prev => {
         const chats = [...prev];
-        const uChat = {...prev[activeChatIndex],model:modelName};
+        const uChat = {...prev[activeChatIndex],model:model.name};
         chats[activeChatIndex] = uChat;
         return chats;
       })
@@ -98,9 +107,11 @@ const InputBar = () => {
     } else if (lowerName.includes('claude')) {
       return '/claude.png';
     } else if (lowerName.includes('gemini')) {
-      return '/geminisvg.png';
+      return '/geminimodel.webp';
     } else if (lowerName.includes('meta') || lowerName.includes('llama')) {
       return '/meta svg.png';
+    } else if (lowerName.includes('grok')){
+      return '/grok.png';
     }
     return '/querynox.jpeg'; // default logo
   }
@@ -372,6 +383,9 @@ const InputBar = () => {
   <div className="flex flex-col px-4 pb-4 items-center justify-center">
       <div className="flex-1 rounded-xl py-1 shadow-2xs border border-input max-w-[800px] w-full dark:bg-primary-foreground bg-primary-foreground">
 
+        {/**Overlay for Get Pro*/}
+        {Overlay}
+
         {/**Attached Files*/}
         {activeChat.files.length > 0 && <div className="flex gap-y-[2px] flex-col w-full pt-2 pl-4 dark:bg-primary-foreground">
           {activeChat.files.map((file,index) => <span className="flex items-center text-sm gap-x-1 italic" key={index}>{file.name} <X onClick={()=> {deleteFromFile(index)}} size={14} color="brown" className="cursor-pointer mt-1"/> </span> )}
@@ -407,59 +421,56 @@ const InputBar = () => {
 
           {/* Model Selector */}
           <div className="relative" ref={modelDropdownRef}>
-                         <div 
+            <div 
                onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)} 
                className="min-[480px]:px-2 px-1 opacity-70 hover:opacity-100 cursor-pointer flex items-center gap-1 hover:bg-secondary/30 dark:hover:bg-secondary/20 rounded-lg p-1 transition-all duration-200" 
                title="Select Model"
              >
-                                                           <img 
+                <img 
                   src={getModelLogo(activeChat.model)} 
                   alt={activeChat.model} 
                   className={cn(
-                    "rounded-sm",
-                    (activeChat.model.toLowerCase().includes('gpt') || activeChat.model.toLowerCase().includes('openai') || activeChat.model.toLowerCase().includes('dall-e')) 
+                    "rounded-sm ml-2",
+                    (activeChat.model.toLowerCase().includes('gpt') || activeChat.model.toLowerCase().includes('openai') || activeChat.model.toLowerCase().includes('dall-e') || activeChat.model.toLowerCase().includes('grok')) 
                       ? "dark:invert size-[18px] min-[480px]:size-[20px]" 
-                      : activeChat.model.toLowerCase().includes('gemini')
-                      ? "h-[18px] min-[480px]:h-[20px] w-[32px] min-[480px]:w-[36px]"
                       : "size-[18px] min-[480px]:size-[20px]"
                   )}
                 />
               <ChevronDown className="size-[12px] min-[480px]:size-[14px]" />
             </div>
             
-                         {isModelDropdownOpen && (
+              {isModelDropdownOpen && (
                <div className="absolute bottom-full right-0 mb-2 w-80 max-h-96 overflow-y-auto bg-popover text-popover-foreground backdrop-blur-2xl border border-border rounded-2xl shadow-2xl z-50 ring-1 ring-ring/20 thin-scrollbar">
                 {groupedModels && Object.keys(groupedModels).map((category) => (
                   <div key={category} className="p-2">
-                                         <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide px-3 py-2 bg-secondary/30 rounded-lg mb-2 backdrop-blur-sm border border-border">
+                     <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide px-3 py-2 bg-secondary/30 rounded-lg mb-2 backdrop-blur-sm border border-border">
                        {category}
                      </div>
-                                         {groupedModels[category].map((model) => (
+                      {groupedModels[category].map((model) => (
                        <div
                          key={model.name}
-                         onClick={() => changeSelectedModel(model.name)}
+                         onClick={() => changeSelectedModel(model)}
                          className={cn(
-                           "flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-secondary/40 dark:hover:bg-secondary/40 rounded-lg transition-all duration-200 hover:shadow-lg hover:scale-[1.02]",
-                           activeChat.model === model.name && "bg-primary/20 border border-primary/40 shadow-md"
+                           "flex items-center gap-3 px-3 py-2 hover:bg-secondary/40 dark:hover:bg-secondary/40 rounded-lg transition-all duration-200 hover:shadow-lg",
+                           activeChat.model === model.name && "bg-primary/20 border border-primary/40 shadow-md",
+                           !userInfo?.isPro && model.pro ? "opacity-40 cursor-help": "opacity-90 hover:scale-105 cursor-pointer"
                          )}
                        >
-                                                                                                   <img 
-                            src={getModelLogo(model.name)} 
-                            alt={model.name} 
-                            className={cn(
-                              "rounded-sm",
-                              (model.name.toLowerCase().includes('gpt') || model.name.toLowerCase().includes('openai') || model.name.toLowerCase().includes('dall-e')) 
-                                ? "dark:invert size-5" 
-                                : model.name.toLowerCase().includes('gemini')
-                                ? "h-5 w-8"
-                                : "size-5"
-                            )}
+                        <img 
+                          src={getModelLogo(model.name)} 
+                          alt={model.name} 
+                          className={cn(
+                            "rounded-sm",
+                            (model.name.toLowerCase().includes('gpt') || model.name.toLowerCase().includes('openai') || model.name.toLowerCase().includes('dall-e') || model.name.toLowerCase().includes('grok')) 
+                              ? "dark:invert size-5" 
+                              : "size-5"
+                          )}
                           />
                         <div className="flex-1">
-                          <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                            {model.name}
+                          <div className="text-sm font-medium text-black dark:text-gray-100">
+                            {model.name}{model.pro && <span className='relative bottom-2 left-1 text-[10px]'>pro</span> }
                           </div>
-                          <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                          <div className="text-xs text-gray-900 dark:text-gray-400 truncate">
                             {model.description}
                           </div>
                         </div>

@@ -15,9 +15,12 @@ export type ChatQueryType = {
 };
 
 export type ModelType = {
-  name:string;
-  category:string;
-  description:string
+  name: string;
+  fullName:string;
+  category: string;
+  description: string;
+  limit: number;
+  pro: boolean;
 };
 
 export type ChatType = {
