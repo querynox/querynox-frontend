@@ -1,4 +1,4 @@
-import { MessageSquarePlus ,MessageSquare, Bookmark, BookmarkPlus, BookmarkPlusIcon, BookmarkMinusIcon, Link2Icon } from "lucide-react"
+import { MessageSquarePlus ,MessageSquare, Bookmark, BookmarkMinusIcon, Link2Icon } from "lucide-react"
 
 import {
   DropdownMenu,
@@ -200,33 +200,43 @@ export function ChatSidebar() {
 
                   <SidebarMenuItem>
                     <SidebarMenuButton 
-                      onClick={()=> setShowBookmarks(prev => !prev)}
+                      onClick={() => setShowBookmarks(prev => !prev)}
                       tooltip={showBookmarks ? 'Hide Bookmarks' : 'Bookmarks'}
                       className={cn("my-[0.7px]")}
                     >
-                     {showBookmarks ? <BookmarkMinusIcon size={"18px"}/> : <Bookmark size={"18px"}/>}
+                      {showBookmarks ? <BookmarkMinusIcon size={"18px"}/> : <Bookmark size={"18px"}/>}
                       <span>{showBookmarks ? 'Hide Bookmarks' : 'Bookmarks'}</span>
                     </SidebarMenuButton>
 
-                    {showBookmarks && 
-                      <div className="ml-3 flex flex-col gap-1 mt-1 transition-all duration-300">
-                      {(bookmarkedData?.chats || []).map((b)=> (
-                        <SidebarMenuItem key={b._id}>
-                          <SidebarMenuButton asChild className={cn("my-[0.7px]")}> 
-                            <Link to={`/chat/$chatId`} params={{chatId:b._id}} onClick={() => {
-                              const idx = chats.findIndex(c => c._id === b._id);
-                              setActiveChatIndex(idx);
-                              handleMobileSidebarClose();
-                            }} className="flex items-center gap-2 ">
-                              <Link2Icon size={"18px"}/>
-                              <span className="truncate w-[126px] inline-block transition-all duration-300" title={b.title}>{b.title}</span>
-                            </Link>
-                          </SidebarMenuButton>
-                        </SidebarMenuItem>))}
-                      </div>}
-
+                    {showBookmarks && (
+                      <SidebarMenu className="ml-3 mt-1 flex flex-col gap-1 transition-all duration-300">
+                        {(bookmarkedData?.chats || []).map((b) => (
+                          <SidebarMenuItem key={b._id}>
+                            <SidebarMenuButton asChild className="w-[calc(100%-13px)]">
+                              <Link
+                                to={`/chat/$chatId`}
+                                params={{ chatId: b._id }}
+                                onClick={() => {
+                                  const idx = chats.findIndex(c => c._id === b._id);
+                                  setActiveChatIndex(idx);
+                                  handleMobileSidebarClose();
+                                }}
+                                className="flex items-center gap-2"
+                              >
+                                <Link2Icon size={"18px"} />
+                                <span
+                                  className="truncate w-full inline-block transition-all duration-300"
+                                  title={b.title}
+                                >
+                                  {b.title}
+                                </span>
+                              </Link>
+                            </SidebarMenuButton>
+                          </SidebarMenuItem>
+                        ))}
+                      </SidebarMenu>
+                    )}
                   </SidebarMenuItem>
-
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
@@ -257,7 +267,7 @@ export function ChatSidebar() {
                           <DropdownMenuContent className="min-[600px]:w-56 w-48" align="start" side="right">
                             <DropdownMenuLabel>Chat Options</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                              <DropdownMenuItem className="min-[600px]:py-2 py-0" onSelect={(e) => e.preventDefault()}>
                                 <AlertDialog>
                                   <AlertDialogTrigger className="w-full text-start">Share Chat</AlertDialogTrigger>
                                   <AlertDialogContent>
@@ -295,7 +305,7 @@ export function ChatSidebar() {
                                   </AlertDialogContent>
                                 </AlertDialog>
                               </DropdownMenuItem>
-                              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                              <DropdownMenuItem  className="min-[600px]:py-2 py-0" onSelect={(e) => e.preventDefault()}>
                                 <AlertDialog>
                                   <AlertDialogTrigger className="w-full text-start">
                                     {bookmarkedIds.has(chat._id) ? 'Remove Bookmark' : 'Bookmark'}
@@ -322,7 +332,7 @@ export function ChatSidebar() {
                                 </AlertDialog>
                               </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
+                            <DropdownMenuItem  className="min-[600px]:py-2 py-0" variant="destructive" onSelect={(e) => e.preventDefault()}>
                               <AlertDialog>
                                 <AlertDialogTrigger className="w-full text-start">Delete Chat</AlertDialogTrigger>
                                 <AlertDialogContent>
