@@ -116,7 +116,7 @@ const Home = () => {
               </Button>
             </SignedIn>
             <SignedOut>
-              <SignInButton mode="modal">
+              <SignInButton mode="modal" fallbackRedirectUrl={FRONTEND_HOST} forceRedirectUrl={FRONTEND_HOST+"/chat"}>
                 <Button size="lg" className="text-lg px-8 py-6">
                   <Sparkles className="mr-2 h-5 w-5" />
                   Get Started Free
@@ -258,22 +258,23 @@ const Home = () => {
                 <li>✖ Document & image uploads</li>
                 <li>✖ Priority support</li>
               </ul>
+              <div className="w-fit mt-auto mx-auto">
+                <SignedIn>
+                    <Button variant="outline" className="mt-auto cursor-pointer">
+                      <Link to="/chat">
+                        Start Chatting
+                      </Link>
+                    </Button>
+                </SignedIn>
 
-            <SignedIn>
-                <Button variant="outline" className="mt-auto cursor-pointer">
-                  <Link to="/chat">
-                    Start Chatting
-                  </Link>
-                </Button>
-            </SignedIn>
-
-            <SignedOut>
-              <SignInButton mode="modal">
-                <Button variant="outline" className="mt-auto cursor-pointer">
-                  Get Started
-                </Button>
-              </SignInButton>
-            </SignedOut>
+                <SignedOut>
+                  <SignInButton mode="modal" fallbackRedirectUrl={FRONTEND_HOST} forceRedirectUrl={FRONTEND_HOST+"/chat"}>
+                    <Button variant="outline" className="mt-auto cursor-pointer">
+                      Get Started
+                    </Button>
+                  </SignInButton>
+                </SignedOut>
+            </div>
 
             </div>
 
@@ -309,9 +310,9 @@ const Home = () => {
                 <li>✔ Team collaboration features</li>
                 <li>✔ 24/7 premium support</li>
               </ul>
-              <Button variant="outline" className="mt-auto cursor-pointer">
+              <a href="mailto:contact@querynox.xyz" className="block w-full mt-auto cursor-pointer"><Button variant="outline" className="">
                 Contact Sales
-              </Button>
+              </Button></a>
             </div>
           </div>
         </div>
