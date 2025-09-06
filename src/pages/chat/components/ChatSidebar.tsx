@@ -55,11 +55,13 @@ import useMutationBookmarkChat from "../apis/mutations/useMutationBookmarkChat";
 import { useMemo, useState } from "react";
 import ClerkUserButton from "@/components/clerk/ClerkUserButton";
 import { useSignInOverlay } from "@/hooks/useGetProOverlay";
+import { useUserContext } from "@/contexts/UserContext";
 
 export function ChatSidebar() {
 
   const {chats,setActiveChatIndex,activeChatIndex, setChats} = useChatContext();
   const {user} = useUser();
+  const { user:userData } = useUserContext() 
   const { isMobile, setOpenMobile } = useSidebar();
   const deleteChatMutation = useDeleteChat();
   const shareChatMutation = useMutationShareChat();
@@ -355,11 +357,11 @@ export function ChatSidebar() {
               <SignedIn>
                   <ClerkUserButton />
                   <span className="text-nowrap ml-2">{user?.fullName}</span>
+                  {!userData?.isPro && <div className="ml-auto my-auto border-[1px] border-white rounded-xl px-2 pt-[1px] pb-[3px] text-xs cursor-pointer opacity-55 
+                  hover:opacity-85 hover:border  hover:border-t-purple-600 transition-all duration-200 ease-in-out hover:border-b-pink-600
+                    hover:border-l-purple-500 hover:border-r-pink-500 " onClick={() => {openOverlay()}}>Go Pro</div>}
+                  {!userData?.isPro && Overlay}
               </SignedIn>
-              <div className="ml-auto my-auto border-[1px] border-white rounded-xl px-2 pt-[1px] pb-[3px] text-xs cursor-pointer opacity-55 
-              hover:opacity-85 hover:border  hover:border-t-purple-600 transition-all duration-200 ease-in-out hover:border-b-pink-600
-                hover:border-l-purple-500 hover:border-r-pink-500 " onClick={() => {openOverlay()}}>Go Pro</div>
-              {Overlay}
             </div>
         </SidebarFooter>
       </Sidebar>
