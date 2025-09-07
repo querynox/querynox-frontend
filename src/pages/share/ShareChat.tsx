@@ -7,7 +7,6 @@ import { useState } from 'react'
 import useQueryModels from '../chat/apis/queries/useQueryModels'
 import type { ChatQueryType } from '@/data/types'
 import { Check, Copy, Download } from 'lucide-react'
-import axios from 'axios'
 
 const ShareChat = () => {
   const params = useParams({ from: '/share/$shareChatId' })
