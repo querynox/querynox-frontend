@@ -13,6 +13,7 @@ import MobileDebug from './components/MobileDebug.tsx'
 import { Analytics } from "@vercel/analytics/react"
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+const isDev = import.meta.env.DEV
 
 const InnerApp = () => {
   const { darkmode } = useSystemContext();
@@ -25,7 +26,7 @@ const InnerApp = () => {
       <ChatProvider>
         <UserProvider>
           <RouterProvider router={router} />
-          <MobileDebug />
+          {isDev && <MobileDebug />}
         </UserProvider>
       </ChatProvider>
     </ClerkProvider>
