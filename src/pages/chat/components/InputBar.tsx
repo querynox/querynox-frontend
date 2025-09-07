@@ -360,7 +360,8 @@ const InputBar = () => {
             //TODO:
             break;
           case 'error':
-            console.log(response)
+            setChatStatus({chatid:"",content:""})
+            setStreamingResponse({chatid:"",content:""})  
             setChatError({chatid:response.chatId,content:response.error})
             break;
           case 'content':

@@ -83,7 +83,7 @@ const Conversation = () => {
                 
         </div>
 
-        {chatStatus.content.trim() && (index == activeChat.chatQueries.length-1) && chatStatus.chatid == activeChat._id &&
+        {!chatError.content.trim() && chatStatus.content.trim() && (index == activeChat.chatQueries.length-1) && chatStatus.chatid == activeChat._id &&
           <div className={cn("relative group min-[500px]:px-4 min-[400px]:px-[14px] min-[350px]:px-[12px] px-2", isChatQueryImage(query) ? "max-w-full":"w-full")}>
             <div className='rounded-lg mb-2 breathing-text text-xl'>{chatStatus.content.trim()}</div>
           </div>}
