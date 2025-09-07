@@ -24,7 +24,7 @@ export const newChatDefaultObject : ChatType = {
     title: "",
     chatName:"",
     chatQueries: [],
-    model: "llama3-70b-8192",
+    model: "llama-3.3-70b-versatile",
     webSearch: false,
     files: [],
     systemPrompt:  `You are a helpful assistant. Be Polite and Kind.

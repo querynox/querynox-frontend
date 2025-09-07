@@ -369,7 +369,7 @@ export function ChatSidebar() {
               <SignedIn>
                   <ClerkUserButton />
                   <span className="text-nowrap ml-2">{user?.fullName}</span>
-                  {!userData?.isPro && <div className="ml-auto my-auto border-[1px] border-white rounded-xl px-2 pt-[1px] mt-1.5 pb-[3px] text-xs cursor-pointer opacity-55 
+                  {!userData?.isPro && <div className="ml-auto my-auto border-[1px] dark:border-white border-black rounded-xl px-2 pt-[1px] mt-1.5 pb-[3px] text-xs cursor-pointer opacity-55 
                   hover:opacity-85 hover:border  hover:border-t-purple-600 transition-all duration-200 ease-in-out hover:border-b-pink-600
                     hover:border-l-purple-500 hover:border-r-pink-500 " onClick={() => {openOverlay()}}>Go Pro</div>}
                   {!userData?.isPro && Overlay}
