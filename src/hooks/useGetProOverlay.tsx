@@ -83,15 +83,15 @@ export function SignInOverlayProvider({ children }: { children: React.ReactNode 
                 </h3>
 
                 <p className="text-center text-3xl sm:text-4xl font-bold mb-6 text-foreground">
-                  $2
+                  $5
                   <span className="text-base sm:text-lg font-normal text-muted-foreground">
                     /month
                   </span>
                 </p>
 
                 <ul className="text-sm sm:text-base text-muted-foreground mb-6 space-y-2 text-left list-disc list-inside">
-                  <li>2000 messages / month</li>
-                  <li>Access to GPT-4, Claude, Gemini</li>
+                  <li>3000 messages / month</li>
+                  <li>Access to GPT-3.5, Claude, Gemini</li>
                   <li>Web search integration</li>
                   <li>Document & image uploads</li>
                   <li>Conversation memory</li>

@@ -34,7 +34,7 @@ const PaymentSuccessCard = ({ onStartChatting, paymentData }: PaymentSuccessCard
           </div>
           <div className="flex items-center space-x-4">
             <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse delay-100"></div>
-            <span className="text-green-700 dark:text-green-300 font-medium">2000 messages per month</span>
+            <span className="text-green-700 dark:text-green-300 font-medium">3000 messages per month</span>
           </div>
           <div className="flex items-center space-x-4">
             <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse delay-200"></div>
