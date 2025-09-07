@@ -7,16 +7,27 @@ import { useState } from 'react'
 import useQueryModels from '../chat/apis/queries/useQueryModels'
 import type { ChatQueryType } from '@/data/types'
 import { Check, Copy, Download } from 'lucide-react'
+import axios from 'axios'
 
 const ShareChat = () => {
   const params = useParams({ from: '/share/$shareChatId' })
-  const { data, isLoading } = useQueryPublicChat(params.shareChatId)
+  const { data, isLoading, error } = useQueryPublicChat(params.shareChatId)
   const { data: models  } = useQueryModels();
   const { darkmode } = useSystemContext()
   
   const [copid, setCopid] = useState<number>(-1)
 
-  if (isLoading || !data) {
+  if(error){
+    const err = axios.isAxiosError(error)
+    ? error.response?.data?.error || "Chat not found or not shared"
+    : (error as Error).message;
+
+    return (
+      <div className="flex justify-center items-center h-screen"><div>{err}</div></div>
+    )
+  }
+
+  if(!error && (isLoading || !data)) {
     return (
       <div className="flex justify-center items-center h-screen"><div className='spinner-loader mx-4 my-2 p-1'></div></div>
     )
