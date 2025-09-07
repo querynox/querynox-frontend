@@ -391,7 +391,7 @@ const InputBar = () => {
         </div>}
 
         {/**Input Bar with Attachment and Send */}
-        <div className="flex w-full items-top justify-around min-[350px]:min-h-[50px] min-[550px]:py-3 px-3 pt-3 ">
+        <div className="flex w-full items-top justify-around min-[350px]:min-h-[50px] min-[550px]:py-2.5 px-3 pt-2 ">
 
 
           <div onClick={handleAttachmentButtonClick} className="min-[480px]:px-2 px-1 opacity-70 hover:opacity-100 cursor-pointer flex " title="Attach files">
@@ -424,7 +424,7 @@ const InputBar = () => {
           <div className="relative" ref={modelDropdownRef}>
             <div 
                onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)} 
-               className="min-[480px]:px-2 px-1 opacity-70 hover:opacity-100 cursor-pointer flex items-center gap-1 hover:bg-secondary/30 dark:hover:bg-secondary/20 rounded-lg pb-1.5 pt-0.5  transition-all duration-200" 
+               className="min-[480px]:px-1.5 px-1 opacity-70 hover:opacity-100 cursor-pointer flex items-center gap-1 hover:bg-secondary/30 dark:hover:bg-secondary/20 rounded-lg py-1.5 transition-all duration-200 relative -top-1" 
                title="Select Model"
              >
                 <img 
