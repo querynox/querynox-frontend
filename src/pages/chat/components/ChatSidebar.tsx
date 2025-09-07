@@ -152,6 +152,10 @@ export function ChatSidebar() {
   }
 
   const handleDelete = async (chat:ChatType, index:number) => {
+    const isBookmarked = bookmarkedIds.has(chat._id)
+    if (isBookmarked) {
+      setBookmarkedState(chat._id, false)
+    }
     deleteChatMutation.mutate({chatId:chat._id});
     setChats((prev)=>{
       const _chats = prev.filter(pchat => pchat._id != chat._id);

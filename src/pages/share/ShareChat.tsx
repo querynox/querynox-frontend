@@ -18,12 +18,10 @@ const ShareChat = () => {
   const [copid, setCopid] = useState<number>(-1)
 
   if(error){
-    const err = axios.isAxiosError(error)
-    ? error.response?.data?.error || "Chat not found or not shared"
-    : (error as Error).message;
-
     return (
-      <div className="flex justify-center items-center h-screen"><div>{err}</div></div>
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-gray-500 dark:text-gray-400">This chat is deleted or not shared with you.</p>
+      </div>
     )
   }
 
