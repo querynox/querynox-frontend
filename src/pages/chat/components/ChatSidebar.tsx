@@ -69,7 +69,7 @@ export function ChatSidebar() {
   const { data: bookmarkedData } = useQueryBookmarkedChats();
   const [showBookmarks, setShowBookmarks] = useState(false);
   const [copied, setCopied] = useState(false);
-  const { openOverlay, Overlay } = useSignInOverlay();
+  const { openOverlay } = useSignInOverlay();
   
   // Toast state
   const [toast, setToast] = useState<{
@@ -372,7 +372,6 @@ export function ChatSidebar() {
                   {!userData?.isPro && <div className="ml-auto my-auto border-[1px] dark:border-white border-black rounded-xl px-2 pt-[1px] mt-1.5 pb-[3px] text-xs cursor-pointer opacity-55 
                   hover:opacity-85 hover:border  hover:border-t-purple-600 transition-all duration-200 ease-in-out hover:border-b-pink-600
                     hover:border-l-purple-500 hover:border-r-pink-500 " onClick={() => {openOverlay()}}>Go Pro</div>}
-                  {!userData?.isPro && Overlay}
               </SignedIn>
             </div>
         </SidebarFooter>

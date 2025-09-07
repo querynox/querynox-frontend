@@ -11,6 +11,7 @@ import { UserProvider } from './contexts/UserContext.tsx'
 import MobileDebug from './components/MobileDebug.tsx'
 
 import { Analytics } from "@vercel/analytics/react"
+import { SignInOverlayProvider } from './hooks/useGetProOverlay.tsx'
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 const isDev = import.meta.env.DEV
@@ -25,8 +26,10 @@ const InnerApp = () => {
     >
       <ChatProvider>
         <UserProvider>
-          <RouterProvider router={router} />
-          {isDev && <MobileDebug />}
+          <SignInOverlayProvider>
+            <RouterProvider router={router} />
+            {isDev && <MobileDebug />}
+        </SignInOverlayProvider>
         </UserProvider>
       </ChatProvider>
     </ClerkProvider>

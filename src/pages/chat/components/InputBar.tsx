@@ -19,7 +19,7 @@ const InputBar = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const inputPromptRef = useRef<HTMLTextAreaElement>(null);
 
-  const { Overlay , openOverlay} = useSignInOverlay()
+  const { openOverlay } = useSignInOverlay()
 
   const { activeChat, activeChatIndex, setNewChat, setChats, setActiveChatIndex, newChat, setStreamingResponse, setChatStatus, setChatError } = useChatContext();
   const { mutate } = useMutationChat(
@@ -382,9 +382,6 @@ const InputBar = () => {
   return (
   <div className="flex flex-col px-4 pb-4 items-center justify-center">
       <div className="flex-1 rounded-xl py-1 shadow-2xs border border-input max-w-[800px] w-full dark:bg-primary-foreground bg-primary-foreground">
-
-        {/**Overlay for Get Pro*/}
-        {Overlay}
 
         {/**Attached Files*/}
         {activeChat.files.length > 0 && <div className="flex flex-col w-full pt-2 pl-4 dark:bg-primary-foreground max-h-40 overflow-y-auto pr-2 thin-scrollbar">
