@@ -387,8 +387,10 @@ const InputBar = () => {
         {Overlay}
 
         {/**Attached Files*/}
-        {activeChat.files.length > 0 && <div className="flex gap-y-[2px] flex-col w-full pt-2 pl-4 dark:bg-primary-foreground">
-          {activeChat.files.map((file,index) => <span className="flex items-center text-sm gap-x-1 italic" key={index}>{file.name} <X onClick={()=> {deleteFromFile(index)}} size={14} color="brown" className="cursor-pointer mt-1"/> </span> )}
+        {activeChat.files.length > 0 && <div className="flex flex-col w-full pt-2 pl-4 dark:bg-primary-foreground max-h-40 overflow-y-auto pr-2 thin-scrollbar">
+          {activeChat.files.map((file,index) => <span className="flex items-center text-sm gap-x-1 italic break-words" key={index}><span className="truncate max-w-[400px]" title={file.name}>
+          {file.name}
+        </span> <X onClick={()=> {deleteFromFile(index)}} size={14} color="brown" className="cursor-pointer mt-1"/> </span> )}
         </div>}
 
         {/**Input Bar with Attachment and Send */}
