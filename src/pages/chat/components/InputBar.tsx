@@ -360,6 +360,7 @@ const InputBar = () => {
             //TODO:
             break;
           case 'error':
+            if(response.chatId != "")  setNewChat(newChatDefaultObject);
             setChatStatus({chatid:"",content:""})
             setStreamingResponse({chatid:"",content:""})  
             setChatError({chatid:response.chatId,content:response.error})
@@ -370,8 +371,7 @@ const InputBar = () => {
         }
       },
       (error) => {
-        console.log(error)
-        if(error.chatid != "") setNewChat(newChatDefaultObject);
+        if(error.chatid != "")  setNewChat(newChatDefaultObject);
         setChatStatus({chatid:"",content:""})
         setStreamingResponse({chatid:"",content:""})
         setChatError({chatid:error.chatid, content:error.error})
