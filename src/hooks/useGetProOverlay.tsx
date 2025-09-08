@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { FRONTEND_HOST } from "@/data/constants";
+import { FRONTEND_HOST, PRO_PRODUCT_ID } from "@/data/constants";
 import useCheckoutLink from "@/pages/home/apis/axios/useCheckoutLink";
 
 type OverlayContextType = {
@@ -101,7 +101,7 @@ export function SignInOverlayProvider({ children }: { children: React.ReactNode 
                   className="w-full relative bg-gradient-to-r from-purple-600 via-purple-500 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 cursor-pointer transition-all duration-300 shadow-lg hover:shadow-purple-500/50"
                   onClick={() =>
                     checkout(
-                      "5f318c59-6185-42a5-aa03-56c9f86f526f",
+                      PRO_PRODUCT_ID,
                       "pro",
                       "GetProOverlay"
                     )
