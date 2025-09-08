@@ -36,7 +36,6 @@ const Chat = () => {
   const loadUser = async () => {
 
     if(!userData || !chatData || chatError || userError){
-      navigate({to:"/chat"})
       return;
     }
 
