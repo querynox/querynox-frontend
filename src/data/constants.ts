@@ -5,4 +5,4 @@ export const FRONTEND_HOST =  (NODE_ENV == "production" ? ( import.meta.env.VITE
 export const SohamJoshiGithubLink = "https://github.com/sohamjoshi25" as string;
 export const Hackice20GithubLink = "https://github.com/hackice20" as string;
 
-export const PRO_PRODUCT_ID =  import.meta.env.PRO_PRODUCT_ID as string;
+export const PRO_PRODUCT_ID =  import.meta.env.VITE_PRO_PRODUCT_ID as string;
