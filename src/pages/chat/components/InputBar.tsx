@@ -226,6 +226,10 @@ const InputBar = () => {
       files:activeChat.files
     }
 
+      setChatStatus({chatid:"",content:""})
+    setStreamingResponse({chatid:"",content:""})    
+    setChatError({chatid:"",content:""})    
+
     mutate(chat);
 
     const chatQuery : ChatQueryType = {
@@ -301,6 +305,10 @@ const InputBar = () => {
       sendChat();
       return;
     }
+
+    setChatStatus({chatid:"",content:""})
+    setStreamingResponse({chatid:"",content:""})    
+    setChatError({chatid:"",content:""})    
 
     const isThinking = activeChatIndex > 0 ? !(activeChat.chatQueries[activeChat.chatQueries.length-1].response) : false;
 
